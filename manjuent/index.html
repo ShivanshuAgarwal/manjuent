@@ -539,10 +539,10 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
 /* JPEG BILL CAPTURE TARGET */
 #bill-jpeg-target {
   position:fixed; top:-9999px; left:-9999px;
-  width:380px; background:#fff;
+  width:680px; background:#fff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color:#1d1d1f; border-radius:16px; overflow:hidden;
-  box-shadow:0 4px 24px rgba(0,0,0,0.15);
+  color:#1d1d1f; border-radius:0px; overflow:hidden;
+  box-shadow:none;
 }
 </style>
 </head>
@@ -2096,16 +2096,17 @@ function saveCurrentBillAsJpeg() {
   const rows = b.items.map(it => {
     const pkgCell = it.pkgText ? it.pkgText : (it.pkgType && it.pkgQty ? it.pkgQty+'×'+it.pkgType : '—');
     const qtyCell = it.pcs != null ? it.pcs : '—';
-    const wtCell = it.weight != null ? it.weight.toFixed(3)+' kg' : '—';
+    const wtCell = it.weight != null ? it.weight.toFixed(2)+' kg' : '—';
     const discCell = it.disc ? it.disc+'%' : '—';
+    const td = 'padding:9px 10px;border-bottom:1px solid #ebebeb;vertical-align:middle;color:#1d1d1f;font-weight:500;';
     return `<tr>
-      <td style="font-weight:700;white-space:nowrap;font-size:11px">${pkgCell}</td>
-      <td>${it.name}</td>
-      <td>₹${it.rate}</td>
-      <td>${qtyCell}</td>
-      <td>${wtCell}</td>
-      <td>${discCell}</td>
-      <td>₹${it.amount.toFixed(2)}</td>
+      <td style="${td}font-weight:700;white-space:nowrap;font-size:11px;font-family:monospace">${pkgCell}</td>
+      <td style="${td}text-align:left;font-size:12px">${it.name}</td>
+      <td style="${td}text-align:right;font-family:monospace">₹${it.rate}</td>
+      <td style="${td}text-align:right;font-family:monospace">${qtyCell}</td>
+      <td style="${td}text-align:right;font-family:monospace">${wtCell}</td>
+      <td style="${td}text-align:right;font-family:monospace">${discCell}</td>
+      <td style="${td}text-align:right;font-family:monospace;font-weight:700">₹${it.amount.toFixed(2)}</td>
     </tr>`;
   }).join('');
 
@@ -2115,57 +2116,72 @@ function saveCurrentBillAsJpeg() {
   ].join('');
 
   const html = `
-    <div style="background:#007aff;padding:16px 18px;text-align:center">
-      <div style="color:#fff;font-size:13px;font-weight:500;letter-spacing:0.3px;opacity:0.75;margin-bottom:2px">ESTIMATE</div>
-      <div style="color:#fff;font-size:22px;font-weight:700;letter-spacing:-0.3px">Manju Enterprises</div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #eee">
-      <div style="padding:10px 12px;border-right:1px solid #eee;border-bottom:1px solid #eee">
-        <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px">Bill To</div>
-        <div style="font-size:13px;font-weight:700;color:#1d1d1f">${b.customer.name}</div>
-        ${b.customer.location ? `<div style="font-size:11px;color:#86868b">${b.customer.location}</div>` : ''}
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#fff;color:#1d1d1f;">
+
+      <!-- HEADER: ESTIMATE only -->
+      <div style="background:#007aff;padding:16px 24px;text-align:center;">
+        <div style="color:#fff;font-size:18px;font-weight:700;letter-spacing:2px;text-transform:uppercase">ESTIMATE</div>
       </div>
-      <div style="padding:10px 12px;border-bottom:1px solid #eee">
-        <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px">Invoice No.</div>
-        <div style="font-size:13px;font-weight:700;color:#1d1d1f;font-family:monospace">${b.invno}</div>
-        <div style="font-size:11px;color:#86868b">${fmtDate(b.date)}</div>
+
+      <!-- META GRID: 4 cells -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1.5px solid #e5e5e5;">
+        <div style="padding:12px 16px;border-right:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;">
+          <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px">Bill To</div>
+          <div style="font-size:15px;font-weight:700;color:#1d1d1f;line-height:1.2">${b.customer.name}</div>
+          ${b.customer.location ? `<div style="font-size:12px;color:#555;margin-top:2px">${b.customer.location}</div>` : ''}
+        </div>
+        <div style="padding:12px 16px;border-bottom:1px solid #e5e5e5;">
+          <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px">Invoice No.</div>
+          <div style="font-size:15px;font-weight:700;color:#1d1d1f;font-family:monospace">${b.invno}</div>
+          <div style="font-size:12px;color:#555;margin-top:2px">${fmtDate(b.date)}</div>
+        </div>
+        <div style="padding:12px 16px;border-right:1px solid #e5e5e5;">
+          <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px">Transport</div>
+          <div style="font-size:13px;font-weight:600;color:#1d1d1f">${b.transport ? b.transport.name : '—'}</div>
+        </div>
+        <div style="padding:12px 16px;">
+          <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px">Destination</div>
+          <div style="font-size:13px;font-weight:600;color:#1d1d1f">${b.customer.location || '—'}</div>
+        </div>
       </div>
-      <div style="padding:10px 12px;border-right:1px solid #eee">
-        <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px">Transport</div>
-        <div style="font-size:12px;font-weight:600;color:#1d1d1f">${b.transport ? b.transport.name : '—'}</div>
+
+      <!-- LINE ITEMS TABLE -->
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead>
+          <tr style="background:#f0f0f5;">
+            <th style="padding:8px 10px;text-align:left;font-size:9px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #ddd;white-space:nowrap">Bundle</th>
+            <th style="padding:8px 10px;text-align:left;font-size:9px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #ddd">Item</th>
+            <th style="padding:8px 10px;text-align:right;font-size:9px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #ddd;white-space:nowrap">Rate</th>
+            <th style="padding:8px 10px;text-align:right;font-size:9px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #ddd;white-space:nowrap">Qty</th>
+            <th style="padding:8px 10px;text-align:right;font-size:9px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #ddd;white-space:nowrap">Wt</th>
+            <th style="padding:8px 10px;text-align:right;font-size:9px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #ddd;white-space:nowrap">Disc</th>
+            <th style="padding:8px 10px;text-align:right;font-size:9px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #ddd;white-space:nowrap">Amt</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}${extraRows}
+        </tbody>
+      </table>
+
+      <!-- DIVIDER -->
+      <div style="border-top:2px solid #e5e5e5;"></div>
+
+      <!-- TOTAL ROW -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f8f8fb;">
+        <div style="font-size:14px;font-weight:700;color:#1d1d1f;">Total Amount</div>
+        <div style="font-size:20px;font-weight:800;color:#007aff;font-family:monospace;letter-spacing:-0.5px">₹${b.grand.toFixed(2)}</div>
       </div>
-      <div style="padding:10px 12px">
-        <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px">Destination</div>
-        <div style="font-size:12px;font-weight:600;color:#1d1d1f">${b.customer.location || '—'}</div>
+
+      <!-- AMOUNT IN WORDS -->
+      <div style="padding:10px 16px;font-size:11px;color:#555;border-top:1px solid #ebebeb;background:#fff;">
+        <span style="font-style:italic;color:#86868b">Amount in words: </span><strong style="color:#1d1d1f;font-weight:600">${b.words}</strong>
       </div>
-    </div>
-    <table style="width:100%;border-collapse:collapse;font-size:11px">
-      <thead>
-        <tr style="background:#f5f5f7">
-          <th style="padding:7px 8px;text-align:left;font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid #e0e0e0">Bundle</th>
-          <th style="padding:7px 8px;text-align:left;font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid #e0e0e0">Item</th>
-          <th style="padding:7px 8px;text-align:right;font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid #e0e0e0">Rate</th>
-          <th style="padding:7px 8px;text-align:right;font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid #e0e0e0">Qty</th>
-          <th style="padding:7px 8px;text-align:right;font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid #e0e0e0">Wt</th>
-          <th style="padding:7px 8px;text-align:right;font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid #e0e0e0">Disc</th>
-          <th style="padding:7px 8px;text-align:right;font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.3px;border-bottom:1px solid #e0e0e0">Amt</th>
-        </tr>
-      </thead>
-      <tbody style="font-weight:500;color:#1d1d1f">
-        ${rows}${extraRows}
-      </tbody>
-      <tfoot>
-        <tr style="background:#f5f5f7">
-          <td colspan="6" style="padding:10px 8px;font-weight:700;font-size:13px;color:#1d1d1f">Total Amount</td>
-          <td style="padding:10px 8px;font-weight:800;font-size:15px;color:#007aff;text-align:right;font-family:monospace">₹${b.grand.toFixed(2)}</td>
-        </tr>
-      </tfoot>
-    </table>
-    <div style="padding:10px 12px;font-size:10px;color:#86868b;border-top:1px solid #eee;font-style:italic">
-      Amount in words: <strong style="color:#1d1d1f;font-style:normal">${b.words}</strong>
-    </div>
-    <div style="background:#f5f5f7;padding:8px 12px;text-align:center;font-size:10px;color:#86868b">
-      This is a computer generated estimate
+
+      <!-- FOOTER -->
+      <div style="padding:8px 16px;background:#f0f0f5;text-align:center;font-size:10px;color:#86868b;letter-spacing:0.2px;">
+        This is a computer generated estimate
+      </div>
+
     </div>`;
 
   const target = document.getElementById('bill-jpeg-target');
