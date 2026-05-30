@@ -14,7 +14,18 @@
 <!-- html2canvas for JPEG bill download -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <!-- App config (Firebase keys + PIN) -->
-<script src="firebase-config.js"></script>
+<script>
+// ── Firebase Configuration ──────────────────────────────────────
+window.FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyAvq04DKa_7iOn3J2zZvVHU7WBqahpWofk",
+  authDomain:        "manjuenterprise.firebaseapp.com",
+  projectId:         "manjuenterprise",
+  storageBucket:     "manjuenterprise.firebasestorage.app",
+  messagingSenderId: "153131392022",
+  appId:             "1:153131392022:web:8d5eebdb072f77369b2937"
+};
+window.APP_PIN = '1234'; // Change this to your preferred PIN
+</script>
 <style>
 :root {
   --bg: #f2f2f7;
@@ -45,8 +56,10 @@
   --font: 'DM Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
   --mono: 'DM Mono', 'SF Mono', monospace;
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-spring2: cubic-bezier(0.25, 1.4, 0.5, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-ios: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-fast: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 body.dark {
@@ -92,21 +105,24 @@ body {
   overscroll-behavior-y: none;
 }
 
-@keyframes fadeUp   { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeUp   { from{opacity:0;transform:translateY(20px) scale(0.98)} to{opacity:1;transform:translateY(0) scale(1)} }
 @keyframes fadeIn   { from{opacity:0}                              to{opacity:1} }
-@keyframes scaleIn  { from{opacity:0;transform:scale(0.95)}       to{opacity:1;transform:scale(1)} }
+@keyframes scaleIn  { from{opacity:0;transform:scale(0.90)}       to{opacity:1;transform:scale(1)} }
 @keyframes slideDown{ from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
-@keyframes slideUp  { from{transform:translateY(100%);opacity:0}  to{transform:translateY(0);opacity:1} }
+@keyframes slideUp  { from{transform:translateY(52px);opacity:0}  to{transform:translateY(0);opacity:1} }
+@keyframes popIn    { 0%{transform:scale(0.72);opacity:0} 60%{transform:scale(1.04);opacity:1} 100%{transform:scale(1);opacity:1} }
+@keyframes shimmer  { 0%{background-position:200% center} 100%{background-position:-200% center} }
+@keyframes dotBounce{ 0%{transform:scale(1)} 45%{transform:scale(1.28)} 100%{transform:scale(1)} }
 
 .screen { display:none; min-height:100dvh; }
-.screen.active { display:block; animation:fadeIn 0.22s var(--ease-ios); }
+.screen.active { display:block; animation:fadeIn 0.18s var(--ease-ios); }
 
 /* NAV BAR */
 .nav-bar {
   position: sticky; top:0; z-index:100;
   background: var(--glass);
-  backdrop-filter: blur(24px) saturate(200%);
-  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  backdrop-filter: blur(40px) saturate(220%);
+  -webkit-backdrop-filter: blur(40px) saturate(220%);
   border-bottom: 0.5px solid var(--glass-border);
   padding: 0 16px;
   padding-top: env(safe-area-inset-top);
@@ -155,7 +171,7 @@ body {
 
 /* DUAL TILE */
 .gw-dual { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.gw-tile { background: var(--surface); border-radius: var(--radius); padding: 16px 15px 15px; cursor: pointer; border: 0.5px solid var(--glass-border); box-shadow: var(--shadow); transition: transform 0.2s var(--ease-spring), box-shadow 0.2s, background 0.12s; display:flex; flex-direction:column; gap:8px; position:relative; overflow:hidden; animation: fadeUp 0.4s var(--ease-out) both; }
+.gw-tile { background: var(--surface); border-radius: var(--radius); padding: 16px 15px 15px; cursor: pointer; border: 0.5px solid var(--glass-border); box-shadow: var(--shadow); transition: transform 0.28s var(--ease-spring), box-shadow 0.28s var(--ease-out), background 0.12s; display:flex; flex-direction:column; gap:8px; position:relative; overflow:hidden; animation: fadeUp 0.42s var(--ease-out) both; }
 .gw-tile:active { transform:scale(0.96); box-shadow:var(--shadow-sm); background:var(--surface2); }
 .gw-tile-icon { width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; background:var(--accent-soft); color:var(--accent); font-size:19px; flex-shrink:0; }
 .gw-tile-icon.green { background:var(--success-soft); color:var(--success); }
@@ -243,20 +259,21 @@ body.dark .total-row.grand .total-value { color:var(--text); }
 .words-row { padding:10px 16px; font-size:12px; color:var(--muted); font-style:italic; border-top:0.5px solid var(--separator); background:var(--surface2); }
 
 /* BOTTOM BAR */
-.bottom-bar { position:fixed; bottom:0; left:0; right:0; z-index:100; background:var(--glass); backdrop-filter:blur(24px) saturate(200%); -webkit-backdrop-filter:blur(24px) saturate(200%); border-top:0.5px solid var(--glass-border); padding-bottom:env(safe-area-inset-bottom); display:flex; }
-.bottom-action { flex:1; padding:10px 4px 12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer; transition:background 0.12s; position:relative; }
-.bottom-action:active { background:var(--surface2); }
-.bottom-action .icon { font-size:22px; line-height:1; color:var(--muted); }
-.bottom-action .label { font-size:10px; font-weight:500; color:var(--muted); letter-spacing:0.1px; }
+.bottom-bar { position:fixed; bottom:0; left:0; right:0; z-index:100; background:var(--glass); backdrop-filter:blur(40px) saturate(220%); -webkit-backdrop-filter:blur(40px) saturate(220%); border-top:0.5px solid var(--glass-border); padding-bottom:env(safe-area-inset-bottom); display:flex; }
+.bottom-action { flex:1; padding:10px 4px 12px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer; transition:background 0.12s; position:relative; -webkit-user-select:none; user-select:none; }
+.bottom-action:active { background:rgba(142,142,147,0.1); }
+.bottom-action:active .icon { transform:scale(0.84); }
+.bottom-action .icon { font-size:22px; line-height:1; color:var(--muted); display:flex;align-items:center;justify-content:center; transition:transform 0.22s var(--ease-spring),color 0.15s; }
+.bottom-action .label { font-size:10px; font-weight:500; color:var(--muted); letter-spacing:0.1px; transition:color 0.15s; }
 .bottom-action.primary .icon  { color:var(--accent); }
 .bottom-action.primary .label { color:var(--accent); }
 .bottom-action.danger .icon  { color:var(--danger); }
 .bottom-action.danger .label { color:var(--danger); }
 
 /* SHEET */
-.sheet-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.38); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); animation:fadeIn 0.2s var(--ease-ios); }
+.sheet-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.32); backdrop-filter:blur(8px) saturate(160%); -webkit-backdrop-filter:blur(8px) saturate(160%); animation:fadeIn 0.18s var(--ease-ios); }
 .sheet-overlay.show { display:flex; align-items:flex-end; }
-.sheet { background:var(--surface); width:100%; max-height:92dvh; border-radius:20px 20px 0 0; overflow:hidden; box-shadow:var(--shadow-lg); animation:slideUp 0.38s var(--ease-spring); }
+.sheet { background:var(--surface); width:100%; max-height:92dvh; border-radius:24px 24px 0 0; overflow:hidden; box-shadow:var(--shadow-lg); animation:slideUp 0.44s var(--ease-spring2); }
 .sheet-handle { width:36px; height:4px; background:var(--surface3); border-radius:2px; margin:10px auto 0; display:block; }
 .sheet-header { padding:12px 16px 13px; display:flex; align-items:center; justify-content:space-between; border-bottom:0.5px solid var(--separator); }
 .sheet-title { font-size:17px; font-weight:600; letter-spacing:-0.3px; }
@@ -351,8 +368,8 @@ body.dark .bills-summary-label { color:var(--muted); }
 body.dark .bills-summary-val { color:var(--text); }
 .bills-summary-count { font-size:13px; color:rgba(255,255,255,0.55); margin-top:3px; }
 body.dark .bills-summary-count { color:var(--muted); }
-.bill-card { background:var(--surface); border-radius:var(--radius); border:0.5px solid var(--glass-border); box-shadow:var(--shadow); padding:15px 16px; cursor:pointer; transition:transform 0.18s var(--ease-spring), box-shadow 0.18s; animation:fadeUp 0.4s var(--ease-out) both; }
-.bill-card:active { transform:scale(0.99); box-shadow:none; }
+.bill-card { background:var(--surface); border-radius:var(--radius); border:0.5px solid var(--glass-border); box-shadow:var(--shadow); padding:15px 16px; cursor:pointer; transition:transform 0.26s var(--ease-spring), box-shadow 0.26s var(--ease-out), background 0.12s; animation:fadeUp 0.4s var(--ease-out) both; -webkit-user-select:none; user-select:none; }
+.bill-card:active { transform:scale(0.978); box-shadow:none; background:var(--surface2); }
 .bill-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:7px; }
 .bill-inv   { font-size:12px; font-weight:600; font-family:var(--mono); color:var(--accent); }
 .bill-date  { font-size:12px; color:var(--muted); }
@@ -476,9 +493,9 @@ body.dark .inv-title { color:var(--text); }
 .edit-mode-tag.kg { background:var(--success-soft); color:var(--success); }
 
 /* TOAST */
-#toast { position:fixed; bottom:86px; left:50%; transform:translateX(-50%) translateY(8px); background:rgba(28,28,30,0.92); color:#fff; padding:10px 18px; border-radius:22px; font-size:14px; font-weight:500; z-index:500; opacity:0; transition:opacity 0.22s,transform 0.22s var(--ease-spring); pointer-events:none; white-space:nowrap; max-width:90vw; text-align:center; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
-#toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-body.dark #toast { background:rgba(58,58,60,0.95); }
+#toast { position:fixed; bottom:86px; left:50%; transform:translateX(-50%) translateY(12px) scale(0.92); background:rgba(28,28,30,0.94); color:#fff; padding:10px 20px; border-radius:24px; font-size:14px; font-weight:500; z-index:500; opacity:0; transition:opacity 0.24s var(--ease-out),transform 0.32s var(--ease-spring); pointer-events:none; white-space:nowrap; max-width:90vw; text-align:center; backdrop-filter:blur(20px) saturate(180%); -webkit-backdrop-filter:blur(20px) saturate(180%); }
+#toast.show { opacity:1; transform:translateX(-50%) translateY(0) scale(1); }
+body.dark #toast { background:rgba(58,58,60,0.96); }
 
 /* EMPTY */
 .empty-state { padding:56px 20px; text-align:center; }
@@ -489,6 +506,15 @@ body.dark #toast { background:rgba(58,58,60,0.95); }
 .bottom-spacer { height:88px; }
 mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; padding:0 1px; }
 .gw-section:last-of-type { padding-bottom: 24px; }
+
+
+/* REPORT RANGE BUTTONS */
+.rpt-range-btn {
+  padding:7px 14px;border:0.5px solid var(--glass-border);border-radius:20px;
+  background:var(--surface);color:var(--muted);font-family:var(--font);
+  font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;
+}
+.rpt-range-btn.active { background:var(--accent);color:#fff;border-color:var(--accent); }
 
 /* PIN LOCK SCREEN */
 #pin-screen {
@@ -502,8 +528,8 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
 .pin-title { font-size:28px; font-weight:700; color:var(--text); letter-spacing:-0.5px; margin-bottom:6px; }
 .pin-sub { font-size:14px; color:var(--muted); margin-bottom:40px; }
 .pin-dots { display:flex; gap:14px; margin-bottom:32px; }
-.pin-dot { width:16px; height:16px; border-radius:50%; background:var(--surface3); border:2px solid var(--glass-border); transition:all 0.15s var(--ease-spring); }
-.pin-dot.filled { background:var(--accent); border-color:var(--accent); transform:scale(1.1); }
+.pin-dot { width:16px; height:16px; border-radius:50%; background:var(--surface3); border:2px solid var(--glass-border); transition:all 0.2s var(--ease-spring); }
+.pin-dot.filled { background:var(--accent); border-color:var(--accent); transform:scale(1.18); box-shadow:0 0 0 4px rgba(0,122,255,0.15); animation:dotBounce 0.26s var(--ease-spring); }
 .pin-keypad { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; width:100%; max-width:280px; }
 .pin-key { height:68px; border:none; border-radius:var(--radius); background:var(--surface); color:var(--text); font-family:var(--font); font-size:22px; font-weight:500; cursor:pointer; box-shadow:var(--shadow); transition:all 0.12s var(--ease-spring); -webkit-tap-highlight-color:transparent; }
 .pin-key:active { transform:scale(0.93); background:var(--surface3); }
@@ -599,7 +625,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </button>
       <div class="nav-title" style="font-size:15px;font-weight:600;letter-spacing:-0.2px">Manju Enterprises</div>
-      <button class="nav-btn" onclick="toggleDark()" id="dark-btn" style="font-size:18px">&#9790;</button>
+      <button class="nav-btn icon" onclick="toggleDark()" id="dark-btn"><svg id="dark-icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
     </div>
   </div>
 
@@ -608,6 +634,27 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
       <div class="gw-hero-date" id="gw-date-display">Today</div>
       <div class="gw-hero-title">Manju<br>Enterprises</div>
       <div class="gw-hero-sub">Business Management</div>
+    </div>
+
+    <!-- DASHBOARD STATS -->
+    <div style="padding:0 16px 4px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <div style="background:var(--surface);border-radius:var(--radius-sm);border:0.5px solid var(--glass-border);box-shadow:var(--shadow);padding:12px 10px;text-align:center;animation:fadeUp 0.42s var(--ease-out) 0.06s both;transition:transform 0.24s var(--ease-spring)">
+          <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px">Today</div>
+          <div id="stat-today" style="font-size:17px;font-weight:700;color:var(--accent);font-family:var(--mono);letter-spacing:-0.3px;transition:all 0.3s var(--ease-out)">&#8377;0</div>
+          <div id="stat-today-count" style="font-size:10px;color:var(--muted);margin-top:2px">0 bills</div>
+        </div>
+        <div style="background:var(--surface);border-radius:var(--radius-sm);border:0.5px solid var(--glass-border);box-shadow:var(--shadow);padding:12px 10px;text-align:center;animation:fadeUp 0.42s var(--ease-out) 0.10s both;transition:transform 0.24s var(--ease-spring)">
+          <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px">This Month</div>
+          <div id="stat-month" style="font-size:17px;font-weight:700;color:var(--success);font-family:var(--mono);letter-spacing:-0.3px;transition:all 0.3s var(--ease-out)">&#8377;0</div>
+          <div id="stat-month-count" style="font-size:10px;color:var(--muted);margin-top:2px">0 bills</div>
+        </div>
+        <div style="background:var(--surface);border-radius:var(--radius-sm);border:0.5px solid var(--glass-border);box-shadow:var(--shadow);padding:12px 10px;text-align:center;animation:fadeUp 0.42s var(--ease-out) 0.14s both;transition:transform 0.24s var(--ease-spring)">
+          <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px">Unpaid</div>
+          <div id="stat-unpaid" style="font-size:17px;font-weight:700;color:var(--danger);font-family:var(--mono);letter-spacing:-0.3px;transition:all 0.3s var(--ease-out)">&#8377;0</div>
+          <div id="stat-unpaid-count" style="font-size:10px;color:var(--muted);margin-top:2px">0 bills</div>
+        </div>
+      </div>
     </div>
 
     <div class="gw-section">
@@ -636,17 +683,17 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
         <div class="gw-row" onclick="goTo('screen-customers')">
           <div class="gw-row-icon blue"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
           <div class="gw-row-body"><div class="gw-row-title">Customers</div><div class="gw-row-sub">Party accounts</div></div>
-          <div class="gw-row-right"><div class="gw-badge muted" id="gw-cust-count">0</div><div class="gw-chevron">&#8250;</div></div>
+          <div class="gw-row-right"><div class="gw-badge muted" id="gw-cust-count">0</div><div class="gw-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div></div>
         </div>
         <div class="gw-row" onclick="goTo('screen-products')">
           <div class="gw-row-icon green"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-4 0v2M8 7V5a2 2 0 00-4 0v2"/></svg></div>
           <div class="gw-row-body"><div class="gw-row-title">Stock Items</div><div class="gw-row-sub">Products &amp; pricing</div></div>
-          <div class="gw-row-right"><div class="gw-badge muted" id="gw-prod-count">0</div><div class="gw-chevron">&#8250;</div></div>
+          <div class="gw-row-right"><div class="gw-badge muted" id="gw-prod-count">0</div><div class="gw-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div></div>
         </div>
         <div class="gw-row" onclick="goTo('screen-transports')">
           <div class="gw-row-icon orange"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
           <div class="gw-row-body"><div class="gw-row-title">Transport</div><div class="gw-row-sub">Logistics partners</div></div>
-          <div class="gw-row-right"><div class="gw-badge muted" id="gw-trans-count">0</div><div class="gw-chevron">&#8250;</div></div>
+          <div class="gw-row-right"><div class="gw-badge muted" id="gw-trans-count">0</div><div class="gw-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div></div>
         </div>
       </div>
     </div>
@@ -657,22 +704,54 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
         <div class="gw-row" onclick="goTo('screen-bills')">
           <div class="gw-row-icon dark"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
           <div class="gw-row-body"><div class="gw-row-title">Sales Register</div><div class="gw-row-sub">All invoices &amp; totals</div></div>
-          <div class="gw-chevron">&#8250;</div>
+          <div class="gw-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="gw-row" onclick="goTo('screen-reports')">
+          <div class="gw-row-icon blue"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <div class="gw-row-body"><div class="gw-row-title">Reports</div><div class="gw-row-sub">Sales, products, customers</div></div>
+          <div class="gw-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
         </div>
         <div class="gw-row" onclick="goTo('screen-backup')">
           <div class="gw-row-icon red"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
           <div class="gw-row-body"><div class="gw-row-title">Backup &amp; Restore</div><div class="gw-row-sub" id="gw-backup-sub">Tap to backup your data</div></div>
-          <div class="gw-chevron">&#8250;</div>
+          <div class="gw-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
         </div>
+      </div>
+    </div>
+
+    <!-- INTERACTIVE CHARTS -->
+    <div style="padding:0 16px 8px;animation:fadeUp 0.4s var(--ease-out) 0.1s both">
+      <div style="background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--glass-border);box-shadow:var(--shadow);overflow:hidden;padding:16px 16px 12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text);letter-spacing:-0.2px">7-Day Revenue</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px" id="bar-chart-label">Tap a bar for details</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:500">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--accent)"></div>Sales
+          </div>
+        </div>
+        <canvas id="bar-chart-canvas" style="display:block;width:100%" height="130"></canvas>
+      </div>
+    </div>
+    <div style="padding:0 16px 8px;display:grid;grid-template-columns:1fr 1fr;gap:10px;animation:fadeUp 0.4s var(--ease-out) 0.15s both">
+      <div style="background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--glass-border);box-shadow:var(--shadow);padding:14px 12px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px">Paid vs Unpaid</div>
+        <canvas id="donut-canvas" width="110" height="110" style="display:block;margin:0 auto;cursor:pointer"></canvas>
+        <div id="donut-legend" style="margin-top:10px;display:flex;flex-direction:column;gap:5px"></div>
+      </div>
+      <div style="background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--glass-border);box-shadow:var(--shadow);padding:14px 12px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px">Top Customers</div>
+        <div id="top-customers-mini" style="display:flex;flex-direction:column;gap:7px"></div>
       </div>
     </div>
   </div>
 
   <div class="bottom-bar">
-    <div class="bottom-action primary" onclick="startNewBill()"><div class="icon">+</div><div class="label">New Bill</div></div>
-    <div class="bottom-action" onclick="goTo('screen-bills')"><div class="icon" style="font-size:16px">&#128196;</div><div class="label">Bills</div></div>
-    <div class="bottom-action" onclick="goTo('screen-customers')"><div class="icon" style="font-size:16px">&#128100;</div><div class="label">Customers</div></div>
-    <div class="bottom-action" onclick="goTo('screen-backup')"><div class="icon" style="font-size:16px">&#9729;</div><div class="label">Backup</div></div>
+    <div class="bottom-action primary" onclick="startNewBill()"><div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><div class="label">New Bill</div></div>
+    <div class="bottom-action" onclick="goTo('screen-bills')"><div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div><div class="label">Bills</div></div>
+    <div class="bottom-action" onclick="goTo('screen-customers')"><div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div><div class="label">Customers</div></div>
+    <div class="bottom-action" onclick="goTo('screen-backup')"><div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="label">Backup</div></div>
   </div>
 </div>
 
@@ -770,7 +849,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
   <div class="bottom-bar">
     <div class="bottom-action" onclick="cancelBill()"><div class="icon">&#8592;</div><div class="label">Cancel</div></div>
     <div class="bottom-action primary" onclick="openSheet('product')"><div class="icon">+</div><div class="label">Add Item</div></div>
-    <div class="bottom-action primary" onclick="acceptBill()" style="--accent:var(--success)"><div class="icon">&#10003;</div><div class="label">Save Bill</div></div>
+    <div class="bottom-action primary" onclick="acceptBill()" style="--accent:var(--success)"><div class="icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="label">Save Bill</div></div>
     <div class="bottom-action danger" onclick="deleteBillItem()"><div class="icon">&#9003;</div><div class="label">Remove</div></div>
   </div>
 </div>
@@ -779,7 +858,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
 <div id="screen-bills" class="screen">
   <div class="nav-bar">
     <div class="nav-inner">
-      <button class="nav-btn" onclick="goTo('screen-gateway')">&#8249; Back</button>
+      <button class="nav-btn" onclick="goTo('screen-gateway')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><polyline points="15 18 9 12 15 6"/></svg>Back</button>
       <div class="nav-title">Sales Register</div>
       <button class="nav-btn" onclick="startNewBill()">New</button>
     </div>
@@ -792,7 +871,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
     </div>
   </div>
   <div class="bills-section" id="bills-container">
-    <div class="empty-state"><div class="empty-icon">&#128203;</div><div class="empty-title">No Bills Yet</div><div class="empty-sub">Create your first bill to get started</div></div>
+    <div class="empty-state"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div><div class="empty-title">No Bills Yet</div><div class="empty-sub">Create your first bill to get started</div></div>
   </div>
   <div class="bottom-bar">
     <div class="bottom-action" onclick="goTo('screen-gateway')"><div class="icon">&#8962;</div><div class="label">Home</div></div>
@@ -800,21 +879,120 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
   </div>
 </div>
 
+
+<!-- REPORTS -->
+<div id="screen-reports" class="screen">
+  <div class="nav-bar">
+    <div class="nav-inner">
+      <button class="nav-btn" onclick="goTo('screen-gateway')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><polyline points="15 18 9 12 15 6"/></svg>Back</button>
+      <div class="nav-title">Reports</div>
+      <div style="min-width:44px"></div>
+    </div>
+  </div>
+  <div style="overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:88px;">
+    <!-- Date range filter -->
+    <div style="padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="rpt-range-btn active" onclick="setReportRange('today',this)">Today</button>
+      <button class="rpt-range-btn" onclick="setReportRange('week',this)">This Week</button>
+      <button class="rpt-range-btn" onclick="setReportRange('month',this)">This Month</button>
+      <button class="rpt-range-btn" onclick="setReportRange('all',this)">All Time</button>
+    </div>
+    <!-- Summary cards -->
+    <div style="padding:0 16px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div style="background:var(--surface);border-radius:var(--radius-sm);border:0.5px solid var(--glass-border);box-shadow:var(--shadow);padding:14px;">
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px">Total Sales</div>
+        <div id="rpt-total" style="font-size:22px;font-weight:700;color:var(--accent);font-family:var(--mono)">&#8377;0</div>
+        <div id="rpt-bill-count" style="font-size:11px;color:var(--muted);margin-top:2px">0 bills</div>
+      </div>
+      <div style="background:var(--surface);border-radius:var(--radius-sm);border:0.5px solid var(--glass-border);box-shadow:var(--shadow);padding:14px;">
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px">Collected</div>
+        <div id="rpt-paid" style="font-size:22px;font-weight:700;color:var(--success);font-family:var(--mono)">&#8377;0</div>
+        <div id="rpt-unpaid-amt" style="font-size:11px;color:var(--danger);margin-top:2px">&#8377;0 pending</div>
+      </div>
+    </div>
+    <!-- Amount search filter -->
+    <div style="padding:0 16px 10px;">
+      <div style="background:var(--surface);border-radius:var(--radius-sm);border:0.5px solid var(--glass-border);padding:10px 14px;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--muted);white-space:nowrap">Min &#8377;</span>
+        <input type="number" id="rpt-min-amt" placeholder="0" min="0" style="flex:1;border:none;background:transparent;font-family:var(--mono);font-size:14px;color:var(--text);outline:none;" oninput="renderReports()">
+        <span style="font-size:12px;color:var(--muted);white-space:nowrap">Max &#8377;</span>
+        <input type="number" id="rpt-max-amt" placeholder="Any" min="0" style="flex:1;border:none;background:transparent;font-family:var(--mono);font-size:14px;color:var(--text);outline:none;" oninput="renderReports()">
+      </div>
+    </div>
+
+    <!-- REVENUE TREND CHART -->
+    <div style="padding:0 16px 8px;animation:fadeUp 0.4s var(--ease-out) 0.08s both">
+      <div style="background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--glass-border);box-shadow:var(--shadow);overflow:hidden;padding:16px 16px 12px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px">
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--text);letter-spacing:-0.2px">Revenue Trend</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px" id="rpt-chart-label">Tap a bar for details</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:500">
+            <div style="width:7px;height:7px;border-radius:50%;background:var(--accent)"></div>Sales
+          </div>
+        </div>
+        <canvas id="rpt-bar-canvas" style="display:block;width:100%" height="130"></canvas>
+      </div>
+    </div>
+
+    <!-- DONUT + TOP CUSTOMERS MINI -->
+    <div style="padding:0 16px 8px;display:grid;grid-template-columns:1fr 1fr;gap:10px;animation:fadeUp 0.4s var(--ease-out) 0.12s both">
+      <div style="background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--glass-border);box-shadow:var(--shadow);padding:14px 12px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:12px;letter-spacing:-0.2px">Paid vs Unpaid</div>
+        <canvas id="rpt-donut-canvas" width="110" height="110" style="display:block;margin:0 auto"></canvas>
+        <div id="rpt-donut-legend" style="margin-top:10px;display:flex;flex-direction:column;gap:5px"></div>
+      </div>
+      <div style="background:var(--surface);border-radius:var(--radius);border:0.5px solid var(--glass-border);box-shadow:var(--shadow);padding:14px 12px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;letter-spacing:-0.2px">Top Customers</div>
+        <div id="rpt-top-customers-mini" style="display:flex;flex-direction:column;gap:7px"></div>
+      </div>
+    </div>
+
+    <!-- Top customers -->
+    <div style="padding:0 16px 8px;">
+      <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px">Customer Summary</div>
+      <div id="rpt-customers" style="background:var(--surface);border-radius:var(--radius-sm);border:0.5px solid var(--glass-border);overflow:hidden;box-shadow:var(--shadow);"></div>
+    </div>
+    <!-- Top products -->
+    <div style="padding:0 16px 8px;">
+      <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px">Product Summary</div>
+      <div id="rpt-products" style="background:var(--surface);border-radius:var(--radius-sm);border:0.5px solid var(--glass-border);overflow:hidden;box-shadow:var(--shadow);"></div>
+    </div>
+    <!-- Customer statement -->
+    <div style="padding:0 16px 8px;">
+      <div style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px">Customer Statement</div>
+      <div style="background:var(--surface);border-radius:var(--radius-sm);border:0.5px solid var(--glass-border);overflow:hidden;box-shadow:var(--shadow);">
+        <div style="padding:10px 14px;border-bottom:0.5px solid var(--separator);">
+          <select id="rpt-cust-select" onchange="renderCustomerStatement()" style="width:100%;border:none;background:transparent;font-family:var(--font);font-size:14px;color:var(--text);outline:none;">
+            <option value="">-- Select Customer --</option>
+          </select>
+        </div>
+        <div id="rpt-cust-statement"></div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <div class="bottom-action" onclick="goTo('screen-gateway')"><div class="icon">&#8962;</div><div class="label">Home</div></div>
+  </div>
+</div>
 <!-- BILL DETAIL -->
 <div id="screen-bill-detail" class="screen">
   <div class="nav-bar">
     <div class="nav-inner">
-      <button class="nav-btn" onclick="goTo('screen-bills')">&#8249; Bills</button>
+      <button class="nav-btn" onclick="goTo('screen-bills')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><polyline points="15 18 9 12 15 6"/></svg>Bills</button>
       <div class="nav-title">Estimate</div>
-      <button class="nav-btn" onclick="saveCurrentBillAsJpeg()" style="font-size:13px">💾 Save</button>
+      <button class="nav-btn" id="pay-toggle-btn" onclick="toggleBillPaid()" style="font-size:12px;font-weight:600">Mark Paid</button>
     </div>
   </div>
   <div id="bill-detail-content" style="overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:88px;"></div>
   <div class="bottom-bar">
-    <div class="bottom-action" onclick="goTo('screen-bills')"><div class="icon">&#8592;</div><div class="label">Back</div></div>
-    <div class="bottom-action" onclick="saveCurrentBillAsJpeg()"><div class="icon" style="font-size:16px">🖼️</div><div class="label">Save JPG</div></div>
-    <div class="bottom-action primary" onclick="editBillFromDetail()"><div class="icon" style="font-size:16px">&#9998;</div><div class="label">Edit</div></div>
-    <div class="bottom-action danger" id="del-bill-btn"><div class="icon" style="font-size:16px">&#128465;</div><div class="label">Delete</div></div>
+    <div class="bottom-action" onclick="goTo('screen-bills')"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></div><div class="label">Back</div></div>
+    <div class="bottom-action" onclick="saveCurrentBillAsJpeg()"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="label">Save</div></div>
+    <div class="bottom-action" style="--ba-color:#25D366" onclick="shareCurrentBillWhatsApp()"><div class="icon" style="color:#25D366"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div><div class="label" style="color:#25D366">Share</div></div>
+    <div class="bottom-action" onclick="duplicateCurrentBill()"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></div><div class="label">Repeat</div></div>
+    <div class="bottom-action primary" onclick="editBillFromDetail()"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><div class="label">Edit</div></div>
+    <div class="bottom-action danger" id="del-bill-btn"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></div><div class="label">Delete</div></div>
   </div>
 </div>
 
@@ -822,7 +1000,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
 <div id="screen-customers" class="screen">
   <div class="nav-bar">
     <div class="nav-inner">
-      <button class="nav-btn" onclick="goTo('screen-gateway')">&#8249; Back</button>
+      <button class="nav-btn" onclick="goTo('screen-gateway')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><polyline points="15 18 9 12 15 6"/></svg>Back</button>
       <div class="nav-title">Customers</div>
       <button class="nav-btn" onclick="switchSeg('cust','add')">Add</button>
     </div>
@@ -834,7 +1012,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
   </div>
   <div class="segment-content active" id="cust-list">
     <div class="master-section" id="cust-list-container">
-      <div class="master-card"><div class="empty-state"><div class="empty-icon">&#128100;</div><div class="empty-title">No Customers</div></div></div>
+      <div class="master-card"><div class="empty-state"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="empty-title">No Customers</div></div></div>
     </div>
   </div>
   <div class="segment-content" id="cust-add">
@@ -854,7 +1032,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
   </div>
   <div class="segment-content" id="cust-import">
     <label class="import-zone" for="cust-file">
-      <div class="import-zone-icon">&#128202;</div>
+      <div class="import-zone-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
       <div class="import-zone-title">Import from Excel / CSV</div>
       <div class="import-zone-sub">Columns: Name | Location | Phone | Preferred Transport</div>
       <input type="file" id="cust-file" accept=".xlsx,.xls,.csv" style="display:none" onchange="importExcel('customer',event)">
@@ -864,7 +1042,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
   <div class="bottom-bar">
     <div class="bottom-action" onclick="goTo('screen-gateway')"><div class="icon">&#8962;</div><div class="label">Home</div></div>
     <div class="bottom-action primary" onclick="switchSeg('cust','add')"><div class="icon">+</div><div class="label">Add New</div></div>
-    <div class="bottom-action" onclick="switchSeg('cust','import')"><div class="icon" style="font-size:16px">&#128229;</div><div class="label">Import</div></div>
+    <div class="bottom-action" onclick="switchSeg('cust','import')"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 10 12 15 7 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="label">Import</div></div>
   </div>
 </div>
 
@@ -872,7 +1050,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
 <div id="screen-products" class="screen">
   <div class="nav-bar">
     <div class="nav-inner">
-      <button class="nav-btn" onclick="goTo('screen-gateway')">&#8249; Back</button>
+      <button class="nav-btn" onclick="goTo('screen-gateway')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><polyline points="15 18 9 12 15 6"/></svg>Back</button>
       <div class="nav-title">Stock Items</div>
       <button class="nav-btn" onclick="switchSeg('prod','add')">Add</button>
     </div>
@@ -884,7 +1062,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
   </div>
   <div class="segment-content active" id="prod-list">
     <div class="master-section" id="prod-list-container">
-      <div class="master-card"><div class="empty-state"><div class="empty-icon">&#128230;</div><div class="empty-title">No Items</div></div></div>
+      <div class="master-card"><div class="empty-state"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-4 0v2M8 7V5a2 2 0 00-4 0v2"/></svg></div><div class="empty-title">No Items</div></div></div>
     </div>
   </div>
   <div class="segment-content" id="prod-add">
@@ -907,7 +1085,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
   </div>
   <div class="segment-content" id="prod-import">
     <label class="import-zone" for="prod-file">
-      <div class="import-zone-icon">&#128202;</div>
+      <div class="import-zone-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
       <div class="import-zone-title">Import from Excel / CSV</div>
       <div class="import-zone-sub">Columns: Name | Unit (pc/kg) | Rate</div>
       <input type="file" id="prod-file" accept=".xlsx,.xls,.csv" style="display:none" onchange="importExcel('product',event)">
@@ -917,7 +1095,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
   <div class="bottom-bar">
     <div class="bottom-action" onclick="goTo('screen-gateway')"><div class="icon">&#8962;</div><div class="label">Home</div></div>
     <div class="bottom-action primary" onclick="switchSeg('prod','add')"><div class="icon">+</div><div class="label">Add New</div></div>
-    <div class="bottom-action" onclick="switchSeg('prod','import')"><div class="icon" style="font-size:16px">&#128229;</div><div class="label">Import</div></div>
+    <div class="bottom-action" onclick="switchSeg('prod','import')"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 10 12 15 7 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="label">Import</div></div>
   </div>
 </div>
 
@@ -925,7 +1103,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
 <div id="screen-transports" class="screen">
   <div class="nav-bar">
     <div class="nav-inner">
-      <button class="nav-btn" onclick="goTo('screen-gateway')">&#8249; Back</button>
+      <button class="nav-btn" onclick="goTo('screen-gateway')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><polyline points="15 18 9 12 15 6"/></svg>Back</button>
       <div class="nav-title">Transport</div>
       <button class="nav-btn" onclick="switchSeg('trans','add')">Add</button>
     </div>
@@ -937,7 +1115,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
   </div>
   <div class="segment-content active" id="trans-list">
     <div class="master-section" id="trans-list-container">
-      <div class="master-card"><div class="empty-state"><div class="empty-icon">&#128666;</div><div class="empty-title">No Transport</div></div></div>
+      <div class="master-card"><div class="empty-state"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div class="empty-title">No Transport</div></div></div>
     </div>
   </div>
   <div class="segment-content" id="trans-add">
@@ -954,7 +1132,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
   </div>
   <div class="segment-content" id="trans-import">
     <label class="import-zone" for="trans-file">
-      <div class="import-zone-icon">&#128202;</div>
+      <div class="import-zone-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
       <div class="import-zone-title">Import from Excel / CSV</div>
       <div class="import-zone-sub">Columns: Name | Contact</div>
       <input type="file" id="trans-file" accept=".xlsx,.xls,.csv" style="display:none" onchange="importExcel('transport',event)">
@@ -971,14 +1149,14 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
 <div id="screen-backup" class="screen">
   <div class="nav-bar">
     <div class="nav-inner">
-      <button class="nav-btn" onclick="goTo('screen-gateway')">&#8249; Back</button>
+      <button class="nav-btn" onclick="goTo('screen-gateway')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><polyline points="15 18 9 12 15 6"/></svg>Back</button>
       <div class="nav-title">Backup &amp; Settings</div>
       <div style="min-width:44px"></div>
     </div>
   </div>
   <div class="backup-section" style="padding-bottom:88px;overflow-y:auto;-webkit-overflow-scrolling:touch;">
     <div class="backup-stat-card">
-      <div class="backup-stat-header"><div class="backup-stat-header-icon" style="background:var(--accent-soft)">&#128202;</div><div class="backup-stat-header-title">Data Summary</div></div>
+      <div class="backup-stat-header"><div class="backup-stat-header-icon" style="background:var(--accent-soft)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="backup-stat-header-title">Data Summary</div></div>
       <div class="backup-stat-row"><div class="backup-stat-label">Total Bills</div><div class="backup-stat-val" id="bk-bill-count">0</div></div>
       <div class="backup-stat-row"><div class="backup-stat-label">Customers</div><div class="backup-stat-val" id="bk-cust-count">0</div></div>
       <div class="backup-stat-row"><div class="backup-stat-label">Stock Items</div><div class="backup-stat-val" id="bk-prod-count">0</div></div>
@@ -990,7 +1168,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
     <!-- CHANGE PIN CARD -->
     <div class="backup-stat-card">
       <div class="backup-stat-header">
-        <div class="backup-stat-header-icon" style="background:var(--accent-soft)">&#128274;</div>
+        <div class="backup-stat-header-icon" style="background:var(--warn-soft)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
         <div class="backup-stat-header-title">Change PIN</div>
       </div>
       <div style="padding:16px">
@@ -1047,22 +1225,22 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
     </div>
 
     <div class="backup-stat-card">
-      <div class="backup-stat-header"><div class="backup-stat-header-icon" style="background:var(--accent-soft)">&#128190;</div><div class="backup-stat-header-title">Export Backup</div></div>
+      <div class="backup-stat-header"><div class="backup-stat-header-icon" style="background:var(--accent-soft)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="backup-stat-header-title">Export Backup</div></div>
       <div style="padding:14px 16px"><button class="backup-btn backup-btn-primary" onclick="exportBackup()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Backup (.json)</button></div>
     </div>
     <div class="backup-stat-card">
-      <div class="backup-stat-header"><div class="backup-stat-header-icon" style="background:var(--success-soft)">&#128194;</div><div class="backup-stat-header-title">Restore from Backup</div></div>
+      <div class="backup-stat-header"><div class="backup-stat-header-icon" style="background:var(--success-soft)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 10 12 15 7 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div><div class="backup-stat-header-title">Restore from Backup</div></div>
       <div style="padding:14px 16px"><div class="backup-warn">Restoring will replace all current data.</div><label class="backup-file-btn" for="restore-file-input">Select Backup File (.json)</label><input type="file" id="restore-file-input" accept=".json" style="display:none" onchange="restoreBackup(event)"></div>
     </div>
     <div class="backup-stat-card">
-      <div class="backup-stat-header" style="border-bottom:1px solid var(--danger-soft)"><div class="backup-stat-header-icon" style="background:var(--danger-soft)">&#128465;</div><div class="backup-stat-header-title" style="color:var(--danger)">Danger Zone</div></div>
+      <div class="backup-stat-header" style="border-bottom:1px solid var(--danger-soft)"><div class="backup-stat-header-icon" style="background:var(--danger-soft)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg></div><div class="backup-stat-header-title" style="color:var(--danger)">Danger Zone</div></div>
       <div style="padding:14px 16px"><div class="backup-warn">This will permanently delete ALL data.</div><button class="backup-btn backup-btn-danger" onclick="clearAllData()">Clear All App Data</button></div>
     </div>
   </div>
   <div class="bottom-bar">
     <div class="bottom-action" onclick="goTo('screen-gateway')"><div class="icon">&#8962;</div><div class="label">Home</div></div>
     <div class="bottom-action primary" onclick="exportBackup()"><div class="icon">&#8595;</div><div class="label">Export</div></div>
-    <label class="bottom-action" for="restore-file-input" style="cursor:pointer"><div class="icon" style="font-size:16px">&#128194;</div><div class="label">Restore</div></label>
+    <label class="bottom-action" for="restore-file-input" style="cursor:pointer"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 10 12 15 7 10"/></svg></div><div class="label">Restore</div></label>
   </div>
 </div>
 
@@ -1169,7 +1347,7 @@ let _firebaseReady = false;
 
 function initFirebase() {
   try {
-    if (typeof FIREBASE_CONFIG === 'undefined' || FIREBASE_CONFIG.apiKey === 'PASTE_YOUR_API_KEY_HERE') {
+    if (typeof FIREBASE_CONFIG === 'undefined' || !FIREBASE_CONFIG.apiKey) {
       console.warn('[ManjuEnt] Firebase not configured — running in local-only mode');
       return;
     }
@@ -1181,6 +1359,7 @@ function initFirebase() {
     console.log('[ManjuEnt] Firebase connected');
     // Start real-time listeners
     startCloudListeners();
+    setTimeout(loadFromCloud, 500);
   } catch(e) {
     console.error('[ManjuEnt] Firebase init error:', e);
   }
@@ -1247,6 +1426,23 @@ function load(){
   });
 }
 
+// Load from Firebase on startup — prevents data loss on redeploy
+function loadFromCloud(){
+  if(!db)return;
+  showSync('syncing','Loading data…');
+  const cols=['customers','products','transports','bills'];
+  Promise.all(cols.map(col=>db.collection(col).get().then(snap=>{
+    const docs=[];snap.forEach(d=>docs.push({id:d.id,...d.data()}));
+    if(docs.length>0){S[col]=docs;localStorage.setItem('me2_'+col,JSON.stringify(docs));}
+  }))).then(()=>{
+    showSync('ok','Data loaded ✓');
+    updateGatewayCounts();updateDashboardStats();
+  }).catch(err=>{
+    console.error('Cloud load error:',err);
+    showSync('err','Using local data');
+  });
+}
+
 function persist(key) {
   // Always save to localStorage as fallback
   localStorage.setItem('me2_'+key, JSON.stringify(S[key]));
@@ -1293,6 +1489,7 @@ function _showScreen(id) {
   if(id==='screen-products')renderMasterList('prod');
   if(id==='screen-transports')renderMasterList('trans');
   if(id==='screen-backup')updateBackupScreen();
+  if(id==='screen-reports'){_reportRange='month';setTimeout(renderReports,80);}
 }
 
 function goTo(id) {
@@ -1357,6 +1554,23 @@ function updateTopDate(){
   document.getElementById('gw-date-display').textContent=dayName+', '+rest;
 }
 
+function updateDashboardStats(){
+  const today=todayISO();
+  const thisMonth=today.slice(0,7);
+  const todayBills=S.bills.filter(b=>b.date===today);
+  const monthBills=S.bills.filter(b=>(b.date||'').startsWith(thisMonth));
+  const unpaidBills=S.bills.filter(b=>!b.paid);
+  const fmt=v=>v>=100000?'₹'+(v/100000).toFixed(1)+'L':v>=1000?'₹'+(v/1000).toFixed(1)+'K':'₹'+v.toFixed(0);
+  const todayTotal=todayBills.reduce((s,b)=>s+(b.grand||0),0);
+  const monthTotal=monthBills.reduce((s,b)=>s+(b.grand||0),0);
+  const unpaidTotal=unpaidBills.reduce((s,b)=>s+(b.grand||0),0);
+  const el=id=>document.getElementById(id);
+  if(el('stat-today')){el('stat-today').textContent=fmt(todayTotal);el('stat-today-count').textContent=todayBills.length+' bill'+(todayBills.length!==1?'s':'');}
+  if(el('stat-month')){el('stat-month').textContent=fmt(monthTotal);el('stat-month-count').textContent=monthBills.length+' bill'+(monthBills.length!==1?'s':'');}
+  if(el('stat-unpaid')){el('stat-unpaid').textContent=fmt(unpaidTotal);el('stat-unpaid-count').textContent=unpaidBills.length+' bill'+(unpaidBills.length!==1?'s':'');}
+  setTimeout(()=>{renderBarChart();renderDonutChart();renderTopCustomersMini();},80);
+}
+
 function updateGatewayCounts(){
   document.getElementById('gw-bill-count').textContent=S.bills.length;
   document.getElementById('gw-cust-count').textContent=S.customers.length;
@@ -1364,6 +1578,7 @@ function updateGatewayCounts(){
   document.getElementById('gw-trans-count').textContent=S.transports.length;
   const lastBak=localStorage.getItem('me2_last_backup');
   if(lastBak){const days=Math.floor((Date.now()-new Date(lastBak).getTime())/86400000);document.getElementById('gw-backup-sub').textContent='Last backup: '+(days===0?'today':days+'d ago');}
+  updateDashboardStats();
 }
 
 function switchSeg(section,tab){
@@ -1379,7 +1594,15 @@ function toggleDark(){
   document.body.classList.toggle('dark');
   const dark=document.body.classList.contains('dark');
   localStorage.setItem('me2_dark',dark?'1':'0');
-  document.getElementById('dark-btn').textContent=dark?'&#9728;':'&#9790;';
+  const icon=document.getElementById('dark-icon');
+  if(icon){
+    if(dark){
+      icon.innerHTML='<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    } else {
+      icon.innerHTML='<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
+    }
+  }
+  setTimeout(()=>{renderBarChart();renderDonutChart();renderTopCustomersMini();},50);
 }
 
 function startNewBill(){
@@ -1668,14 +1891,14 @@ function acceptBill(){
 // BILLS LIST
 function renderBillsList(q){
   const c=document.getElementById('bills-container');
-  if(!S.bills.length){c.innerHTML='<div class="empty-state"><div class="empty-icon">&#128203;</div><div class="empty-title">No Bills Yet</div><div class="empty-sub">Create your first bill to get started</div></div>';return;}
+  if(!S.bills.length){c.innerHTML='<div class="empty-state"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div><div class="empty-title">No Bills Yet</div><div class="empty-sub">Create your first bill to get started</div></div>';return;}
   let filtered=S.bills;
   if(q&&q.trim()){const ql=q.trim().toLowerCase();filtered=S.bills.filter(b=>(b.customer.name||'').toLowerCase().includes(ql)||String(b.invno||'').toLowerCase().includes(ql));}
   const isFiltered=!!(q&&q.trim());
-  if(!filtered.length){c.innerHTML='<div class="empty-state"><div class="empty-icon">&#128269;</div><div class="empty-title">No Results</div><div class="empty-sub">Try a different name or invoice number</div></div><div class="bottom-spacer"></div>';return;}
+  if(!filtered.length){c.innerHTML='<div class="empty-state"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="empty-title">No Results</div><div class="empty-sub">Try a different name or invoice number</div></div><div class="bottom-spacer"></div>';return;}
   function hlB(text,q){if(!q||!q.trim())return esc(text);const ql=q.trim().toLowerCase();const lower=(text||'').toLowerCase();const idx=lower.indexOf(ql);if(idx!==-1)return esc(text.slice(0,idx))+'<mark>'+esc(text.slice(idx,idx+ql.length))+'</mark>'+esc(text.slice(idx+ql.length));return esc(text);}
   const filteredTotal=filtered.reduce((s,b)=>s+(b.grand||0),0);
-  c.innerHTML=`<div class="bills-summary"><div class="bills-summary-label">${isFiltered?'Matching Sales':'Total Sales'}</div><div class="bills-summary-val">&#8377;${filteredTotal.toFixed(2)}</div><div class="bills-summary-count">${isFiltered?filtered.length+' of '+S.bills.length+' bills':S.bills.length+' bill'+(S.bills.length!==1?'s':'')}</div></div>${filtered.map((b,idx)=>`<div class="bill-card" style="animation-delay:${Math.min(idx*0.04,0.3)}s" onclick="viewBill('${b.id}')"><div class="bill-card-top"><div class="bill-inv">No. ${hlB(String(b.invno),q)}</div><div class="bill-date">${fmtDate(b.date)}</div></div><div class="bill-party">${hlB(b.customer.name,q)}</div><div class="bill-location">${esc(b.customer.location||'')}${b.transport?' · '+esc(b.transport.name):''}</div><div class="bill-card-bottom"><div class="bill-meta">${b.items.length} item${b.items.length!==1?'s':''}</div><div class="bill-amount">&#8377;${b.grand.toFixed(2)}</div></div></div>`).join('')}<div class="bottom-spacer"></div>`;
+  c.innerHTML=`<div class="bills-summary"><div class="bills-summary-label">${isFiltered?'Matching Sales':'Total Sales'}</div><div class="bills-summary-val">&#8377;${filteredTotal.toFixed(2)}</div><div class="bills-summary-count">${isFiltered?filtered.length+' of '+S.bills.length+' bills':S.bills.length+' bill'+(S.bills.length!==1?'s':'')}</div></div>${filtered.map((b,idx)=>`<div class="bill-card" style="animation-delay:${Math.min(idx*0.04,0.3)}s" onclick="viewBill('${b.id}')"><div class="bill-card-top"><div class="bill-inv">No. ${hlB(String(b.invno),q)}</div><div class="bill-date">${fmtDate(b.date)}</div></div><div class="bill-party">${hlB(b.customer.name,q)}</div><div class="bill-location">${esc(b.customer.location||'')}${b.transport?' · '+esc(b.transport.name):''}</div><div class="bill-card-bottom"><div style="display:flex;align-items:center;gap:6px"><div class="bill-meta">${b.items.length} item${b.items.length!==1?'s':''}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.paid?'var(--success-soft)':'var(--danger-soft)'};color:${b.paid?'var(--success)':'var(--danger)'}">${b.paid?'PAID':'UNPAID'}</div></div><div class="bill-amount">&#8377;${b.grand.toFixed(2)}</div></div></div>`).join('')}<div class="bottom-spacer"></div>`;
 }
 
 function filterBillsList(){const q=document.getElementById('bills-search').value;const cb=document.getElementById('bills-search-clear');if(cb)cb.style.display=q?'block':'none';renderBillsList(q);}
@@ -1759,12 +1982,210 @@ function viewBill(id){
       <div class="inv-footer">Amount in words: <strong>${b.words}</strong></div>
     </div>`;
 
+  // Update pay toggle button
+  const payBtn=document.getElementById('pay-toggle-btn');
+  if(payBtn){
+    payBtn.textContent=b.paid?'Mark Unpaid':'Mark Paid';
+    payBtn.style.color=b.paid?'var(--danger)':'var(--success)';
+  }
+
   document.getElementById('del-bill-btn').onclick=()=>{
     if(confirm('Delete bill #'+b.invno+'?')){
       S.bills=S.bills.filter(x=>x.id!==id);persist('bills');S.currentBillId=null;showToast('Bill deleted');goTo('screen-bills');
     }
   };
   goTo('screen-bill-detail');
+}
+
+
+// ================================================================
+// TOGGLE PAID/UNPAID
+// ================================================================
+function toggleBillPaid(){
+  const b=S.bills.find(x=>x.id===S.currentBillId);if(!b)return;
+  b.paid=!b.paid;
+  persist('bills');
+  const payBtn=document.getElementById('pay-toggle-btn');
+  if(payBtn){payBtn.textContent=b.paid?'Mark Unpaid':'Mark Paid';payBtn.style.color=b.paid?'var(--danger)':'var(--success)';}
+  showToast(b.paid?'✅ Marked as Paid':'Bill marked unpaid');
+  updateDashboardStats();
+}
+
+// ================================================================
+// DUPLICATE BILL
+// ================================================================
+function duplicateCurrentBill(){
+  const b=S.bills.find(x=>x.id===S.currentBillId);if(!b)return;
+  S.billItems=b.items.map(it=>({...it,id:uid()}));
+  S.selCustomer={...b.customer};
+  S.selTransport=b.transport?{...b.transport}:null;
+  const pdisp=document.getElementById('party-display');
+  pdisp.innerHTML=esc(b.customer.name);pdisp.className='form-tap';
+  const pb=document.getElementById('party-balance');
+  pb.textContent=(b.customer.location||'')+(b.customer.phone?' · '+b.customer.phone:'');
+  pb.style.display=pb.textContent?'block':'none';
+  if(b.transport){const tdisp=document.getElementById('transport-display');tdisp.innerHTML=esc(b.transport.name);tdisp.className='form-tap';}
+  document.getElementById('bill-invno').value=nextInvNo();
+  document.getElementById('bill-date').value=todayISO();
+  document.getElementById('bill-tax').value=b.taxPct||0;
+  document.getElementById('bill-rikshaw').value=b.rikshaw||0;
+  document.getElementById('bill-nav-title').textContent='Repeat Bill';
+  document.getElementById('voucher-pill').textContent='New Estimate';
+  document.getElementById('voucher-pill').className='voucher-pill new';
+  S.currentBillId=null;
+  updateBillDateDisplay();renderBillItems();recalcBill();
+  goTo('screen-bill');
+  showToast('Bill duplicated — review and save');
+}
+
+// ================================================================
+// WHATSAPP SHARE
+// ================================================================
+function shareCurrentBillWhatsApp(){
+  const b=S.bills.find(x=>x.id===S.currentBillId);if(!b)return;
+  showToast('Preparing…');
+  const target=document.getElementById('bill-jpeg-target');
+  setTimeout(()=>{
+    html2canvas(target,{scale:2.5,useCORS:true,backgroundColor:'#ffffff',logging:false}).then(canvas=>{
+      canvas.toBlob(blob=>{
+        const file=new File([blob],'Estimate-'+b.invno+'.jpg',{type:'image/jpeg'});
+        if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+          navigator.share({files:[file],title:'Estimate #'+b.invno,text:'Estimate from Manju Enterprises — ₹'+b.grand.toFixed(2)}).catch(()=>{});
+        } else {
+          // Fallback: save image + open WhatsApp
+          const url=URL.createObjectURL(blob);
+          const a=document.createElement('a');a.href=url;a.download='Estimate-'+b.invno+'.jpg';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+          setTimeout(()=>{
+            const msg=encodeURIComponent('Estimate #'+b.invno+' from Manju Enterprises\nAmount: ₹'+b.grand.toFixed(2)+'\n(Image saved — please attach it)');
+            window.open('https://wa.me/?text='+msg,'_blank');
+          },800);
+        }
+      },'image/jpeg',0.95);
+    });
+  },100);
+}
+
+
+// ================================================================
+// REPORTS
+// ================================================================
+let _reportRange = 'month';
+
+function setReportRange(range, btn) {
+  _reportRange = range;
+  document.querySelectorAll('.rpt-range-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderReports();
+}
+
+function getReportBills() {
+  const today = todayISO();
+  const d = new Date();
+  let bills = S.bills;
+  // Amount filter
+  const minAmt = parseFloat(document.getElementById('rpt-min-amt')?.value) || 0;
+  const maxAmt = parseFloat(document.getElementById('rpt-max-amt')?.value) || Infinity;
+  if (_reportRange === 'today') bills = bills.filter(b => b.date === today);
+  else if (_reportRange === 'week') {
+    const weekAgo = new Date(d); weekAgo.setDate(d.getDate() - 7);
+    bills = bills.filter(b => b.date >= weekAgo.toISOString().split('T')[0]);
+  } else if (_reportRange === 'month') {
+    bills = bills.filter(b => (b.date||'').startsWith(today.slice(0,7)));
+  }
+  return bills.filter(b => (b.grand||0) >= minAmt && (b.grand||0) <= maxAmt);
+}
+
+function renderReports() {
+  const bills = getReportBills();
+  setTimeout(()=>{
+    renderReportBarChart(bills);
+    renderReportDonutChart(bills);
+    renderReportTopCustomersMini(bills);
+  },100);
+  const total = bills.reduce((s,b) => s+(b.grand||0), 0);
+  const paid = bills.filter(b=>b.paid).reduce((s,b) => s+(b.grand||0), 0);
+  const unpaid = total - paid;
+
+  const fmt = v => '₹' + v.toFixed(2);
+  const el = id => document.getElementById(id);
+  if(el('rpt-total')) el('rpt-total').textContent = fmt(total);
+  if(el('rpt-bill-count')) el('rpt-bill-count').textContent = bills.length + ' bill' + (bills.length!==1?'s':'');
+  if(el('rpt-paid')) el('rpt-paid').textContent = fmt(paid);
+  if(el('rpt-unpaid-amt')) el('rpt-unpaid-amt').textContent = fmt(unpaid) + ' pending';
+
+  // Top customers
+  const custMap = {};
+  bills.forEach(b => {
+    const name = b.customer?.name || 'Unknown';
+    if(!custMap[name]) custMap[name] = {total:0,count:0};
+    custMap[name].total += b.grand||0;
+    custMap[name].count++;
+  });
+  const custList = Object.entries(custMap).sort((a,b) => b[1].total - a[1].total).slice(0,8);
+  const custEl = el('rpt-customers');
+  if(custEl) custEl.innerHTML = custList.length ? custList.map(([name,d],i) => `
+    <div style="display:flex;align-items:center;padding:10px 14px;border-bottom:0.5px solid var(--separator);gap:10px;">
+      <div style="width:22px;height:22px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">${i+1}</div>
+      <div style="flex:1;font-size:13px;font-weight:500;color:var(--text)">${esc(name)}</div>
+      <div style="font-size:11px;color:var(--muted);margin-right:8px">${d.count} bills</div>
+      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--success)">₹${d.total.toFixed(0)}</div>
+    </div>`).join('') : '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">No data</div>';
+
+  // Product summary
+  const prodMap = {};
+  bills.forEach(b => b.items?.forEach(it => {
+    if(!prodMap[it.name]) prodMap[it.name] = {total:0,qty:0,wt:0};
+    prodMap[it.name].total += it.amount||0;
+    prodMap[it.name].qty += it.pcs||0;
+    prodMap[it.name].wt += it.weight||0;
+  }));
+  const prodList = Object.entries(prodMap).sort((a,b) => b[1].total - a[1].total).slice(0,8);
+  const prodEl = el('rpt-products');
+  if(prodEl) prodEl.innerHTML = prodList.length ? prodList.map(([name,d],i) => `
+    <div style="display:flex;align-items:center;padding:10px 14px;border-bottom:0.5px solid var(--separator);gap:10px;">
+      <div style="width:22px;height:22px;border-radius:50%;background:var(--success-soft);color:var(--success);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">${i+1}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(name)}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px">${d.qty>0?d.qty+' pcs':''}${d.wt>0?(d.qty>0?' · ':'')+d.wt.toFixed(1)+' kg':''}</div>
+      </div>
+      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--success)">₹${d.total.toFixed(0)}</div>
+    </div>`).join('') : '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">No data</div>';
+
+  // Populate customer statement dropdown
+  const sel = el('rpt-cust-select');
+  if(sel) {
+    const currentVal = sel.value;
+    const custNames = [...new Set(S.bills.map(b=>b.customer?.name).filter(Boolean))].sort();
+    sel.innerHTML = '<option value="">-- Select Customer --</option>' + custNames.map(n=>`<option value="${esc(n)}" ${n===currentVal?'selected':''}>${esc(n)}</option>`).join('');
+    if(currentVal) renderCustomerStatement();
+  }
+}
+
+function renderCustomerStatement() {
+  const name = document.getElementById('rpt-cust-select')?.value;
+  const el = document.getElementById('rpt-cust-statement');
+  if(!el) return;
+  if(!name) { el.innerHTML=''; return; }
+  const bills = S.bills.filter(b=>b.customer?.name===name).sort((a,b)=>b.date.localeCompare(a.date));
+  const total = bills.reduce((s,b)=>s+(b.grand||0),0);
+  const unpaid = bills.filter(b=>!b.paid).reduce((s,b)=>s+(b.grand||0),0);
+  el.innerHTML = `
+    <div style="padding:10px 14px;background:var(--surface2);border-bottom:0.5px solid var(--separator);display:flex;justify-content:space-between;">
+      <div style="font-size:12px;color:var(--muted)">${bills.length} bills total</div>
+      <div style="font-size:12px;font-weight:700;color:var(--danger)">₹${unpaid.toFixed(0)} pending</div>
+    </div>
+    ${bills.map(b=>`<div style="display:flex;align-items:center;padding:10px 14px;border-bottom:0.5px solid var(--separator);gap:8px;" onclick="viewBill('${b.id}')">
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500;color:var(--text)">#${b.invno} · ${fmtDate(b.date)}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px">${b.items?.length||0} items</div>
+      </div>
+      <div style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.paid?'var(--success-soft)':'var(--danger-soft)'};color:${b.paid?'var(--success)':'var(--danger)'};margin-right:4px">${b.paid?'PAID':'DUE'}</div>
+      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--text)">₹${b.grand.toFixed(0)}</div>
+    </div>`).join('')}
+    <div style="padding:12px 14px;display:flex;justify-content:space-between;background:var(--surface2);">
+      <div style="font-size:13px;font-weight:700;color:var(--text)">Total</div>
+      <div style="font-size:15px;font-weight:800;font-family:var(--mono);color:var(--accent)">₹${total.toFixed(2)}</div>
+    </div>`;
 }
 
 // PRINT
@@ -1837,7 +2258,7 @@ function addTransport(){const name=document.getElementById('tn-name').value.trim
 function renderMasterList(section){
   const map={cust:{data:S.customers,id:'cust-list-container',type:'customer'},prod:{data:S.products,id:'prod-list-container',type:'product'},trans:{data:S.transports,id:'trans-list-container',type:'transport'}};
   const m=map[section];if(!m)return;const c=document.getElementById(m.id);
-  if(!m.data.length){c.innerHTML=`<div class="master-card"><div class="empty-state"><div class="empty-icon">${section==='cust'?'&#128100;':section==='prod'?'&#128230;':'&#128666;'}</div><div class="empty-title">No records yet</div></div></div>`;return;}
+  if(!m.data.length){c.innerHTML=`<div class="master-card"><div class="empty-state"><div class="empty-icon">${section==='cust'?'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>':section==='prod'?'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/></svg>':'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="3" width="15" height="13"/></svg>'}</div><div class="empty-title">No records yet</div></div></div>`;return;}
   c.innerHTML=`<div class="master-card">${m.data.map((item,i)=>{let sub='',rate='';if(m.type==='customer'){const parts=[];if(item.searchName&&item.searchName!==(item.name+(item.location?' - '+item.location:'')))parts.push('Search: '+item.searchName);else if(item.location)parts.push(item.location);if(item.phone)parts.push(item.phone);if(item.preferredTransport)parts.push('Transport: '+item.preferredTransport);sub=parts.join(' · ');}if(m.type==='product'){sub=item.type==='kg'?'Per Kg':'Per Pc';rate='&#8377;'+item.rate+'/'+item.type;}if(m.type==='transport')sub=item.contact||'';return`<div class="master-item"><div class="master-item-num">${i+1}</div><div class="master-item-body"><div class="master-item-name">${esc(item.name)}</div>${sub?`<div class="master-item-sub">${esc(sub)}</div>`:''}</div>${rate?`<div class="master-item-rate">${rate}</div>`:''}<div class="master-actions"><button class="btn-edit" onclick="editMaster('${m.type}','${item.id}')">Edit</button><button class="btn-del" onclick="deleteMaster('${m.type}','${item.id}')">Del</button></div></div>`;}).join('')}</div>`;
 }
 
@@ -2219,16 +2640,321 @@ function saveCurrentBillAsJpeg() {
 // ================================================================
 load();
 initFirebase();
-if(localStorage.getItem('me2_dark')==='1'){document.body.classList.add('dark');document.getElementById('dark-btn').innerHTML='&#9728;';}
+if(localStorage.getItem('me2_dark')==='1'){
+  document.body.classList.add('dark');
+  const di=document.getElementById('dark-icon');
+  if(di)di.innerHTML='<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+}
 if(!S.customers.length){S.customers=[{id:uid(),name:'Jaya Traders',location:'Bodhan',phone:'9876543210',preferredTransport:'',searchName:'Jaya Traders - Bodhan'},{id:uid(),name:'Ravi Stores',location:'Nizamabad',phone:'8765432109',preferredTransport:'',searchName:'Ravi Stores - Nizamabad'},{id:uid(),name:'Lakshmi Enterprises',location:'Kamareddy',phone:'',preferredTransport:'',searchName:'Lakshmi Enterprises - Kamareddy'}];persist('customers');}
 if(!S.products.length){S.products=[{id:uid(),name:'Cover Gold PVC 24 x 24',type:'pc',rate:950},{id:uid(),name:'Cover Silver PVC 18 x 18',type:'pc',rate:650},{id:uid(),name:'PVC Granules Premium',type:'kg',rate:120},{id:uid(),name:'Tarpaulin Sheet Heavy',type:'pc',rate:450}];persist('products');}
 if(!S.transports.length){S.transports=[{id:uid(),name:'Hindustan Roadlines',contact:'9900112233'},{id:uid(),name:'Sri Venkateshwara Transport',contact:'8811223344'}];persist('transports');}
-updateTopDate();updateGatewayCounts();
+updateTopDate();updateGatewayCounts();updateDashboardStats();
 
 // Check PIN session
 if (sessionStorage.getItem('me_unlocked') === '1') {
   document.getElementById('pin-screen').style.display = 'none';
 }
+
+// ================================================================
+// INTERACTIVE CHARTS
+// ================================================================
+function renderBarChart(canvasId, labelId) {
+  canvasId = canvasId || 'bar-chart-canvas';
+  labelId = labelId || 'bar-chart-label';
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const today = new Date();
+  const days7 = Array.from({length:7}, (_,i) => {
+    const d = new Date(today); d.setDate(today.getDate()-6+i);
+    return d.toISOString().split('T')[0];
+  });
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const data = days7.map(date => ({
+    date,
+    label: dayNames[new Date(date+'T12:00:00').getDay()],
+    value: S.bills.filter(b=>b.date===date).reduce((s,b)=>s+(b.grand||0),0)
+  }));
+  _animateBarChart(canvas, data, labelId);
+  _setupBarInteraction(canvas, data, labelId);
+}
+
+function _drawBarChart(canvas, data, labelId, progress) {
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.parentElement ? canvas.parentElement.clientWidth - 32 : 300;
+  canvas.width = W * dpr; canvas.height = 130 * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = '130px';
+  const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, 130);
+  const dark = document.body.classList.contains('dark');
+  const accent = dark ? '#0a84ff' : '#007aff';
+  const accentFade = dark ? 'rgba(10,132,255,0.15)' : 'rgba(0,122,255,0.07)';
+  const gridCol = dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)';
+  const textCol = dark ? 'rgba(255,255,255,0.32)' : 'rgba(0,0,0,0.26)';
+  const p = progress !== undefined ? progress : 1;
+  const pad = {t:8,r:8,b:28,l:8};
+  const cW = W-pad.l-pad.r, cH = 130-pad.t-pad.b;
+  const maxV = Math.max(...data.map(d=>d.value), 1);
+  const bSlot = cW/data.length, bW = Math.min(bSlot*0.55, 28);
+  // grid lines
+  ctx.strokeStyle = gridCol; ctx.lineWidth = 0.5;
+  for(let i=0;i<=3;i++){const y=pad.t+cH-(i/3)*cH;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cW,y);ctx.stroke();}
+  data.forEach((d,i) => {
+    const fullH = d.value>0 ? Math.max(4,(d.value/maxV)*cH) : 0;
+    const bH = fullH * p;
+    const x = pad.l + i*bSlot + (bSlot-bW)/2;
+    const y = pad.t + cH - bH;
+    const r = Math.min(5, bW/2);
+    if(bH > 0) {
+      const grad = ctx.createLinearGradient(0,pad.t+cH-fullH,0,pad.t+cH);
+      grad.addColorStop(0, accent); grad.addColorStop(1, accentFade);
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      if(bH>r*2){ctx.moveTo(x+r,y);ctx.lineTo(x+bW-r,y);ctx.quadraticCurveTo(x+bW,y,x+bW,y+r);ctx.lineTo(x+bW,pad.t+cH);ctx.lineTo(x,pad.t+cH);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);}
+      else{ctx.rect(x,y,bW,bH);}
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.fillStyle = textCol; ctx.font = '500 10px DM Sans,system-ui'; ctx.textAlign = 'center';
+    ctx.fillText(d.label, x+bW/2, 130-pad.b+14);
+  });
+  const lbl = document.getElementById(labelId);
+  if(lbl&&p===1){const total=data.reduce((s,d)=>s+d.value,0);lbl.textContent=total>0?'7-day total: ₹'+total.toFixed(0):'No sales this week';}
+}
+
+function _animateBarChart(canvas, data, labelId) {
+  const start = performance.now();
+  const dur = 520;
+  function ease(t){return t<0.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1;}
+  function frame(now) {
+    const t = Math.min(1, (now - start) / dur);
+    _drawBarChart(canvas, data, labelId, ease(t));
+    if(t < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+function _setupBarInteraction(canvas, data, labelId) {
+  let _hovIdx = -1;
+  function getIdx(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.touches?e.touches[0].clientX:e.clientX)-rect.left;
+    return Math.max(0,Math.min(data.length-1,Math.floor(x/(canvas.clientWidth/data.length))));
+  }
+  function show(e) {
+    const idx = getIdx(e);
+    if(idx===_hovIdx)return; _hovIdx=idx;
+    const d = data[idx]; if(!d)return;
+    const lbl = document.getElementById(labelId);
+    if(lbl)lbl.textContent=d.label+' ('+d.date.slice(5)+') – ₹'+d.value.toFixed(0);
+    // Redraw with highlight
+    const dpr=window.devicePixelRatio||1;
+    const W=canvas.clientWidth;
+    const dark=document.body.classList.contains('dark');
+    const bSlot=W/data.length,bW=bSlot*0.55;
+    const ctx=canvas.getContext('2d');ctx.scale(0,0);ctx.scale(1,1);
+    // Re-draw with highlight overlay
+    const maxV=Math.max(...data.map(d=>d.value),1);
+    const pad={t:8,r:8,b:28,l:8};const cH=130-pad.t-pad.b;
+    ctx.save();ctx.setTransform(dpr,0,0,dpr,0,0);
+    data.forEach((dd,ii)=>{
+      const bH=dd.value>0?Math.max(4,(dd.value/maxV)*cH):0;
+      const x=pad.l+ii*bSlot+(bSlot-bW)/2;const y=pad.t+cH-bH;
+      if(ii===idx){ctx.fillStyle='rgba(255,255,255,0.15)';ctx.fillRect(x-2,pad.t,bW+4,cH);}
+    });
+    ctx.restore();
+  }
+  function hide() {
+    _hovIdx=-1;
+    const lbl=document.getElementById(labelId);
+    if(lbl){const total=data.reduce((s,d)=>s+d.value,0);lbl.textContent=total>0?'7-day total: ₹'+total.toFixed(0):'No sales this week';}
+    renderBarChart();
+  }
+  canvas.onmousemove=show; canvas.onmouseleave=hide;
+  canvas.ontouchstart=e=>{show(e);e.preventDefault();};
+  canvas.ontouchend=hide;
+}
+
+function _drawDonut(ctx, segs, total, dark, progress) {
+  ctx.clearRect(0,0,110,110);
+  const p = progress !== undefined ? progress : 1;
+  if(!total){
+    ctx.fillStyle=dark?'#2c2c2e':'#f2f2f7';ctx.beginPath();ctx.arc(55,55,42,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=dark?'#636366':'#8e8e93';ctx.font='500 10px DM Sans,system-ui';ctx.textAlign='center';ctx.fillText('No data',55,59);
+    return;
+  }
+  let a=-Math.PI/2;
+  const totalAngle = Math.PI * 2 * p;
+  let drawn = 0;
+  segs.forEach(seg=>{
+    if(drawn >= totalAngle) return;
+    const segAngle = seg.ratio * Math.PI * 2;
+    const drawAngle = Math.min(segAngle, totalAngle - drawn);
+    const end = a + drawAngle;
+    ctx.beginPath();ctx.moveTo(55,55);ctx.arc(55,55,46,a,end);ctx.closePath();
+    ctx.fillStyle=seg.color;ctx.fill();
+    a=end; drawn+=drawAngle;
+  });
+  ctx.fillStyle=dark?'#1c1c1e':'#fff';ctx.beginPath();ctx.arc(55,55,30,0,Math.PI*2);ctx.fill();
+  if(p===1){
+    ctx.fillStyle=dark?'#f5f5f7':'#1c1c1e';ctx.font='700 11px DM Mono,monospace';ctx.textAlign='center';
+    ctx.fillText(Math.round(segs[0].value/total*100)+'%',55,59);
+  }
+}
+
+function renderDonutChart() {
+  const canvas = document.getElementById('donut-canvas');
+  if(!canvas)return;
+  const paid = S.bills.filter(b=>b.paid).reduce((s,b)=>s+(b.grand||0),0);
+  const unpaid = S.bills.filter(b=>!b.paid).reduce((s,b)=>s+(b.grand||0),0);
+  const total = paid+unpaid;
+  const dpr=window.devicePixelRatio||1;
+  canvas.width=canvas.height=110*dpr; canvas.style.width=canvas.style.height='110px';
+  const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
+  const dark=document.body.classList.contains('dark');
+  const segs=[
+    {label:'Paid',value:paid,ratio:total>0?paid/total:0,color:dark?'#30d158':'#34c759'},
+    {label:'Unpaid',value:unpaid,ratio:total>0?unpaid/total:0,color:dark?'#ff453a':'#ff3b30'}
+  ];
+  // Animate
+  const start=performance.now(); const dur=480;
+  function ease(t){return 1-Math.pow(1-t,3);}
+  function frame(now){
+    const p=Math.min(1,(now-start)/dur);
+    _drawDonut(ctx,segs,total,dark,ease(p));
+    if(p<1)requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  const fmt=v=>{if(v>=100000)return '₹'+(v/100000).toFixed(1)+'L';if(v>=1000)return'₹'+(v/1000).toFixed(1)+'K';return'₹'+v.toFixed(0);};
+  const legend=document.getElementById('donut-legend');
+  if(legend)legend.innerHTML=segs.map(s=>`<div style="display:flex;align-items:center;justify-content:space-between;gap:6px"><div style="display:flex;align-items:center;gap:5px"><div style="width:7px;height:7px;border-radius:50%;background:${s.color};flex-shrink:0"></div><span style="font-size:11px;color:var(--muted)">${s.label}</span></div><span style="font-size:11px;font-weight:600;font-family:var(--mono);color:var(--text)">${fmt(s.value)}</span></div>`).join('');
+}
+
+function renderTopCustomersMini() {
+  const el=document.getElementById('top-customers-mini');if(!el)return;
+  const map={};S.bills.forEach(b=>{const n=b.customer?.name||'';if(!n)return;if(!map[n])map[n]=0;map[n]+=(b.grand||0);});
+  const top=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,4);
+  const fmt=v=>{if(v>=100000)return'₹'+(v/100000).toFixed(1)+'L';if(v>=1000)return'₹'+(v/1000).toFixed(1)+'K';return'₹'+v.toFixed(0);};
+  if(!top.length){el.innerHTML='<div style="font-size:11px;color:var(--muted);text-align:center;padding:16px 0">No data yet</div>';return;}
+  const maxV=top[0][1];
+  el.innerHTML=top.map(([name,val])=>{
+    const pct=Math.round(val/maxV*100);
+    const init=name.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
+    return`<div style="display:flex;align-items:center;gap:7px"><div style="width:22px;height:22px;border-radius:7px;background:var(--accent-soft);color:var(--accent);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${init}</div><div style="flex:1;min-width:0"><div style="font-size:11px;font-weight:500;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(name)}</div><div style="height:3px;background:var(--surface2);border-radius:2px;margin-top:3px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--accent);border-radius:2px;transition:width 0.6s cubic-bezier(0.16,1,0.3,1)"></div></div></div><div style="font-size:10px;font-weight:600;font-family:var(--mono);color:var(--muted);white-space:nowrap">${fmt(val)}</div></div>`;
+  }).join('');
+}
+
+function renderReportBarChart(bills) {
+  const canvas=document.getElementById('rpt-bar-canvas');if(!canvas)return;
+  const dateMap={};bills.forEach(b=>{if(!dateMap[b.date])dateMap[b.date]=0;dateMap[b.date]+=(b.grand||0);});
+  const sorted=Object.entries(dateMap).sort((a,b)=>a[0].localeCompare(b[0])).slice(-10);
+  if(!sorted.length){const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);return;}
+  const data=sorted.map(([d,v])=>({date:d,label:d.slice(5).replace('-','/'),value:v}));
+  _animateBarChart(canvas,data,'rpt-chart-label');
+  _setupBarInteraction(canvas,data,'rpt-chart-label');
+}
+
+
+// ── REPORTS PAGE CHARTS ───────────────────────────────────────────
+function renderReportDonutChart(bills) {
+  const canvas = document.getElementById('rpt-donut-canvas');
+  if(!canvas) return;
+  const paid = bills.filter(b=>b.paid).reduce((s,b)=>s+(b.grand||0),0);
+  const unpaid = bills.filter(b=>!b.paid).reduce((s,b)=>s+(b.grand||0),0);
+  const total = paid + unpaid;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.height = 110 * dpr;
+  canvas.style.width = canvas.style.height = '110px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0,0,110,110);
+  const dark = document.body.classList.contains('dark');
+  if(!total) {
+    ctx.fillStyle = dark ? '#2c2c2e' : '#f2f2f7';
+    ctx.beginPath(); ctx.arc(55,55,42,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = dark ? '#636366' : '#8e8e93';
+    ctx.font = '500 10px DM Sans,system-ui'; ctx.textAlign = 'center';
+    ctx.fillText('No data', 55, 59);
+    const leg = document.getElementById('rpt-donut-legend');
+    if(leg) leg.innerHTML = '';
+    return;
+  }
+  const segs = [
+    {label:'Paid', value:paid, ratio:paid/total, color: dark?'#30d158':'#34c759'},
+    {label:'Unpaid', value:unpaid, ratio:unpaid/total, color: dark?'#ff453a':'#ff3b30'}
+  ];
+  let a = -Math.PI/2;
+  segs.forEach(seg => {
+    const end = a + seg.ratio * Math.PI * 2;
+    ctx.beginPath(); ctx.moveTo(55,55); ctx.arc(55,55,46,a,end); ctx.closePath();
+    ctx.fillStyle = seg.color; ctx.fill(); a = end;
+  });
+  ctx.fillStyle = dark ? '#1c1c1e' : '#fff';
+  ctx.beginPath(); ctx.arc(55,55,30,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = dark ? '#f5f5f7' : '#1c1c1e';
+  ctx.font = '700 11px DM Mono,monospace'; ctx.textAlign = 'center';
+  ctx.fillText(total > 0 ? Math.round(paid/total*100)+'%' : '0%', 55, 59);
+  const fmt = v => v >= 100000 ? '₹'+(v/100000).toFixed(1)+'L' : v >= 1000 ? '₹'+(v/1000).toFixed(1)+'K' : '₹'+v.toFixed(0);
+  const leg = document.getElementById('rpt-donut-legend');
+  if(leg) leg.innerHTML = segs.map(s =>
+    `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px">
+      <div style="display:flex;align-items:center;gap:5px">
+        <div style="width:7px;height:7px;border-radius:50%;background:${s.color};flex-shrink:0"></div>
+        <span style="font-size:11px;color:var(--muted)">${s.label}</span>
+      </div>
+      <span style="font-size:11px;font-weight:600;font-family:var(--mono);color:var(--text)">${fmt(s.value)}</span>
+    </div>`
+  ).join('');
+}
+
+function renderReportTopCustomersMini(bills) {
+  const el = document.getElementById('rpt-top-customers-mini');
+  if(!el) return;
+  const map = {};
+  bills.forEach(b => {
+    const n = b.customer?.name || '';
+    if(!n) return;
+    if(!map[n]) map[n] = 0;
+    map[n] += (b.grand || 0);
+  });
+  const top = Object.entries(map).sort((a,b) => b[1]-a[1]).slice(0,4);
+  const fmt = v => v >= 100000 ? '₹'+(v/100000).toFixed(1)+'L' : v >= 1000 ? '₹'+(v/1000).toFixed(1)+'K' : '₹'+v.toFixed(0);
+  if(!top.length) {
+    el.innerHTML = '<div style="font-size:11px;color:var(--muted);text-align:center;padding:16px 0">No data</div>';
+    return;
+  }
+  const maxV = top[0][1];
+  el.innerHTML = top.map(([name, val]) => {
+    const pct = Math.round(val / maxV * 100);
+    const init = name.split(' ').slice(0,2).map(w => w[0]||'').join('').toUpperCase();
+    return `<div style="display:flex;align-items:center;gap:7px">
+      <div style="width:22px;height:22px;border-radius:7px;background:var(--accent-soft);color:var(--accent);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${init}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:11px;font-weight:500;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(name)}</div>
+        <div style="height:3px;background:var(--surface2);border-radius:2px;margin-top:3px;overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:var(--accent);border-radius:2px;transition:width 0.6s cubic-bezier(0.16,1,0.3,1)"></div>
+        </div>
+      </div>
+      <div style="font-size:10px;font-weight:600;font-family:var(--mono);color:var(--muted);white-space:nowrap">${fmt(val)}</div>
+    </div>`;
+  }).join('');
+}
+
+window.addEventListener('resize', function() {
+  clearTimeout(window._resizeTimer);
+  window._resizeTimer = setTimeout(function(){
+    renderBarChart();
+    renderDonutChart();
+    renderTopCustomersMini();
+    // Re-render reports charts if that screen is active
+    const active = document.querySelector('.screen.active');
+    if(active && active.id === 'screen-reports') {
+      const bills = getReportBills();
+      renderReportBarChart(bills);
+      renderReportDonutChart(bills);
+      renderReportTopCustomersMini(bills);
+    }
+  }, 200);
+});
+
 </script>
 </body>
 </html>
