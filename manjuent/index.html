@@ -1657,6 +1657,99 @@ body.dark .bottom-action.primary {
     bottom: 16px !important;
   }
 }
+/* Apple Premium v5: mobile speed + real active navigation */
+.bottom-action.primary {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.bottom-action.primary .icon,
+.bottom-action.primary .label {
+  color: rgba(60,60,67,.58) !important;
+}
+.bottom-action.is-active {
+  background:
+    linear-gradient(180deg, rgba(232,244,255,.92), rgba(207,231,251,.62)) !important;
+  box-shadow:
+    0 1px 1px rgba(255,255,255,.86) inset,
+    0 14px 34px rgba(10,132,255,.16),
+    0 0 0 1px rgba(255,255,255,.68) inset !important;
+}
+.bottom-action.is-active .icon,
+.bottom-action.is-active .label {
+  color: var(--accent) !important;
+}
+.bottom-action.is-action {
+  color: var(--accent);
+}
+.bottom-action.is-action .icon {
+  color: var(--accent) !important;
+}
+@media (max-width: 620px), (hover: none), (pointer: coarse) {
+  body {
+    background:
+      linear-gradient(180deg, #f7f4ed 0%, #eee9dd 100%) !important;
+  }
+  body::before,
+  .premium-hero::before,
+  .liquid-card::before,
+  .liquid-card::after,
+  .gw-tile::after,
+  .gw-card-group::after,
+  .kpi-card::after,
+  .timeline-card::after,
+  .action-chip::after,
+  .hero-chart-wrap::after,
+  .sync-health-card::after {
+    animation: none !important;
+  }
+  .nav-bar,
+  .bottom-bar,
+  .liquid-card,
+  .glass-surface,
+  .gw-card-group,
+  .gw-tile,
+  .kpi-card,
+  .sync-health-card,
+  .hero-chart-wrap {
+    backdrop-filter: blur(14px) saturate(135%) !important;
+    -webkit-backdrop-filter: blur(14px) saturate(135%) !important;
+  }
+  .premium-hero {
+    min-height: 560px !important;
+    margin-top: 28px !important;
+    overflow: hidden !important;
+    contain: layout paint;
+  }
+  .premium-title {
+    max-width: 11ch;
+    font-size: 38px !important;
+  }
+  .hero-chart-wrap {
+    top: 318px !important;
+    bottom: auto !important;
+    min-height: 206px;
+  }
+  #hero-chart-canvas {
+    height: 112px !important;
+  }
+  .premium-grid {
+    margin-top: 20px !important;
+  }
+  .kpi-card {
+    min-height: 160px !important;
+  }
+  .smart-actions {
+    gap: 12px !important;
+  }
+  .sync-health-card {
+    margin-top: 18px !important;
+    margin-bottom: 18px !important;
+  }
+  .bottom-bar {
+    overflow: hidden !important;
+    transform: translateZ(0);
+  }
+}
 </style>
 </head>
 <body>
@@ -4604,6 +4697,69 @@ window.addEventListener('resize', function() {
   window.addEventListener('offline', () => updateSyncHealth('err', 'Offline'));
   setInterval(() => updateSyncHealth(lastSyncState), 30000);
   setTimeout(() => updateSyncHealth(navigator.onLine ? ((typeof _firebaseReady !== 'undefined' && _firebaseReady) ? 'ok' : 'syncing') : 'err'), 60);
+})();
+
+// Apple Premium v5: bottom navigation follows the active screen instead of
+// leaving New Bill highlighted forever.
+(function(){
+  const screenToLabel = {
+    'screen-bill': 'New Bill',
+    'screen-bills': 'Bills',
+    'screen-customers': 'Customers',
+    'screen-backup': 'Backup'
+  };
+
+  function normalize(text){
+    return String(text || '').trim().toLowerCase();
+  }
+
+  function updateBottomNavState(activeScreenId){
+    const activeLabel = screenToLabel[activeScreenId] || '';
+    document.querySelectorAll('.bottom-bar .bottom-action').forEach(action => {
+      const label = action.querySelector('.label')?.textContent || '';
+      action.classList.remove('primary', 'is-active', 'is-action');
+      if(activeLabel && normalize(label) === normalize(activeLabel)){
+        action.classList.add('is-active');
+      }
+      if(!activeLabel && normalize(label) === 'new bill'){
+        action.classList.add('is-action');
+      }
+    });
+  }
+
+  const originalShowScreen = window._showScreen;
+  if(typeof originalShowScreen === 'function'){
+    window._showScreen = function(id){
+      originalShowScreen(id);
+      updateBottomNavState(id);
+    };
+  }
+
+  const originalGoTo = window.goTo;
+  if(typeof originalGoTo === 'function'){
+    window.goTo = function(id){
+      const result = originalGoTo(id);
+      setTimeout(() => {
+        const active = document.querySelector('.screen.active');
+        updateBottomNavState(active?.id || id);
+      }, 0);
+      return result;
+    };
+  }
+
+  const originalStartNewBill = window.startNewBill;
+  if(typeof originalStartNewBill === 'function'){
+    window.startNewBill = function(){
+      const result = originalStartNewBill();
+      setTimeout(() => updateBottomNavState('screen-bill'), 0);
+      return result;
+    };
+  }
+
+  setTimeout(() => {
+    const active = document.querySelector('.screen.active');
+    updateBottomNavState(active?.id || 'screen-gateway');
+  }, 80);
 })();
 
 </script>
