@@ -12821,6 +12821,8 @@
           listening: false,
           wakeListening: false,
           wakePaused: false,
+          wakeArmed: false,
+          wakeRetryTimer: null,
           lastTranscript: "",
           parsed: null,
           phase: "idle", // idle | listening | parsed | confirmed
@@ -13066,6 +13068,20 @@
             "mat",
             "please",
             "plz",
+            "radhe",
+            "raadhe",
+            "radhey",
+            "rade",
+            "raday",
+            "radha",
+            "shyam",
+            "krishna",
+            "kanha",
+            "govind",
+            "gopal",
+            "mohan",
+            "hari",
+            "hare",
           ].includes(w);
         }
 
@@ -13074,6 +13090,14 @@
             String(raw || "")
               .replace(/[\u0966-\u096f]/g, (d) => "\u0966\u0967\u0968\u0969\u096a\u096b\u096c\u096d\u096e\u096f".indexOf(d))
               .replace(/\u0917\u094d\u0930\u093e\u0939\u0915|\u0915\u0938\u094d\u091f\u092e\u0930/g, " customer ")
+              .replace(/\u0930\u093e\u0927\u0947|\u0930\u093e\u0927\u0947\u092f|\u0930\u093e\u0927\u093e/g, " radhe ")
+              .replace(/\u0936\u094d\u092f\u093e\u092e/g, " shyam ")
+              .replace(/\u0915\u0943\u0937\u094d\u0923|\u0915\u0943\u0937\u094d\u0923\u093e/g, " krishna ")
+              .replace(/\u0915\u093e\u0928\u094d\u0939\u093e/g, " kanha ")
+              .replace(/\u0917\u094b\u0935\u093f\u0902\u0926/g, " govind ")
+              .replace(/\u0917\u094b\u092a\u093e\u0932/g, " gopal ")
+              .replace(/\u092e\u094b\u0939\u0928/g, " mohan ")
+              .replace(/\u0939\u0930\u0947|\u0939\u0930\u093f/g, " hare ")
               .replace(/\u092a\u093e\u0930\u094d\u091f\u0940/g, " party ")
               .replace(/\u0930\u0935\u093f/g, " ravi ")
               .replace(/\u091c\u092f|\u091c\u092f\u093e/g, " jaya ")
@@ -13083,6 +13107,9 @@
               .replace(/\u090f\u0902\u091f\u0930\u092a\u094d\u0930\u093e\u0907\u091c\u0947\u091c|\u090f\u0902\u091f\u0930\u092a\u094d\u0930\u093e\u0907\u091c/g, " enterprises ")
               .replace(/\u0928\u093e\u092e/g, " naam ")
               .replace(/\u092c\u093f\u0932/g, " bill ")
+              .replace(/\u0921\u093f\u0938\u094d\u0915\u093e\u0909\u0902\u091f|\u0921\u093f\u0938\u094d\u0915\u093e\u0909\u0928\u094d\u091f/g, " discount ")
+              .replace(/\u091b\u0942\u091f|\u091b\u0941\u091f/g, " chhoot ")
+              .replace(/\u092a\u094d\u0930\u0924\u093f\u0936\u0924|\u092a\u0930\u0938\u0947\u0902\u091f/g, " percent ")
               .replace(/\u0932\u093f\u090f|\u0932\u093f\u092f\u0947/g, " liye ")
               .replace(/\u0915\u094b/g, " ko ")
               .replace(/\u0915\u0947/g, " ke ")
@@ -13102,6 +13129,9 @@
               .replace(/\u0926\u094b/g, " 2 ")
               .replace(/\u090f\u0915/g, " 1 ")
               .replace(/\b(per cent|percentage)\b/gi, " percent ")
+              .replace(/\b(dis|dikount|discunt|diskount|diskaunt|discounted)\b/gi, " discount ")
+              .replace(/\b(chut|chhut|chhod|choot|chhoot)\b/gi, " chhoot ")
+              .replace(/\b(taka|percant|parsent|persent)\b/gi, " percent ")
               .replace(/\b(custmer|costumer|kastmar|kashtamar|party name)\b/gi, " customer ")
               .replace(/\b(billed to|bill 2|bill too|made for|make for)\b/gi, " bill to ")
               .replace(/\b(k naam se|ke naam se|naam se|ke nam se|k nam se)\b/gi, " ke liye ")
@@ -13170,7 +13200,14 @@
         }
 
         function customerKeys(c) {
-          const raw = [c.name, c.searchName, c.location, c.phone]
+          const raw = [
+            c.name,
+            c.searchName,
+            c.location,
+            c.phone,
+            c.name && c.location ? c.name + " " + c.location : "",
+            c.searchName && c.location ? c.searchName + " " + c.location : "",
+          ]
             .map(normalize)
             .filter((v) => v && v.length >= 2);
           const suffixes = new Set([
@@ -13199,6 +13236,13 @@
             const compact = parts.filter((p) => !suffixes.has(p)).join(" ");
             if (compact.length >= 2) variants.push(compact);
             if (parts.length > 1) variants.push(parts.slice(0, 2).join(" "));
+            if (parts.length > 1) {
+              const initials = parts
+                .filter((p) => !suffixes.has(p))
+                .map((p) => p[0])
+                .join("");
+              if (initials.length >= 2) variants.push(initials);
+            }
             parts.forEach((p) => {
               if (p.length >= 3 && !suffixes.has(p)) variants.push(p);
             });
@@ -13221,12 +13265,18 @@
             /\b(discount|disc|chhoot|choot)\s+(nahi|nahin|mat)\b/.test(text)
           )
             return 0;
-          const direct = text.match(
-            /(\d+(?:\.\d+)?|ek|do|teen|char|paanch|chhe|saat|aath|nau|das|barah|bees)\s*(?:%|percent|chhoot|choot|off|discount|disc)\b/,
-          );
-          if (direct) {
-            const n = tokenNumber(direct[1]);
-            return isNaN(n) ? 0 : n;
+          const numberWord =
+            "\\d+(?:\\.\\d+)?|ek|do|teen|char|paanch|chhe|saat|aath|nau|das|gyarah|barah|bees|tees|chalees|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty|thirty|forty|fifty";
+          const patterns = [
+            new RegExp("\\b(" + numberWord + ")\\s*(?:%|percent|chhoot|choot|off|discount|disc)\\b"),
+            new RegExp("\\b(?:discount|disc|chhoot|choot|off)\\s*(?:ka|ke|of|de|dena)?\\s*(" + numberWord + ")\\b"),
+            new RegExp("\\b(" + numberWord + ")\\s*(?:ka|ke)?\\s*(?:discount|disc|chhoot|choot|off)\\b"),
+          ];
+          for (const rx of patterns) {
+            const hit = text.match(rx);
+            if (!hit) continue;
+            const n = tokenNumber(hit[1]);
+            if (!isNaN(n)) return Math.max(0, Math.min(100, n));
           }
           return 0;
         }
@@ -13235,6 +13285,10 @@
           let cleaned = " " + text + " ";
           cleaned = cleaned.replace(
             /\b(no|without|bina|nahi|nahin)?\s*(discount|disc|chhoot|choot|off|percent)\s*\d*(?:\.\d+)?\b/g,
+            " ",
+          );
+          cleaned = cleaned.replace(
+            /\b\d+(?:\.\d+)?\s*(%|percent|discount|disc|chhoot|choot|off)\b/g,
             " ",
           );
           S.products
@@ -13272,8 +13326,22 @@
                     "bana",
                     "banana",
                     "banado",
+                    "banao",
+                    "bna",
+                    "bnado",
                     "please",
                     "plz",
+                    "radhe",
+                    "raadhe",
+                    "radhey",
+                    "rade",
+                    "raday",
+                    "shyam",
+                    "krishna",
+                    "kanha",
+                    "govind",
+                    "gopal",
+                    "mohan",
                   ].includes(w),
               )
               .join(" ");
@@ -13316,7 +13384,7 @@
               .filter((key) => key.length >= 3)
               .forEach((key) => {
                 const keyPattern = key
-                  .replace(/[.*+?^${}()|[\]\\]/g, "\$&")
+                  .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
                   .replace(/\s+/g, "\\s+");
                 const rx = new RegExp("\\b" + keyPattern + "\\b");
                 if (!rx.test(commandText) && !rx.test(strippedText)) return;
@@ -13717,44 +13785,75 @@
           return r;
         }
 
+        function wakeHotwordHeard(text) {
+          const heard = " " + speechNormalize(text) + " ";
+          return /\b(?:hey|he|ok|okay|jai|shree|shri|hare)?\s*(?:radhe|raadhe|radhey|rade|raday|radha|radhika|shyam|krishna|kanha|govind|gopal|mohan|hari|hare)(?:\s*(?:radhe|shyam|krishna|kanha|govind|gopal|mohan|hari|hare))?\b/.test(
+            heard,
+          );
+        }
+
+        function scheduleWakeRestart(delay) {
+          clearTimeout(VB.wakeRetryTimer);
+          VB.wakeRetryTimer = setTimeout(startWakeListener, delay || 900);
+        }
 
         function startWakeListener() {
           const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
           if (!SpeechRecognition || VB.wakeListening || VB.listening) return;
+          if (document.hidden) {
+            scheduleWakeRestart(1200);
+            return;
+          }
           const r = new SpeechRecognition();
           r.continuous = true;
           r.interimResults = true;
           r.lang = "hi-IN";
-          r.maxAlternatives = 2;
+          r.maxAlternatives = 5;
           VB.wakeRecognition = r;
-          r.onstart = () => { VB.wakeListening = true; };
+          r.onstart = () => {
+            VB.wakeListening = true;
+            VB.wakeArmed = true;
+          };
           r.onresult = (e) => {
             for (let i = e.resultIndex; i < e.results.length; i++) {
-              const heard = Array.from(e.results[i]).map((alt) => speechNormalize(alt.transcript)).join(" ");
-              if (/\b(?:hey|he|ok|okay)?\s*(?:radhe|raadhe|rade|raday|radhey)\b/.test(heard)) {
+              const heard = Array.from(e.results[i]).map((alt) => alt.transcript).join(" ");
+              if (wakeHotwordHeard(heard)) {
                 VB.wakePaused = true;
                 try { r.abort(); } catch (err) {}
                 openVoiceBill();
-                setHint("Hey Radhe heard - listening...");
-                setTimeout(() => toggleVoiceListening(), 280);
+                setHint("Radhe heard - listening...");
+                setTimeout(() => {
+                  if (!VB.listening) toggleVoiceListening();
+                }, 280);
                 break;
               }
             }
           };
-          r.onerror = () => { VB.wakeListening = false; };
+          r.onerror = (e) => {
+            VB.wakeListening = false;
+            if (e.error !== "not-allowed") scheduleWakeRestart(e.error === "network" ? 1800 : 1000);
+          };
           r.onend = () => {
             VB.wakeListening = false;
-            if (!VB.wakePaused) setTimeout(startWakeListener, 900);
+            if (!VB.wakePaused) scheduleWakeRestart(700);
             VB.wakePaused = false;
           };
-          try { r.start(); } catch (e) {}
+          try { r.start(); } catch (e) { scheduleWakeRestart(1200); }
         }
 
         function armWakeListenerAfterGesture() {
-          const arm = () => startWakeListener();
-          ["click", "keydown", "touchstart"].forEach((evt) => {
-            document.addEventListener(evt, arm, { once: true, passive: true });
+          const arm = () => {
+            VB.wakeArmed = true;
+            startWakeListener();
+          };
+          ["click", "keydown", "touchstart", "pointerdown"].forEach((evt) => {
+            document.addEventListener(evt, arm, { passive: true });
           });
+          document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) scheduleWakeRestart(350);
+          });
+          window.addEventListener("focus", () => scheduleWakeRestart(350));
+          setTimeout(startWakeListener, 700);
         }
 
         function processTranscript(raw) {
@@ -13852,7 +13951,7 @@
           VB.lastTranscript = "";
           VB.parsed = null;
           setTranscript("Bolo apna bill...", true);
-          setHint("Tap mic, or say Hey Radhe after mic permission is active");
+          setHint("Bol do bill - Radhe wake mode active hai");
           showConfirmBtns(false);
           showRetry(false);
           setOrbState("idle");
@@ -13861,6 +13960,9 @@
             .classList.remove("show");
           overlay.classList.add("show");
           document.body.style.overflow = "hidden";
+          setTimeout(() => {
+            if (!VB.listening) toggleVoiceListening();
+          }, 220);
         };
 
         window.closeVoiceBill = function () {
@@ -13874,7 +13976,7 @@
           }
           VB.listening = false;
           setOrbState("idle");
-          setTimeout(startWakeListener, 700);
+          scheduleWakeRestart(700);
         };
 
         window.voiceOverlayBgClick = function (e) {
