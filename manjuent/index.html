@@ -29,7 +29,7 @@
     <!-- Firebase v9 compat -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-    <!-- html2canvas for JPEG bill download — loaded lazily -->
+    <!-- html2canvas for JPEG bill download â€” loaded lazily -->
     <script>
       function _loadHtml2Canvas(cb) {
         if (window.html2canvas) {
@@ -45,7 +45,7 @@
     </script>
     <!-- App config (Firebase keys + PIN) -->
     <script>
-      // ── Firebase Configuration ──────────────────────────────────────
+      // â”€â”€ Firebase Configuration â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       window.FIREBASE_CONFIG = {
         apiKey: "AIzaSyAvq04DKa_7iOn3J2zZvVHU7WBqahpWofk",
         authDomain: "manjuenterprise.firebaseapp.com",
@@ -2052,13 +2052,40 @@
         border-radius: 3px;
         padding: 0 1px;
       }
-      /* Delivered checkbox — hidden from JPEG/print */
-      #bill-jpeg-target .item-delivered-wrap { display:none !important; }
-      @media print { .item-delivered-wrap { display:none !important; } }
-      .item-delivered-wrap { display:flex; align-items:center; gap:6px; padding:4px 0 2px; }
-      .item-delivered-cb { width:15px; height:15px; accent-color:var(--success); cursor:pointer; flex-shrink:0; }
-      .item-delivered-label { font-size:11px; color:var(--muted); font-weight:500; cursor:pointer; user-select:none; transition:color 0.12s; }
-      .item-delivered-wrap.checked .item-delivered-label { color:var(--success); font-weight:600; }
+      /* Delivered checkbox â€” hidden from JPEG/print */
+      #bill-jpeg-target .item-delivered-wrap {
+        display: none !important;
+      }
+      @media print {
+        .item-delivered-wrap {
+          display: none !important;
+        }
+      }
+      .item-delivered-wrap {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 0 2px;
+      }
+      .item-delivered-cb {
+        width: 15px;
+        height: 15px;
+        accent-color: var(--success);
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .item-delivered-label {
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 500;
+        cursor: pointer;
+        user-select: none;
+        transition: color 0.12s;
+      }
+      .item-delivered-wrap.checked .item-delivered-label {
+        color: var(--success);
+        font-weight: 600;
+      }
       .gw-section:last-of-type {
         padding-bottom: 24px;
       }
@@ -3822,10 +3849,10 @@
       }
 
       /* ================================================================
-   MOBILE PERFORMANCE — kills the expensive GPU work on phones
+   MOBILE PERFORMANCE â€” kills the expensive GPU work on phones
    ================================================================ */
       @media (max-width: 768px) {
-        /* 1. Replace all backdrop-blur with solid backgrounds — single biggest win */
+        /* 1. Replace all backdrop-blur with solid backgrounds â€” single biggest win */
         .nav-bar,
         .bottom-bar,
         .sheet-overlay,
@@ -3855,7 +3882,7 @@
           background: rgba(28, 28, 30, 0.96) !important;
         }
 
-        /* 2. Strip the glass-surface multi-layer backgrounds — just use flat color */
+        /* 2. Strip the glass-surface multi-layer backgrounds â€” just use flat color */
         .gw-card-group,
         .gw-tile,
         .form-group,
@@ -3877,7 +3904,7 @@
           box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
         }
 
-        /* 3. Kill infinite looping animations — they run 24/7 on mobile GPU */
+        /* 3. Kill infinite looping animations â€” they run 24/7 on mobile GPU */
         .liquid-card::before,
         .gw-tile::after,
         .gw-card-group::after,
@@ -3927,7 +3954,7 @@
           will-change: auto !important;
         }
 
-        /* 8. Simplify transitions — shorter = less jank */
+        /* 8. Simplify transitions â€” shorter = less jank */
         .gw-tile,
         .bill-card,
         .kpi-card,
@@ -4120,7 +4147,7 @@
       }
 
       /* ================================================================
-         VOICE BILL ASSISTANT — SIRI-STYLE
+         VOICE BILL ASSISTANT â€” SIRI-STYLE
       ================================================================ */
       .voice-mic-btn {
         color: var(--accent);
@@ -4131,8 +4158,13 @@
         animation: voicePulse 1.2s ease-in-out infinite;
       }
       @keyframes voicePulse {
-        0%,100% { opacity:1; }
-        50% { opacity:0.55; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.55;
+        }
       }
 
       .voice-overlay {
@@ -4140,7 +4172,7 @@
         position: fixed;
         inset: 0;
         z-index: 9900;
-        background: rgba(0,0,0,0.55);
+        background: rgba(0, 0, 0, 0.55);
         backdrop-filter: blur(10px) saturate(1.4);
         -webkit-backdrop-filter: blur(10px) saturate(1.4);
         align-items: flex-end;
@@ -4152,8 +4184,12 @@
         animation: voiceOverlayIn 0.32s var(--ease-out) forwards;
       }
       @keyframes voiceOverlayIn {
-        from { opacity:0; }
-        to { opacity:1; }
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
       }
 
       .voice-panel {
@@ -4167,11 +4203,15 @@
         gap: 14px;
         animation: voicePanelUp 0.38s var(--ease-spring) forwards;
         border-top: 1px solid var(--glass-border);
-        box-shadow: 0 -8px 40px rgba(0,0,0,0.18);
+        box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.18);
       }
       @keyframes voicePanelUp {
-        from { transform: translateY(120%); }
-        to { transform: translateY(0); }
+        from {
+          transform: translateY(120%);
+        }
+        to {
+          transform: translateY(0);
+        }
       }
 
       .voice-transcript-area {
@@ -4191,7 +4231,9 @@
         line-height: 1.45;
         transition: opacity 0.2s;
       }
-      .voice-transcript-text.dim { opacity: 0.35; }
+      .voice-transcript-text.dim {
+        opacity: 0.35;
+      }
 
       .voice-parsed-preview {
         background: var(--surface2);
@@ -4202,7 +4244,9 @@
         gap: 7px;
         border: 1px solid var(--glass-border);
       }
-      .voice-parsed-preview.show { display: flex; }
+      .voice-parsed-preview.show {
+        display: flex;
+      }
       .vp-row {
         display: flex;
         align-items: center;
@@ -4241,12 +4285,25 @@
         font-size: 14px;
         font-weight: 700;
         cursor: pointer;
-        transition: transform 0.12s var(--ease-spring), opacity 0.15s;
+        transition:
+          transform 0.12s var(--ease-spring),
+          opacity 0.15s;
       }
-      .voice-action-btn:active { transform: scale(0.95); }
-      .voice-action-save { background: var(--accent); color: #fff; }
-      .voice-action-edit { background: var(--surface3); color: var(--text); }
-      .voice-action-cancel { background: var(--surface3); color: var(--text); }
+      .voice-action-btn:active {
+        transform: scale(0.95);
+      }
+      .voice-action-save {
+        background: var(--accent);
+        color: #fff;
+      }
+      .voice-action-edit {
+        background: var(--surface3);
+        color: var(--text);
+      }
+      .voice-action-cancel {
+        background: var(--surface3);
+        color: var(--text);
+      }
 
       .voice-bottom-row {
         display: flex;
@@ -4254,18 +4311,29 @@
         justify-content: space-between;
         padding: 0 8px;
       }
-      .voice-close-btn, .voice-retry-btn {
-        width: 44px; height: 44px;
-        border: 0; border-radius: 50%;
+      .voice-close-btn,
+      .voice-retry-btn {
+        width: 44px;
+        height: 44px;
+        border: 0;
+        border-radius: 50%;
         background: var(--surface3);
         color: var(--muted);
         cursor: pointer;
-        display: grid; place-items: center;
+        display: grid;
+        place-items: center;
         transition: transform 0.12s var(--ease-spring);
         flex-shrink: 0;
       }
-      .voice-close-btn:active, .voice-retry-btn:active { transform: scale(0.9); }
-      .voice-retry-btn { transition: opacity 0.2s, transform 0.12s var(--ease-spring); }
+      .voice-close-btn:active,
+      .voice-retry-btn:active {
+        transform: scale(0.9);
+      }
+      .voice-retry-btn {
+        transition:
+          opacity 0.2s,
+          transform 0.12s var(--ease-spring);
+      }
 
       .voice-orb-wrap {
         display: flex;
@@ -4274,16 +4342,19 @@
       }
       .voice-orb {
         position: relative;
-        width: 80px; height: 80px;
-        border: 0; background: none;
+        width: 80px;
+        height: 80px;
+        border: 0;
+        background: none;
         cursor: pointer;
-        display: grid; place-items: center;
+        display: grid;
+        place-items: center;
         -webkit-tap-highlight-color: transparent;
       }
       .voice-orb-ring {
         position: absolute;
         border-radius: 50%;
-        border: 2px solid rgba(0,122,255,0.25);
+        border: 2px solid rgba(0, 122, 255, 0.25);
         pointer-events: none;
         transform: scale(1);
         opacity: 0;
@@ -4291,34 +4362,63 @@
       .voice-orb.listening .voice-orb-ring {
         animation: orbRing 2s ease-in-out infinite;
       }
-      .voice-orb-ring.r1 { width:80px;height:80px; animation-delay:0s !important; }
-      .voice-orb-ring.r2 { width:80px;height:80px; animation-delay:0.5s !important; }
-      .voice-orb-ring.r3 { width:80px;height:80px; animation-delay:1s !important; }
+      .voice-orb-ring.r1 {
+        width: 80px;
+        height: 80px;
+        animation-delay: 0s !important;
+      }
+      .voice-orb-ring.r2 {
+        width: 80px;
+        height: 80px;
+        animation-delay: 0.5s !important;
+      }
+      .voice-orb-ring.r3 {
+        width: 80px;
+        height: 80px;
+        animation-delay: 1s !important;
+      }
       @keyframes orbRing {
-        0%   { transform:scale(1); opacity:0.7; }
-        100% { transform:scale(2.1); opacity:0; }
+        0% {
+          transform: scale(1);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(2.1);
+          opacity: 0;
+        }
       }
       .voice-orb-core {
-        width: 64px; height: 64px;
+        width: 64px;
+        height: 64px;
         border-radius: 50%;
         background: linear-gradient(135deg, var(--accent) 0%, #5e5ce6 100%);
-        display: grid; place-items: center;
+        display: grid;
+        place-items: center;
         color: #fff;
-        box-shadow: 0 6px 24px rgba(0,122,255,0.38);
-        transition: background 0.25s, box-shadow 0.25s, transform 0.15s var(--ease-spring);
+        box-shadow: 0 6px 24px rgba(0, 122, 255, 0.38);
+        transition:
+          background 0.25s,
+          box-shadow 0.25s,
+          transform 0.15s var(--ease-spring);
         position: relative;
         z-index: 1;
       }
       .voice-orb.listening .voice-orb-core {
         background: linear-gradient(135deg, #ff3b30 0%, #ff9500 100%);
-        box-shadow: 0 6px 28px rgba(255,59,48,0.42);
+        box-shadow: 0 6px 28px rgba(255, 59, 48, 0.42);
         animation: orbCoreBreath 0.9s ease-in-out infinite alternate;
       }
       @keyframes orbCoreBreath {
-        from { transform: scale(1); }
-        to   { transform: scale(1.08); }
+        from {
+          transform: scale(1);
+        }
+        to {
+          transform: scale(1.08);
+        }
       }
-      .voice-orb:active .voice-orb-core { transform: scale(0.92); }
+      .voice-orb:active .voice-orb-core {
+        transform: scale(0.92);
+      }
 
       .voice-hint {
         text-align: center;
@@ -4332,10 +4432,208 @@
 
       /* dark mode tweaks */
       body.dark .voice-panel {
-        box-shadow: 0 -8px 60px rgba(0,0,0,0.6);
+        box-shadow: 0 -8px 60px rgba(0, 0, 0, 0.6);
       }
       body.dark .voice-orb-core {
-        box-shadow: 0 6px 24px rgba(10,132,255,0.45);
+        box-shadow: 0 6px 24px rgba(10, 132, 255, 0.45);
+      }
+      /* Siri-style voice overlay override */
+      .voice-overlay {
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.38);
+        backdrop-filter: blur(22px) saturate(1.5);
+        -webkit-backdrop-filter: blur(22px) saturate(1.5);
+      }
+      .voice-panel {
+        width: min(92vw, 430px);
+        max-width: 430px;
+        min-height: min(620px, calc(100vh - 40px));
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 22px 0;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        animation: voiceBubbleIn 0.34s var(--ease-out) both;
+      }
+      @keyframes voiceBubbleIn {
+        from { opacity: 0; transform: scale(0.92) translateY(14px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      .voice-transcript-area {
+        order: 1;
+        width: 100%;
+        min-height: 74px;
+        max-height: 158px;
+        padding: 14px 18px;
+        border-radius: 24px;
+        background: rgba(251, 250, 246, 0.86);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+      }
+      body.dark .voice-transcript-area {
+        background: rgba(20, 20, 24, 0.82);
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+      .voice-transcript-text {
+        font-size: clamp(18px, 4.8vw, 24px);
+        font-weight: 750;
+        line-height: 1.25;
+        color: var(--text);
+      }
+      .voice-transcript-text.dim {
+        opacity: 0.62;
+      }
+      .voice-orb-wrap {
+        order: 2;
+        width: 230px;
+        height: 230px;
+        position: relative;
+      }
+      .voice-orb {
+        width: 230px;
+        height: 230px;
+        border-radius: 50%;
+        isolation: isolate;
+      }
+      .voice-orb-core {
+        width: 164px;
+        height: 164px;
+        border-radius: 48% 52% 46% 54% / 54% 42% 58% 46%;
+        background:
+          radial-gradient(circle at 28% 24%, rgba(255, 255, 255, 0.96), transparent 18%),
+          radial-gradient(circle at 78% 28%, #20d6ff 0, transparent 30%),
+          radial-gradient(circle at 22% 80%, #ff2d75 0, transparent 33%),
+          radial-gradient(circle at 72% 78%, #ffd60a 0, transparent 28%),
+          linear-gradient(135deg, #0a84ff 0%, #7c3aed 48%, #ff375f 100%);
+        box-shadow:
+          0 0 34px rgba(10, 132, 255, 0.45),
+          0 24px 80px rgba(255, 55, 95, 0.28),
+          inset 0 0 30px rgba(255, 255, 255, 0.24);
+        animation: siriBlob 5.5s ease-in-out infinite, siriHue 9s linear infinite;
+      }
+      .voice-orb-core svg {
+        display: none !important;
+      }
+      .voice-orb::before,
+      .voice-orb::after {
+        content: "";
+        position: absolute;
+        inset: 24px;
+        border-radius: 46% 54% 50% 50% / 48% 46% 54% 52%;
+        background: conic-gradient(from 180deg, #0a84ff, #64d2ff, #bf5af2, #ff375f, #ffd60a, #0a84ff);
+        filter: blur(18px);
+        opacity: 0.42;
+        z-index: -1;
+        animation: siriSpin 7s linear infinite;
+      }
+      .voice-orb::after {
+        inset: 42px;
+        opacity: 0.26;
+        filter: blur(28px);
+        animation-duration: 11s;
+        animation-direction: reverse;
+      }
+      .voice-orb-ring {
+        width: 164px !important;
+        height: 164px !important;
+        border: 0;
+        background: radial-gradient(circle, rgba(255,255,255,0.24), transparent 62%);
+        filter: blur(5px);
+      }
+      .voice-orb.listening .voice-orb-core {
+        animation: siriBlob 1.1s ease-in-out infinite, siriHue 3.4s linear infinite;
+        box-shadow:
+          0 0 48px rgba(100, 210, 255, 0.58),
+          0 26px 90px rgba(255, 45, 117, 0.38),
+          inset 0 0 34px rgba(255, 255, 255, 0.32);
+      }
+      .voice-orb.thinking .voice-orb-core {
+        animation: siriBlob 1.8s ease-in-out infinite, siriHue 4.5s linear infinite;
+      }
+      .voice-orb.ready .voice-orb-core {
+        background:
+          radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.95), transparent 18%),
+          radial-gradient(circle at 74% 30%, #34c759 0, transparent 31%),
+          radial-gradient(circle at 20% 80%, #0a84ff 0, transparent 34%),
+          linear-gradient(135deg, #30d158 0%, #64d2ff 54%, #0a84ff 100%);
+      }
+      .voice-orb.error .voice-orb-core {
+        background:
+          radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.88), transparent 18%),
+          radial-gradient(circle at 72% 30%, #ff9500 0, transparent 31%),
+          radial-gradient(circle at 20% 80%, #ff375f 0, transparent 34%),
+          linear-gradient(135deg, #ff453a 0%, #ff9f0a 100%);
+      }
+      @keyframes siriBlob {
+        0%, 100% { transform: scale(1) rotate(0deg); border-radius: 48% 52% 46% 54% / 54% 42% 58% 46%; }
+        33% { transform: scale(1.06) rotate(4deg); border-radius: 56% 44% 52% 48% / 46% 58% 42% 54%; }
+        66% { transform: scale(0.97) rotate(-3deg); border-radius: 45% 55% 57% 43% / 57% 44% 56% 43%; }
+      }
+      @keyframes siriHue {
+        from { filter: hue-rotate(0deg) saturate(1.15); }
+        to { filter: hue-rotate(360deg) saturate(1.15); }
+      }
+      @keyframes siriSpin {
+        to { transform: rotate(360deg); }
+      }
+      .voice-parsed-preview {
+        order: 3;
+        width: 100%;
+        background: rgba(251, 250, 246, 0.88);
+        backdrop-filter: blur(18px) saturate(1.2);
+        -webkit-backdrop-filter: blur(18px) saturate(1.2);
+        border-radius: 22px;
+        box-shadow: 0 16px 46px rgba(0, 0, 0, 0.16);
+      }
+      body.dark .voice-parsed-preview {
+        background: rgba(20, 20, 24, 0.86);
+      }
+      .voice-confirm-btns {
+        order: 4;
+        width: 100%;
+      }
+      .voice-bottom-row {
+        order: 5;
+        width: 230px;
+        justify-content: center;
+        gap: 16px;
+      }
+      .voice-close-btn,
+      .voice-retry-btn {
+        background: rgba(251, 250, 246, 0.86);
+        color: var(--text);
+        box-shadow: 0 10px 34px rgba(0, 0, 0, 0.18);
+      }
+      body.dark .voice-close-btn,
+      body.dark .voice-retry-btn {
+        background: rgba(28, 28, 32, 0.86);
+        color: #fff;
+      }
+      .voice-hint {
+        order: 6;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.82);
+        text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+      }
+      body.dark .voice-panel {
+        box-shadow: none;
+      }
+      body.dark .voice-orb-core {
+        box-shadow:
+          0 0 42px rgba(10, 132, 255, 0.52),
+          0 24px 80px rgba(255, 55, 95, 0.3),
+          inset 0 0 30px rgba(255, 255, 255, 0.18);
+      }
+      @media (max-width: 420px) {
+        .voice-panel { min-height: calc(100vh - 30px); gap: 14px; }
+        .voice-orb-wrap, .voice-orb { width: 200px; height: 200px; }
+        .voice-orb-core { width: 144px; height: 144px; }
+        .voice-bottom-row { width: 200px; }
       }
     </style>
   </head>
@@ -4378,7 +4676,7 @@
         <button class="pin-key" onclick="pinPress('9')">9</button>
         <button class="pin-key empty" disabled></button>
         <button class="pin-key" onclick="pinPress('0')">0</button>
-        <button class="pin-key del" onclick="pinDel()">⌫</button>
+        <button class="pin-key del" onclick="pinDel()">âŒ«</button>
       </div>
       <div class="pin-error" id="pin-error"></div>
       <div class="pin-eye-row" onclick="togglePinReveal()" id="pin-eye-row">
@@ -4403,7 +4701,7 @@
     <!-- CLOUD SYNC STATUS -->
     <div id="sync-status">
       <div class="sync-dot" id="sync-dot"></div>
-      <span id="sync-label">Syncing…</span>
+      <span id="sync-label">Syncingâ€¦</span>
     </div>
 
     <!-- UNIVERSAL SEARCH -->
@@ -4464,42 +4762,120 @@
     </div>
 
     <!-- VOICE BILL ASSISTANT OVERLAY -->
-    <div id="voice-overlay" class="voice-overlay" onclick="voiceOverlayBgClick(event)">
+    <div
+      id="voice-overlay"
+      class="voice-overlay"
+      onclick="voiceOverlayBgClick(event)"
+    >
       <div class="voice-panel" id="voice-panel">
         <div class="voice-transcript-area" id="voice-transcript-area">
           <div class="voice-transcript-text" id="voice-transcript-text"></div>
         </div>
         <div class="voice-parsed-preview" id="voice-parsed-preview"></div>
-        <div class="voice-confirm-btns" id="voice-confirm-btns" style="display:none">
-          <button class="voice-action-btn voice-action-save" onclick="voiceConfirmSave()">✓ Save Bill</button>
-          <button class="voice-action-btn voice-action-edit" onclick="voiceGoToBill()">✎ Edit</button>
-          <button class="voice-action-btn voice-action-cancel" onclick="voiceAddMore()">+ Add More</button>
+        <div
+          class="voice-confirm-btns"
+          id="voice-confirm-btns"
+          style="display: none"
+        >
+          <button
+            class="voice-action-btn voice-action-save"
+            onclick="voiceConfirmSave()"
+          >
+            âœ“ Save Bill
+          </button>
+          <button
+            class="voice-action-btn voice-action-edit"
+            onclick="voiceGoToBill()"
+          >
+            âœŽ Edit
+          </button>
+          <button
+            class="voice-action-btn voice-action-cancel"
+            onclick="voiceAddMore()"
+          >
+            + Add More
+          </button>
         </div>
         <div class="voice-bottom-row">
-          <button class="voice-close-btn" onclick="closeVoiceBill()" title="Close">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          <button
+            class="voice-close-btn"
+            onclick="closeVoiceBill()"
+            title="Close"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            >
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
           </button>
           <div class="voice-orb-wrap">
-            <button class="voice-orb" id="voice-orb" onclick="toggleVoiceListening()">
+            <button
+              class="voice-orb"
+              id="voice-orb"
+              onclick="toggleVoiceListening()"
+            >
               <div class="voice-orb-ring r1"></div>
               <div class="voice-orb-ring r2"></div>
               <div class="voice-orb-ring r3"></div>
               <div class="voice-orb-core" id="voice-orb-core">
-                <svg id="voice-orb-mic" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                  <rect x="9" y="2" width="6" height="11" rx="3"/>
-                  <path d="M5 10a7 7 0 0 0 14 0"/>
-                  <line x1="12" y1="19" x2="12" y2="22"/>
-                  <line x1="9" y1="22" x2="15" y2="22"/>
+                <svg
+                  id="voice-orb-mic"
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                >
+                  <rect x="9" y="2" width="6" height="11" rx="3" />
+                  <path d="M5 10a7 7 0 0 0 14 0" />
+                  <line x1="12" y1="19" x2="12" y2="22" />
+                  <line x1="9" y1="22" x2="15" y2="22" />
                 </svg>
-                <svg id="voice-orb-stop" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="4" y="4" width="16" height="16" rx="3"/></svg>
+                <svg
+                  id="voice-orb-stop"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  style="display: none"
+                >
+                  <rect x="4" y="4" width="16" height="16" rx="3" />
+                </svg>
               </div>
             </button>
           </div>
-          <button class="voice-retry-btn" id="voice-retry-btn" onclick="voiceRetry()" title="Retry" style="opacity:0;pointer-events:none">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          <button
+            class="voice-retry-btn"
+            id="voice-retry-btn"
+            onclick="voiceRetry()"
+            title="Retry"
+            style="opacity: 0; pointer-events: none"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            >
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+            </svg>
           </button>
         </div>
-        <div class="voice-hint" id="voice-hint">Tap mic and speak your bill</div>
+        <div class="voice-hint" id="voice-hint">
+          Tap mic and speak your bill
+        </div>
       </div>
     </div>
 
@@ -4543,11 +4919,20 @@
               title="Voice Bill"
               id="voice-nav-btn"
             >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="2" width="6" height="11" rx="3"/>
-                <path d="M5 10a7 7 0 0 0 14 0"/>
-                <line x1="12" y1="19" x2="12" y2="22"/>
-                <line x1="9" y1="22" x2="15" y2="22"/>
+              <svg
+                width="19"
+                height="19"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.15"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="2" width="6" height="11" rx="3" />
+                <path d="M5 10a7 7 0 0 0 14 0" />
+                <line x1="12" y1="19" x2="12" y2="22" />
+                <line x1="9" y1="22" x2="15" y2="22" />
               </svg>
             </button>
             <button
@@ -5726,7 +6111,7 @@
           <input
             type="text"
             id="bills-search"
-            placeholder="Search party or invoice…"
+            placeholder="Search party or invoiceâ€¦"
             oninput="filterBillsList()"
             autocomplete="off"
           />
@@ -6079,7 +6464,15 @@
             >
               Delivery Status
             </div>
-            <div id="rpt-delivery-bar" style="display:flex;flex-direction:column;gap:10px;margin-top:4px"></div>
+            <div
+              id="rpt-delivery-bar"
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 4px;
+              "
+            ></div>
           </div>
           <div
             style="
@@ -6252,8 +6645,27 @@
           padding-bottom: 88px;
         "
       >
-        <div style="padding:8px 16px 0;display:flex;align-items:center;gap:8px">
-          <div id="bill-delivery-badge" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;background:var(--warn-soft);color:var(--warn)">Pending Delivery</div>
+        <div
+          style="
+            padding: 8px 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          "
+        >
+          <div
+            id="bill-delivery-badge"
+            style="
+              font-size: 11px;
+              font-weight: 700;
+              padding: 4px 12px;
+              border-radius: 20px;
+              background: var(--warn-soft);
+              color: var(--warn);
+            "
+          >
+            Pending Delivery
+          </div>
         </div>
       </div>
       <div class="bottom-bar">
@@ -7036,7 +7448,7 @@
                   margin-bottom: 8px;
                 "
               >
-                New PIN ✓ Current verified
+                New PIN âœ“ Current verified
               </div>
               <div class="change-pin-dots" id="cpd-new-dots">
                 <div class="change-pin-dot" id="cpnd0"></div>
@@ -7114,7 +7526,7 @@
                 0
               </button>
               <button class="change-pin-key del" onclick="changePinDel()">
-                ⌫
+                âŒ«
               </button>
             </div>
             <button
@@ -7316,7 +7728,7 @@
             <input
               type="text"
               id="sheet-search"
-              placeholder="Search…"
+              placeholder="Searchâ€¦"
               oninput="filterSheet()"
             />
           </div>
@@ -7385,7 +7797,7 @@
             </div>
           </div>
 
-          <!-- Packaging — free text input -->
+          <!-- Packaging â€” free text input -->
           <div class="pe-pkg-row">
             <div class="pe-pkg-label">Bundle</div>
             <input
@@ -7663,7 +8075,7 @@
             !FIREBASE_CONFIG.apiKey
           ) {
             console.warn(
-              "[ManjuEnt] Firebase not configured — running in local-only mode",
+              "[ManjuEnt] Firebase not configured â€” running in local-only mode",
             );
             return;
           }
@@ -7700,7 +8112,7 @@
       }
 
       // ================================================================
-      // REAL-TIME CLOUD LISTENERS (data flows from Firestore → app)
+      // REAL-TIME CLOUD LISTENERS (data flows from Firestore â†’ app)
       // ================================================================
       let _persistInProgress = {}; // guard: don't overwrite local mid-save
 
@@ -7723,7 +8135,7 @@
                 console.warn(
                   "[ManjuEnt] Ignoring empty snapshot for",
                   col,
-                  "— possible race condition",
+                  "â€” possible race condition",
                 );
                 return;
               }
@@ -7756,7 +8168,7 @@
       }
 
       // ================================================================
-      // PERSIST — saves to both localStorage AND Firestore
+      // PERSIST â€” saves to both localStorage AND Firestore
       // ================================================================
       function uid() {
         return (
@@ -7810,10 +8222,10 @@
         });
       }
 
-      // Load from Firebase on startup — prevents data loss on redeploy
+      // Load from Firebase on startup â€” prevents data loss on redeploy
       function loadFromCloud() {
         if (!db) return;
-        showSync("syncing", "Loading data…");
+        showSync("syncing", "Loading dataâ€¦");
         const cols = ["customers", "products", "transports", "bills"];
         Promise.all(
           cols.map((col) =>
@@ -7831,7 +8243,7 @@
           ),
         )
           .then(() => {
-            showSync("ok", "Data loaded ✓");
+            showSync("ok", "Data loaded âœ“");
             updateGatewayCounts();
             updateDashboardStats();
           })
@@ -7848,13 +8260,13 @@
         // If Firebase ready, sync to cloud
         if (!_firebaseReady || !db) return;
 
-        showSync("syncing", "Syncing…");
+        showSync("syncing", "Syncingâ€¦");
 
         const col = db.collection(key);
         const items = S[key];
 
-        // ── SAFE SYNC STRATEGY ──────────────────────────────────────────
-        // 1. Upsert (set) every item we currently have — never bulk-delete.
+        // â”€â”€ SAFE SYNC STRATEGY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // 1. Upsert (set) every item we currently have â€” never bulk-delete.
         // 2. Remove only docs whose id is no longer in our local array.
         // This prevents two simultaneous users from wiping each other's data.
         _persistInProgress[key] = true;
@@ -7881,7 +8293,7 @@
           })
           .then(() => {
             _persistInProgress[key] = false;
-            showSync("ok", "Saved ✓");
+            showSync("ok", "Saved âœ“");
           })
           .catch((err) => {
             _persistInProgress[key] = false;
@@ -8067,7 +8479,7 @@
           console.log("[Manju] Capacitor backButton listener registered");
         } catch (e) {
           console.log(
-            "[Manju] Not in Capacitor — browser back handles navigation",
+            "[Manju] Not in Capacitor â€” browser back handles navigation",
           );
         }
       }
@@ -8115,10 +8527,10 @@
         const unpaidBills = S.bills.filter((b) => !b.paid);
         const fmt = (v) =>
           v >= 100000
-            ? "₹" + (v / 100000).toFixed(1) + "L"
+            ? "â‚¹" + (v / 100000).toFixed(1) + "L"
             : v >= 1000
-              ? "₹" + (v / 1000).toFixed(1) + "K"
-              : "₹" + v.toFixed(0);
+              ? "â‚¹" + (v / 1000).toFixed(1) + "K"
+              : "â‚¹" + v.toFixed(0);
         const todayTotal = todayBills.reduce((s, b) => s + (b.grand || 0), 0);
         const monthTotal = monthBills.reduce((s, b) => s + (b.grand || 0), 0);
         const prevMonthTotal = prevMonthBills.reduce(
@@ -8489,7 +8901,7 @@
         const pb = document.getElementById("party-balance");
         pb.textContent =
           (b.customer.location || "") +
-          (b.customer.phone ? " · " + b.customer.phone : "");
+          (b.customer.phone ? " Â· " + b.customer.phone : "");
         pb.style.display = pb.textContent ? "block" : "none";
         if (b.transport) {
           document.getElementById("transport-display").innerHTML = esc(
@@ -8614,7 +9026,7 @@
           body.innerHTML = results
             .map(
               ({ item: i }) =>
-                `<div class="sheet-item" onclick="selectCustomer('${i.id}')"><div class="sheet-item-icon" style="background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:700">${(i.name || "?").slice(0, 2).toUpperCase()}</div><div class="sheet-item-body"><div class="sheet-item-name">${hl(i.searchName || i.name, q)}</div><div class="sheet-item-sub">${esc(i.name)}${i.location ? " · " + i.location : ""}${i.phone ? " · " + i.phone : ""}</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>`,
+                `<div class="sheet-item" onclick="selectCustomer('${i.id}')"><div class="sheet-item-icon" style="background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:700">${(i.name || "?").slice(0, 2).toUpperCase()}</div><div class="sheet-item-body"><div class="sheet-item-name">${hl(i.searchName || i.name, q)}</div><div class="sheet-item-sub">${esc(i.name)}${i.location ? " Â· " + i.location : ""}${i.phone ? " Â· " + i.phone : ""}</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>`,
             )
             .join("");
         } else {
@@ -8638,7 +9050,7 @@
         const subParts = [];
         if (c.location) subParts.push(c.location);
         if (c.phone) subParts.push(c.phone);
-        pb.textContent = subParts.join(" · ");
+        pb.textContent = subParts.join(" Â· ");
         pb.style.display = pb.textContent ? "block" : "none";
         if (c.preferredTransport && c.preferredTransport.trim()) {
           const pref = c.preferredTransport.trim().toLowerCase();
@@ -8694,7 +9106,7 @@
         document.getElementById("pe-rate").value = p.rate;
         document.getElementById("pe-disc").value = "0";
         document.getElementById("pe-amount").innerHTML = "&#8377;0.00";
-        document.getElementById("pe-formula").textContent = "—";
+        document.getElementById("pe-formula").textContent = "â€”";
         document.getElementById("pe-pkg-text").value = "";
         document.getElementById("sheet-body").style.display = "none";
         document.getElementById("sheet-search-wrap").style.display = "none";
@@ -8797,7 +9209,7 @@
         showToast("Added: " + p.name);
       }
 
-      // RENDER BILL ITEMS — FIX: no typeTag shown under pkg text
+      // RENDER BILL ITEMS â€” FIX: no typeTag shown under pkg text
       function renderBillItems() {
         const list = document.getElementById("bill-items-list");
         if (!S.billItems.length) {
@@ -8819,20 +9231,20 @@
           S.billItems.length +
           " item" +
           (S.billItems.length !== 1 ? "s" : "") +
-          (parts.length ? " · " + parts.join(", ") : "");
+          (parts.length ? " Â· " + parts.join(", ") : "");
 
         list.innerHTML = S.billItems
           .map((it, i) => {
             // FIX: pkg text is black (var(--text)) via CSS, no "pc"/"kg" type tag below it
             const pkgCell = it.pkgText
               ? `<div class="item-pkg-text">${esc(it.pkgText)}</div>`
-              : `<div class="item-pkg-none">—</div>`;
+              : `<div class="item-pkg-none">â€”</div>`;
 
             return `<div class="item-row" onclick="editItem(${i})">
       <div>${pkgCell}</div>
       <div class="item-name">${esc(it.name)}</div>
-      <div class="item-cell">${it.pcs != null ? it.pcs : "—"}</div>
-      <div class="item-cell">${it.weight != null ? it.weight.toFixed(2) : "—"}</div>
+      <div class="item-cell">${it.pcs != null ? it.pcs : "â€”"}</div>
+      <div class="item-cell">${it.weight != null ? it.weight.toFixed(2) : "â€”"}</div>
       <div class="item-cell">&#8377;${it.rate}</div>
       <div class="item-amount">&#8377;${it.amount.toFixed(0)}</div>
     </div>`;
@@ -8960,7 +9372,7 @@
         }
       }
 
-      // FIX: use innerHTML so ₹ entity renders correctly in totals
+      // FIX: use innerHTML so â‚¹ entity renders correctly in totals
       function recalcBill() {
         const subtotal = S.billItems.reduce((s, it) => s + it.amount, 0);
         const taxPct =
@@ -9067,7 +9479,7 @@
           return esc(text);
         }
         const filteredTotal = filtered.reduce((s, b) => s + (b.grand || 0), 0);
-        c.innerHTML = `<div class="bills-summary"><div class="bills-summary-label">${isFiltered ? "Matching Sales" : "Total Sales"}</div><div class="bills-summary-val">&#8377;${filteredTotal.toFixed(2)}</div><div class="bills-summary-count">${isFiltered ? filtered.length + " of " + S.bills.length + " bills" : S.bills.length + " bill" + (S.bills.length !== 1 ? "s" : "")}</div></div>${filtered.map((b, idx) => `<div class="bill-card" style="animation-delay:${Math.min(idx * 0.04, 0.3)}s" onclick="viewBill('${b.id}')"><div class="bill-card-top"><div class="bill-inv">No. ${hlB(String(b.invno), q)}</div><div class="bill-date">${fmtDate(b.date)}</div></div><div class="bill-party">${hlB(b.customer.name, q)}</div><div class="bill-location">${esc(b.customer.location || "")}${b.transport ? " · " + esc(b.transport.name) : ""}</div><div class="bill-card-bottom"><div style="display:flex;align-items:center;gap:6px"><div class="bill-meta">${b.items.length} item${b.items.length !== 1 ? "s" : ""}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.paid ? "var(--success-soft)" : "var(--danger-soft)"};color:${b.paid ? "var(--success)" : "var(--danger)"}">${b.paid ? "PAID" : "UNPAID"}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.delivered ? "var(--success-soft)" : "var(--warn-soft)"};color:${b.delivered ? "var(--success)" : "var(--warn)"}">${b.delivered ? "✓ DELIVERED" : "PENDING"}</div></div><div class="bill-amount">&#8377;${b.grand.toFixed(2)}</div></div></div>`).join("")}<div class="bottom-spacer"></div>`;
+        c.innerHTML = `<div class="bills-summary"><div class="bills-summary-label">${isFiltered ? "Matching Sales" : "Total Sales"}</div><div class="bills-summary-val">&#8377;${filteredTotal.toFixed(2)}</div><div class="bills-summary-count">${isFiltered ? filtered.length + " of " + S.bills.length + " bills" : S.bills.length + " bill" + (S.bills.length !== 1 ? "s" : "")}</div></div>${filtered.map((b, idx) => `<div class="bill-card" style="animation-delay:${Math.min(idx * 0.04, 0.3)}s" onclick="viewBill('${b.id}')"><div class="bill-card-top"><div class="bill-inv">No. ${hlB(String(b.invno), q)}</div><div class="bill-date">${fmtDate(b.date)}</div></div><div class="bill-party">${hlB(b.customer.name, q)}</div><div class="bill-location">${esc(b.customer.location || "")}${b.transport ? " Â· " + esc(b.transport.name) : ""}</div><div class="bill-card-bottom"><div style="display:flex;align-items:center;gap:6px"><div class="bill-meta">${b.items.length} item${b.items.length !== 1 ? "s" : ""}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.paid ? "var(--success-soft)" : "var(--danger-soft)"};color:${b.paid ? "var(--success)" : "var(--danger)"}">${b.paid ? "PAID" : "UNPAID"}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.delivered ? "var(--success-soft)" : "var(--warn-soft)"};color:${b.delivered ? "var(--success)" : "var(--warn)"}">${b.delivered ? "âœ“ DELIVERED" : "PENDING"}</div></div><div class="bill-amount">&#8377;${b.grand.toFixed(2)}</div></div></div>`).join("")}<div class="bottom-spacer"></div>`;
       }
 
       function filterBillsList() {
@@ -9093,25 +9505,26 @@
 
         const rows = b.items
           .map((it, idx) => {
-            let pkgCell = "—";
+            let pkgCell = "â€”";
             if (it.pkgText) pkgCell = esc(it.pkgText);
             else if (it.pkgType && it.pkgQty)
-              pkgCell = it.pkgQty + "×" + it.pkgType;
+              pkgCell = it.pkgQty + "Ã—" + it.pkgType;
             const rateCell = `&#8377;${it.rate}`;
-            const qtyCell = it.pcs != null ? it.pcs : "—";
+            const qtyCell = it.pcs != null ? it.pcs : "â€”";
             const wtCell =
-              it.weight != null ? it.weight.toFixed(3) + " kg" : "—";
-            const discCell = it.disc ? it.disc + "%" : "—";
+              it.weight != null ? it.weight.toFixed(3) + " kg" : "â€”";
+            const discCell = it.disc ? it.disc + "%" : "â€”";
             const amtCell = `&#8377;${it.amount.toFixed(2)}`;
-            const dvId = 'dvcb-' + idx;
-            const dvCls = 'item-delivered-wrap' + (it.delivered ? ' checked' : '');
+            const dvId = "dvcb-" + idx;
+            const dvCls =
+              "item-delivered-wrap" + (it.delivered ? " checked" : "");
             return `<tr>
       <td style="font-weight:700;color:var(--text);white-space:nowrap;font-size:11px;font-family:var(--mono)">${pkgCell}</td>
       <td style="text-align:left">
         ${esc(it.name)}
         <div class="${dvCls}" onclick="event.stopPropagation()">
-          <input type="checkbox" class="item-delivered-cb" id="${dvId}" ${it.delivered ? 'checked' : ''} onchange="toggleDelivered('${b.id}',${idx},this.checked)">
-          <label class="item-delivered-label" for="${dvId}">${it.delivered ? '✓ Delivered' : 'Delivered?'}</label>
+          <input type="checkbox" class="item-delivered-cb" id="${dvId}" ${it.delivered ? "checked" : ""} onchange="toggleDelivered('${b.id}',${idx},this.checked)">
+          <label class="item-delivered-label" for="${dvId}">${it.delivered ? "âœ“ Delivered" : "Delivered?"}</label>
         </div>
       </td>
       <td style="font-family:var(--mono)">${rateCell}</td>
@@ -9134,8 +9547,8 @@
 
         document.getElementById("bill-detail-content").innerHTML = `
     <div style="padding:8px 16px 0;display:flex;align-items:center;gap:8px">
-      <div id="bill-delivery-badge" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;background:${b.delivered ? 'var(--success-soft)' : 'var(--warn-soft)'};color:${b.delivered ? 'var(--success)' : 'var(--warn)'}">
-        ${b.delivered ? '✓ Fully Delivered' : 'Pending Delivery'}
+      <div id="bill-delivery-badge" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;background:${b.delivered ? "var(--success-soft)" : "var(--warn-soft)"};color:${b.delivered ? "var(--success)" : "var(--warn)"}">
+        ${b.delivered ? "âœ“ Fully Delivered" : "Pending Delivery"}
       </div>
     </div>
     <div class="invoice-card">
@@ -9155,11 +9568,11 @@
         </div>
         <div class="inv-meta-cell">
           <div class="inv-meta-label">Transport</div>
-          <div class="inv-meta-val">${b.transport ? esc(b.transport.name) : "—"}</div>
+          <div class="inv-meta-val">${b.transport ? esc(b.transport.name) : "â€”"}</div>
         </div>
         <div class="inv-meta-cell">
           <div class="inv-meta-label">Destination</div>
-          <div class="inv-meta-val">${esc(b.customer.location || "—")}</div>
+          <div class="inv-meta-val">${esc(b.customer.location || "â€”")}</div>
         </div>
       </div>
       <table class="inv-table">
@@ -9200,29 +9613,39 @@
         goTo("screen-bill-detail");
       }
 
-      // TOGGLE DELIVERED (per item — bill is "delivered" only when ALL items delivered)
+      // TOGGLE DELIVERED (per item â€” bill is "delivered" only when ALL items delivered)
       function toggleDelivered(billId, itemIdx, checked) {
         const b = S.bills.find((x) => x.id === billId);
         if (!b || !b.items[itemIdx]) return;
         b.items[itemIdx].delivered = checked;
         // Bill-level delivered = every item is delivered
         b.delivered = b.items.length > 0 && b.items.every((it) => it.delivered);
-        persist('bills');
-        const wraps = document.querySelectorAll('.item-delivered-wrap');
+        persist("bills");
+        const wraps = document.querySelectorAll(".item-delivered-wrap");
         const wrap = wraps[itemIdx];
         if (wrap) {
-          const lbl = wrap.querySelector('.item-delivered-label');
-          if (lbl) lbl.textContent = checked ? '✓ Delivered' : 'Delivered?';
-          wrap.classList.toggle('checked', checked);
+          const lbl = wrap.querySelector(".item-delivered-label");
+          if (lbl) lbl.textContent = checked ? "âœ“ Delivered" : "Delivered?";
+          wrap.classList.toggle("checked", checked);
         }
         // Update the bill-level delivery badge in the detail view if present
-        const billDelivBadge = document.getElementById('bill-delivery-badge');
+        const billDelivBadge = document.getElementById("bill-delivery-badge");
         if (billDelivBadge) {
-          billDelivBadge.textContent = b.delivered ? '✓ Fully Delivered' : 'Pending Delivery';
-          billDelivBadge.style.background = b.delivered ? 'var(--success-soft)' : 'var(--warn-soft)';
-          billDelivBadge.style.color = b.delivered ? 'var(--success)' : 'var(--warn)';
+          billDelivBadge.textContent = b.delivered
+            ? "âœ“ Fully Delivered"
+            : "Pending Delivery";
+          billDelivBadge.style.background = b.delivered
+            ? "var(--success-soft)"
+            : "var(--warn-soft)";
+          billDelivBadge.style.color = b.delivered
+            ? "var(--success)"
+            : "var(--warn)";
         }
-        const msg = b.delivered ? '✅ Bill fully delivered!' : checked ? '✓ Item marked delivered' : 'Delivery mark removed';
+        const msg = b.delivered
+          ? "âœ… Bill fully delivered!"
+          : checked
+            ? "âœ“ Item marked delivered"
+            : "Delivery mark removed";
         showToast(msg);
         updateDashboardStats();
       }
@@ -9240,7 +9663,7 @@
           payBtn.textContent = b.paid ? "Mark Unpaid" : "Mark Paid";
           payBtn.style.color = b.paid ? "var(--danger)" : "var(--success)";
         }
-        showToast(b.paid ? "✅ Marked as Paid" : "Bill marked unpaid");
+        showToast(b.paid ? "âœ… Marked as Paid" : "Bill marked unpaid");
         updateDashboardStats();
       }
 
@@ -9259,7 +9682,7 @@
         const pb = document.getElementById("party-balance");
         pb.textContent =
           (b.customer.location || "") +
-          (b.customer.phone ? " · " + b.customer.phone : "");
+          (b.customer.phone ? " Â· " + b.customer.phone : "");
         pb.style.display = pb.textContent ? "block" : "none";
         if (b.transport) {
           const tdisp = document.getElementById("transport-display");
@@ -9278,7 +9701,7 @@
         renderBillItems();
         recalcBill();
         goTo("screen-bill");
-        showToast("Bill duplicated — review and save");
+        showToast("Bill duplicated â€” review and save");
       }
 
       // ================================================================
@@ -9287,7 +9710,7 @@
       function shareCurrentBillWhatsApp() {
         const b = S.bills.find((x) => x.id === S.currentBillId);
         if (!b) return;
-        showToast("Preparing…");
+        showToast("Preparingâ€¦");
         const target = document.getElementById("bill-jpeg-target");
         _loadHtml2Canvas(() => {
           setTimeout(() => {
@@ -9314,7 +9737,7 @@
                         files: [file],
                         title: "Estimate #" + b.invno,
                         text:
-                          "Estimate from Manju Enterprises — ₹" +
+                          "Estimate from Manju Enterprises â€” â‚¹" +
                           b.grand.toFixed(2),
                       })
                       .catch(() => {});
@@ -9332,9 +9755,9 @@
                       const msg = encodeURIComponent(
                         "Estimate #" +
                           b.invno +
-                          " from Manju Enterprises\nAmount: ₹" +
+                          " from Manju Enterprises\nAmount: â‚¹" +
                           b.grand.toFixed(2) +
-                          "\n(Image saved — please attach it)",
+                          "\n(Image saved â€” please attach it)",
                       );
                       window.open("https://wa.me/?text=" + msg, "_blank");
                     }, 800);
@@ -9402,7 +9825,7 @@
           .reduce((s, b) => s + (b.grand || 0), 0);
         const unpaid = total - paid;
 
-        const fmt = (v) => "₹" + v.toFixed(2);
+        const fmt = (v) => "â‚¹" + v.toFixed(2);
         const el = (id) => document.getElementById(id);
         if (el("rpt-total")) el("rpt-total").textContent = fmt(total);
         if (el("rpt-bill-count"))
@@ -9433,7 +9856,7 @@
       <div style="width:22px;height:22px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">${i + 1}</div>
       <div style="flex:1;font-size:13px;font-weight:500;color:var(--text)">${esc(name)}</div>
       <div style="font-size:11px;color:var(--muted);margin-right:8px">${d.count} bills</div>
-      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--success)">₹${d.total.toFixed(0)}</div>
+      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--success)">â‚¹${d.total.toFixed(0)}</div>
     </div>`,
                 )
                 .join("")
@@ -9463,9 +9886,9 @@
       <div style="width:22px;height:22px;border-radius:50%;background:var(--success-soft);color:var(--success);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">${i + 1}</div>
       <div style="flex:1;min-width:0;">
         <div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(name)}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:1px">${d.qty > 0 ? d.qty + " pcs" : ""}${d.wt > 0 ? (d.qty > 0 ? " · " : "") + d.wt.toFixed(1) + " kg" : ""}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px">${d.qty > 0 ? d.qty + " pcs" : ""}${d.wt > 0 ? (d.qty > 0 ? " Â· " : "") + d.wt.toFixed(1) + " kg" : ""}</div>
       </div>
-      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--success)">₹${d.total.toFixed(0)}</div>
+      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--success)">â‚¹${d.total.toFixed(0)}</div>
     </div>`,
                 )
                 .join("")
@@ -9508,7 +9931,7 @@
         el.innerHTML = `
     <div style="padding:10px 14px;background:var(--surface2);border-bottom:0.5px solid var(--separator);display:flex;justify-content:space-between;">
       <div style="font-size:12px;color:var(--muted)">${bills.length} bills total</div>
-      <div style="font-size:12px;font-weight:700;color:var(--danger)">₹${unpaid.toFixed(0)} pending</div>
+      <div style="font-size:12px;font-weight:700;color:var(--danger)">â‚¹${unpaid.toFixed(0)} pending</div>
     </div>
     ${bills
       .map(
@@ -9516,17 +9939,17 @@
           b,
         ) => `<div style="display:flex;align-items:center;padding:10px 14px;border-bottom:0.5px solid var(--separator);gap:8px;" onclick="viewBill('${b.id}')">
       <div style="flex:1">
-        <div style="font-size:13px;font-weight:500;color:var(--text)">#${b.invno} · ${fmtDate(b.date)}</div>
+        <div style="font-size:13px;font-weight:500;color:var(--text)">#${b.invno} Â· ${fmtDate(b.date)}</div>
         <div style="font-size:11px;color:var(--muted);margin-top:1px">${b.items?.length || 0} items</div>
       </div>
       <div style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.paid ? "var(--success-soft)" : "var(--danger-soft)"};color:${b.paid ? "var(--success)" : "var(--danger)"};margin-right:4px">${b.paid ? "PAID" : "DUE"}</div>
-      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--text)">₹${b.grand.toFixed(0)}</div>
+      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--text)">â‚¹${b.grand.toFixed(0)}</div>
     </div>`,
       )
       .join("")}
     <div style="padding:12px 14px;display:flex;justify-content:space-between;background:var(--surface2);">
       <div style="font-size:13px;font-weight:700;color:var(--text)">Total</div>
-      <div style="font-size:15px;font-weight:800;font-family:var(--mono);color:var(--accent)">₹${total.toFixed(2)}</div>
+      <div style="font-size:15px;font-weight:800;font-family:var(--mono);color:var(--accent)">â‚¹${total.toFixed(2)}</div>
     </div>`;
       }
 
@@ -9547,7 +9970,7 @@
           }
         }
         if (/android/i.test(navigator.userAgent)) {
-          showToast("AndroidPrint bridge not found — check MainActivity.java");
+          showToast("AndroidPrint bridge not found â€” check MainActivity.java");
           return;
         }
         const content = document.getElementById(
@@ -9587,7 +10010,8 @@
         const doc = iframe.contentDocument || iframe.contentWindow.document;
         doc.open();
         doc.write(
-          `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Estimate</title><style>${printCSS}</style></head><body>${content}</body></html>`,
+          `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Estimate</title><style>${printCSS}
+</style></head><body>${content}</body></html>`,
         );
         doc.close();
         iframe.onload = function () {
@@ -9748,7 +10172,7 @@
               if (item.phone) parts.push(item.phone);
               if (item.preferredTransport)
                 parts.push("Transport: " + item.preferredTransport);
-              sub = parts.join(" · ");
+              sub = parts.join(" Â· ");
             }
             if (m.type === "product") {
               sub = item.type === "kg" ? "Per Kg" : "Per Pc";
@@ -9885,7 +10309,11 @@
             processRows(XLSX._parseCSV(e.target.result));
           };
           reader.readAsText(file);
-        } else if (fname.endsWith(".xlsx") || fname.endsWith(".xls") || fname.endsWith(".xlsm")) {
+        } else if (
+          fname.endsWith(".xlsx") ||
+          fname.endsWith(".xls") ||
+          fname.endsWith(".xlsm")
+        ) {
           reader.onload = (e) => {
             try {
               processRows(XLSX._readFile(e.target.result));
@@ -9970,10 +10398,10 @@
           return [
             '<option value="-1"' +
               (selected === -1 ? " selected" : "") +
-              ">— Skip —</option>",
+              ">â€” Skip â€”</option>",
             ...headers.map(
               (h, i) =>
-                `<option value="${i}"${i === selected ? " selected" : ""}>${h} — "${String((rows[dataStart] || [])[i] || "").slice(0, 22)}"</option>`,
+                `<option value="${i}"${i === selected ? " selected" : ""}>${h} â€” "${String((rows[dataStart] || [])[i] || "").slice(0, 22)}"</option>`,
             ),
           ].join("");
         }
@@ -10031,7 +10459,7 @@
         document.getElementById("edit-sheet-title").textContent =
           "Map Customer Columns";
         document.getElementById("edit-sheet-body").innerHTML =
-          `<div class="mapping-panel" style="overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:calc(92dvh - 80px);"><div class="mapping-title">Map Your Columns</div><div class="mapping-sub">${rows.length} rows · ${hasHeader ? "First row used as header" : "No header detected"} · Preview:</div>${previewTable}${fields.map((f) => `<div class="map-row"><div class="map-label">${f.label}</div><div class="map-arrow">&#8594;</div><select id="${f.id}">${optionsList(f.selected)}</select></div>`).join("")}<div style="background:var(--accent-soft);border-radius:var(--radius-xs);padding:10px 12px;font-size:12px;color:var(--accent);margin-bottom:14px;font-weight:500;">Transport column auto-fills when selecting a party in bills</div><div class="add-form-btn-row"><button class="add-form-btn add-form-btn-primary" onclick="confirmCustomerImport(${dataStart})">Import Customers</button><button class="add-form-btn add-form-btn-cancel" onclick="document.getElementById('edit-overlay').classList.remove('show')">Cancel</button></div></div>`;
+          `<div class="mapping-panel" style="overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:calc(92dvh - 80px);"><div class="mapping-title">Map Your Columns</div><div class="mapping-sub">${rows.length} rows Â· ${hasHeader ? "First row used as header" : "No header detected"} Â· Preview:</div>${previewTable}${fields.map((f) => `<div class="map-row"><div class="map-label">${f.label}</div><div class="map-arrow">&#8594;</div><select id="${f.id}">${optionsList(f.selected)}</select></div>`).join("")}<div style="background:var(--accent-soft);border-radius:var(--radius-xs);padding:10px 12px;font-size:12px;color:var(--accent);margin-bottom:14px;font-weight:500;">Transport column auto-fills when selecting a party in bills</div><div class="add-form-btn-row"><button class="add-form-btn add-form-btn-primary" onclick="confirmCustomerImport(${dataStart})">Import Customers</button><button class="add-form-btn add-form-btn-cancel" onclick="document.getElementById('edit-overlay').classList.remove('show')">Cancel</button></div></div>`;
         document.getElementById("edit-overlay").classList.add("show");
       }
 
@@ -10120,7 +10548,7 @@
           ]
             .map(
               (f) =>
-                `<div class="map-row"><div class="map-label">${f.label}</div><div class="map-arrow">&#8594;</div><select id="${f.id}">${f.defaultSpecial ? '<option value="-1" selected>— Skip (default Pcs) —</option>' : ""}${headers.map((h, i) => `<option value="${i}"${!f.defaultSpecial && i === f.default ? " selected" : ""}>${h} — "${String(previewRow[i] || "").slice(0, 20)}"</option>`).join("")}</select></div>`,
+                `<div class="map-row"><div class="map-label">${f.label}</div><div class="map-arrow">&#8594;</div><select id="${f.id}">${f.defaultSpecial ? '<option value="-1" selected>â€” Skip (default Pcs) â€”</option>' : ""}${headers.map((h, i) => `<option value="${i}"${!f.defaultSpecial && i === f.default ? " selected" : ""}>${h} â€” "${String(previewRow[i] || "").slice(0, 20)}"</option>`).join("")}</select></div>`,
             )
             .join(
               "",
@@ -10128,7 +10556,7 @@
             .slice(dataStart, dataStart + 2)
             .map(
               (r) =>
-                `<span class="map-chip">${String(r[0] || "—").slice(0, 20)}</span><span class="map-chip">&#8377;${guessRate >= 0 ? String(r[guessRate] || "?") : "?"}</span>`,
+                `<span class="map-chip">${String(r[0] || "â€”").slice(0, 20)}</span><span class="map-chip">&#8377;${guessRate >= 0 ? String(r[guessRate] || "?") : "?"}</span>`,
             )
             .join(
               "",
@@ -10283,7 +10711,7 @@
         haptic(10);
         const el = document.getElementById("toast");
         el.textContent = String(msg || "")
-          .replace(/[✅🏢]/g, "")
+          .replace(/[âœ…ðŸ¢]/g, "")
           .trim();
         el.classList.add("show");
         setTimeout(() => el.classList.remove("show"), 2800);
@@ -10477,7 +10905,7 @@
           return;
         }
         localStorage.setItem("me_custom_pin", _cpNew);
-        showToast("✅ PIN changed successfully!");
+        showToast("âœ… PIN changed successfully!");
         resetChangePinFlow();
       }
 
@@ -10491,39 +10919,39 @@
           return;
         }
 
-        showToast("Preparing image…");
+        showToast("Preparing imageâ€¦");
 
         const rows = b.items
           .map((it) => {
             const pkgCell = it.pkgText
               ? it.pkgText
               : it.pkgType && it.pkgQty
-                ? it.pkgQty + "×" + it.pkgType
-                : "—";
-            const qtyCell = it.pcs != null ? it.pcs : "—";
+                ? it.pkgQty + "Ã—" + it.pkgType
+                : "â€”";
+            const qtyCell = it.pcs != null ? it.pcs : "â€”";
             const wtCell =
-              it.weight != null ? it.weight.toFixed(2) + " kg" : "—";
-            const discCell = it.disc ? it.disc + "%" : "—";
+              it.weight != null ? it.weight.toFixed(2) + " kg" : "â€”";
+            const discCell = it.disc ? it.disc + "%" : "â€”";
             const td =
               "padding:9px 10px;border-bottom:1px solid #ebebeb;vertical-align:middle;color:#1d1d1f;font-weight:500;";
             return `<tr>
       <td style="${td}font-weight:700;white-space:nowrap;font-size:11px;font-family:monospace">${pkgCell}</td>
       <td style="${td}text-align:left;font-size:12px">${it.name}</td>
-      <td style="${td}text-align:right;font-family:monospace">₹${it.rate}</td>
+      <td style="${td}text-align:right;font-family:monospace">â‚¹${it.rate}</td>
       <td style="${td}text-align:right;font-family:monospace">${qtyCell}</td>
       <td style="${td}text-align:right;font-family:monospace">${wtCell}</td>
       <td style="${td}text-align:right;font-family:monospace">${discCell}</td>
-      <td style="${td}text-align:right;font-family:monospace;font-weight:700">₹${it.amount.toFixed(2)}</td>
+      <td style="${td}text-align:right;font-family:monospace;font-weight:700">â‚¹${it.amount.toFixed(2)}</td>
     </tr>`;
           })
           .join("");
 
         const extraRows = [
           b.taxAmt > 0
-            ? `<tr><td colspan="6" style="text-align:left;color:#86868b;font-size:11px">Tax (${b.taxPct}%)</td><td>₹${b.taxAmt.toFixed(2)}</td></tr>`
+            ? `<tr><td colspan="6" style="text-align:left;color:#86868b;font-size:11px">Tax (${b.taxPct}%)</td><td>â‚¹${b.taxAmt.toFixed(2)}</td></tr>`
             : "",
           b.rikshaw > 0
-            ? `<tr><td colspan="6" style="text-align:left;color:#86868b;font-size:11px">Rikshaw Charges</td><td>₹${b.rikshaw.toFixed(2)}</td></tr>`
+            ? `<tr><td colspan="6" style="text-align:left;color:#86868b;font-size:11px">Rikshaw Charges</td><td>â‚¹${b.rikshaw.toFixed(2)}</td></tr>`
             : "",
         ].join("");
 
@@ -10549,11 +10977,11 @@
         </div>
         <div style="padding:12px 16px;border-right:1px solid #e5e5e5;">
           <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px">Transport</div>
-          <div style="font-size:13px;font-weight:600;color:#1d1d1f">${b.transport ? b.transport.name : "—"}</div>
+          <div style="font-size:13px;font-weight:600;color:#1d1d1f">${b.transport ? b.transport.name : "â€”"}</div>
         </div>
         <div style="padding:12px 16px;">
           <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px">Destination</div>
-          <div style="font-size:13px;font-weight:600;color:#1d1d1f">${b.customer.location || "—"}</div>
+          <div style="font-size:13px;font-weight:600;color:#1d1d1f">${b.customer.location || "â€”"}</div>
         </div>
       </div>
 
@@ -10581,7 +11009,7 @@
       <!-- TOTAL ROW -->
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f8f8fb;">
         <div style="font-size:14px;font-weight:700;color:#1d1d1f;">Total Amount</div>
-        <div style="font-size:20px;font-weight:800;color:#007aff;font-family:monospace;letter-spacing:-0.5px">₹${b.grand.toFixed(2)}</div>
+        <div style="font-size:20px;font-weight:800;color:#007aff;font-family:monospace;letter-spacing:-0.5px">â‚¹${b.grand.toFixed(2)}</div>
       </div>
 
       <!-- AMOUNT IN WORDS -->
@@ -10623,7 +11051,7 @@
                     a.click();
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
-                    showToast("✅ Bill saved as JPEG!");
+                    showToast("âœ… Bill saved as JPEG!");
                   },
                   "image/jpeg",
                   0.95,
@@ -10650,7 +11078,7 @@
         };
       }
 
-      // Single coalesced chart render — call this instead of rendering charts inline
+      // Single coalesced chart render â€” call this instead of rendering charts inline
       let _chartScheduled = false;
       function scheduleDashboardCharts() {
         if (_chartScheduled) return;
@@ -10691,7 +11119,7 @@
         });
       }
 
-      // Debounced resize handler — replaces the existing one
+      // Debounced resize handler â€” replaces the existing one
       const _debouncedResize = debounce(function () {
         renderHeroChart();
         renderBarChart();
@@ -11172,7 +11600,7 @@
           const total = data.reduce((s, d) => s + d.value, 0);
           lbl.textContent =
             total > 0
-              ? "7-day total: ₹" + total.toFixed(0)
+              ? "7-day total: â‚¹" + total.toFixed(0)
               : "No sales this week";
         }
       }
@@ -11215,7 +11643,7 @@
           const lbl = document.getElementById(labelId);
           if (lbl)
             lbl.textContent =
-              d.label + " (" + d.date.slice(5) + ") – ₹" + d.value.toFixed(0);
+              d.label + " (" + d.date.slice(5) + ") â€“ â‚¹" + d.value.toFixed(0);
           // Redraw with highlight
           const dpr = window.devicePixelRatio || 1;
           const W = canvas.clientWidth;
@@ -11249,7 +11677,7 @@
             const total = data.reduce((s, d) => s + d.value, 0);
             lbl.textContent =
               total > 0
-                ? "7-day total: ₹" + total.toFixed(0)
+                ? "7-day total: â‚¹" + total.toFixed(0)
                 : "No sales this week";
           }
           renderBarChart();
@@ -11368,9 +11796,9 @@
           .sort((a, b) => b[1] - a[1])
           .slice(0, 4);
         const fmt = (v) => {
-          if (v >= 100000) return "₹" + (v / 100000).toFixed(1) + "L";
-          if (v >= 1000) return "₹" + (v / 1000).toFixed(1) + "K";
-          return "₹" + v.toFixed(0);
+          if (v >= 100000) return "â‚¹" + (v / 100000).toFixed(1) + "L";
+          if (v >= 1000) return "â‚¹" + (v / 1000).toFixed(1) + "K";
+          return "â‚¹" + v.toFixed(0);
         };
         if (!top.length) {
           el.innerHTML =
@@ -11417,7 +11845,7 @@
         _setupBarInteraction(canvas, data, "rpt-chart-label");
       }
 
-      // ── REPORTS PAGE CHARTS ───────────────────────────────────────────
+      // â”€â”€ REPORTS PAGE CHARTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       function renderReportDonutChart(bills) {
         const el = document.getElementById("rpt-delivery-bar");
         if (!el) return;
@@ -11425,7 +11853,8 @@
         const pending = bills.filter((b) => !b.delivered).length;
         const total = bills.length;
         if (!total) {
-          el.innerHTML = '<div style="font-size:11px;color:var(--muted);text-align:center;padding:12px 0">No data</div>';
+          el.innerHTML =
+            '<div style="font-size:11px;color:var(--muted);text-align:center;padding:12px 0">No data</div>';
           return;
         }
         const dark = document.body.classList.contains("dark");
@@ -11443,7 +11872,9 @@
             </div>
           </div>`;
         }
-        el.innerHTML = barRow("Delivered", delivered, delivColor) + barRow("Pending", pending, pendColor);
+        el.innerHTML =
+          barRow("Delivered", delivered, delivColor) +
+          barRow("Pending", pending, pendColor);
       }
 
       function renderReportTopCustomersMini(bills) {
@@ -11461,10 +11892,10 @@
           .slice(0, 4);
         const fmt = (v) =>
           v >= 100000
-            ? "₹" + (v / 100000).toFixed(1) + "L"
+            ? "â‚¹" + (v / 100000).toFixed(1) + "L"
             : v >= 1000
-              ? "₹" + (v / 1000).toFixed(1) + "K"
-              : "₹" + v.toFixed(0);
+              ? "â‚¹" + (v / 1000).toFixed(1) + "K"
+              : "â‚¹" + v.toFixed(0);
         if (!top.length) {
           el.innerHTML =
             '<div style="font-size:11px;color:var(--muted);text-align:center;padding:16px 0">No data</div>';
@@ -11754,340 +12185,642 @@
       })();
 
       // ================================================================
-      // VOICE BILL ASSISTANT — 100% FREE (Web Speech API, zero paid APIs)
+      // VOICE BILL ASSISTANT â€” 100% FREE (Web Speech API, zero paid APIs)
       // Supports Hindi + English, regex + fuzzy matching
       // ================================================================
       (function () {
         const VB = {
           recognition: null,
           listening: false,
-          lastTranscript: '',
+          lastTranscript: "",
           parsed: null,
-          phase: 'idle', // idle | listening | parsed | confirmed
+          phase: "idle", // idle | listening | parsed | confirmed
         };
 
-        // ── Number word maps (Hindi + English) ────────────────────────
+        // â”€â”€ Number word maps (Hindi + English) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         const NUM_WORDS = {
           // English
-          zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,
-          eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,
-          eighteen:18,nineteen:19,twenty:20,thirty:30,forty:40,fifty:50,sixty:60,
-          seventy:70,eighty:80,ninety:90,hundred:100,thousand:1000,
-          'a':1,'an':1,
+          zero: 0,
+          one: 1,
+          two: 2,
+          three: 3,
+          four: 4,
+          five: 5,
+          six: 6,
+          seven: 7,
+          eight: 8,
+          nine: 9,
+          ten: 10,
+          eleven: 11,
+          twelve: 12,
+          thirteen: 13,
+          fourteen: 14,
+          fifteen: 15,
+          sixteen: 16,
+          seventeen: 17,
+          eighteen: 18,
+          nineteen: 19,
+          twenty: 20,
+          thirty: 30,
+          forty: 40,
+          fifty: 50,
+          sixty: 60,
+          seventy: 70,
+          eighty: 80,
+          ninety: 90,
+          hundred: 100,
+          thousand: 1000,
+          a: 1,
+          an: 1,
           // Hindi transliterated
-          ek:1,do:2,teen:3,char:4,paanch:5,chhe:6,saat:7,aath:8,nau:9,das:10,
-          gyarah:11,barah:12,terah:13,chaudah:14,pandrah:15,solah:16,satrah:17,
-          atharah:18,unees:19,bees:20,tees:30,chalees:40,pachaas:50,saath:60,
-          sattar:70,assi:80,nabbe:90,so:100,hazaar:1000,
-          'ek so':100,'do so':200,'teen so':300,'char so':400,
+          ek: 1,
+          do: 2,
+          teen: 3,
+          char: 4,
+          paanch: 5,
+          chhe: 6,
+          saat: 7,
+          aath: 8,
+          nau: 9,
+          das: 10,
+          gyarah: 11,
+          barah: 12,
+          terah: 13,
+          chaudah: 14,
+          pandrah: 15,
+          solah: 16,
+          satrah: 17,
+          atharah: 18,
+          unees: 19,
+          bees: 20,
+          tees: 30,
+          chalees: 40,
+          pachaas: 50,
+          saath: 60,
+          sattar: 70,
+          assi: 80,
+          nabbe: 90,
+          so: 100,
+          hazaar: 1000,
+          "ek so": 100,
+          "do so": 200,
+          "teen so": 300,
+          "char so": 400,
         };
 
         // Unit words that indicate product quantity type
         const UNIT_KEYWORDS = {
-          kg:['kg','kilo','kilos','kilogram','kilograms','kilo gram','kilo grams'],
-          pc:['pc','pcs','piece','pieces','no','nos','number','packet','packets',
-              'bag','bags','box','boxes','unit','units','nag','nag.','nag ','nag',
-              'manhole','manholes','cover','covers','lid','lids','ring','rings',
-              'pipe','pipes','slab','slabs'],
+          kg: [
+            "kg",
+            "kilo",
+            "kilos",
+            "kilogram",
+            "kilograms",
+            "kilo gram",
+            "kilo grams",
+          ],
+          pc: [
+            "pc",
+            "pcs",
+            "piece",
+            "pieces",
+            "no",
+            "nos",
+            "number",
+            "packet",
+            "packets",
+            "bag",
+            "bags",
+            "box",
+            "boxes",
+            "unit",
+            "units",
+            "nag",
+            "nag.",
+            "nag ",
+            "nag",
+            "manhole",
+            "manholes",
+            "cover",
+            "covers",
+            "lid",
+            "lids",
+            "ring",
+            "rings",
+            "pipe",
+            "pipes",
+            "unit",
+            "units",
+            "slab",
+            "slabs",
+            "lid",
+            "lids",
+            "slab",
+            "slabs",
+          ],
         };
 
         // Discount trigger words
-        const DISC_WORDS = ['discount','disc','off','percent off','% off','rebate',
-                            'chhoot','choot','discount dena','percent','%'];
+        const DISC_WORDS = [
+          "discount",
+          "disc",
+          "off",
+          "percent off",
+          "% off",
+          "rebate",
+          "chhoot",
+          "choot",
+          "discount dena",
+          "percent",
+          "%",
+        ];
 
-        // ── Fuzzy string match ─────────────────────────────────────────
+        // â”€â”€ Fuzzy string match â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function normalize(s) {
-          return String(s||'').toLowerCase()
-            .normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
-            .replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim();
+          return String(s || "")
+            .toLowerCase()
+            .normalize("NFKD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-z0-9 ]+/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
         }
         function editDist(a, b) {
-          a = normalize(a); b = normalize(b);
+          a = normalize(a);
+          b = normalize(b);
           if (!a || !b) return Math.max(a.length, b.length);
-          const dp = Array.from({length:b.length+1},(_,i)=>i);
-          for (let i=1;i<=a.length;i++) {
-            let prev=dp[0]; dp[0]=i;
-            for (let j=1;j<=b.length;j++) {
-              const tmp=dp[j];
-              dp[j]=a[i-1]===b[j-1]?prev:1+Math.min(prev,dp[j],dp[j-1]);
-              prev=tmp;
+          const dp = Array.from({ length: b.length + 1 }, (_, i) => i);
+          for (let i = 1; i <= a.length; i++) {
+            let prev = dp[0];
+            dp[0] = i;
+            for (let j = 1; j <= b.length; j++) {
+              const tmp = dp[j];
+              dp[j] =
+                a[i - 1] === b[j - 1]
+                  ? prev
+                  : 1 + Math.min(prev, dp[j], dp[j - 1]);
+              prev = tmp;
             }
           }
           return dp[b.length];
         }
         function fuzzyScore(query, candidate) {
-          const q = normalize(query), c = normalize(candidate);
-          if (!q||!c) return 0;
-          if (c===q) return 1;
-          if (c.startsWith(q)||c.includes(q)) return 0.88;
-          const dist = editDist(q,c);
+          const q = normalize(query),
+            c = normalize(candidate);
+          if (!q || !c) return 0;
+          if (c === q) return 1;
+          const qc = q.replace(/\s+/g, "");
+          const cc = c.replace(/\s+/g, "");
+          if (c.startsWith(q) || c.includes(q) || cc.startsWith(qc)) return 0.94;
+          const qTokens = q.split(/\s+/).filter(Boolean);
+          const cTokens = c.split(/\s+/).filter(Boolean);
+          const hits = qTokens.filter((t) =>
+            cTokens.some((ct) => ct === t || ct.startsWith(t) || t.startsWith(ct)),
+          ).length;
+          const overlap = hits / Math.max(qTokens.length, 1);
+          if (overlap === 1 && qTokens.length > 1) return 0.9;
+          if (overlap >= 0.67) return 0.74 + overlap * 0.12;
+          const dist = editDist(q, c);
           const maxLen = Math.max(q.length, c.length);
-          return Math.max(0, 1 - dist/maxLen);
+          return Math.max(0, 1 - dist / maxLen);
         }
         function bestMatch(query, list, keyFn) {
-          if (!query||!list.length) return null;
-          let best=null, bestS=0;
-          list.forEach(item=>{
-            const keys = keyFn ? [keyFn(item)] : [item];
-            keys.forEach(k=>{
-              const s=fuzzyScore(query, k);
-              if(s>bestS){bestS=s;best=item;}
-            });
-          });
-          return bestS>=0.42 ? best : null;
+          const hit = findBestWithScore(query, list, keyFn ? (item) => [keyFn(item)] : null, 0.42);
+          return hit ? hit.item : null;
         }
 
-        // ── Word-to-number parser ──────────────────────────────────────
+        function isFillerWord(w) {
+          return [
+            "for", "ke", "liye", "k", "ko", "party", "customer", "cust",
+            "bill", "bana", "banana", "banado", "ka", "ki", "me", "mein",
+            "mai", "par", "pe", "at", "and", "aur", "or", "with", "discount",
+            "disc", "percent", "off", "chhoot", "choot", "nahi", "nahin", "no",
+            "without", "bina", "mat", "please", "plz",
+          ].includes(w);
+        }
+
+        function speechNormalize(raw) {
+          return normalize(
+            String(raw || "")
+              .replace(/[०-९]/g, (d) => "०१२३४५६७८९".indexOf(d))
+              .replace(/\b(per cent|percentage)\b/gi, " percent ")
+              .replace(/\b(by|into|cross)\b/gi, " x ")
+              .replace(/\bf\s*r\s*p\b/gi, " frp ")
+              .replace(/\b(fiber|fibre)\b/gi, " frp ")
+              .replace(/एफ\s*आर\s*पी/g, " frp ")
+              .replace(/एफआरपी/g, " frp ")
+              .replace(/बारह/g, " 12 ")
+              .replace(/ग्यारह/g, " 11 ")
+              .replace(/दस/g, " 10 ")
+              .replace(/नौ/g, " 9 ")
+              .replace(/आठ/g, " 8 ")
+              .replace(/सात/g, " 7 ")
+              .replace(/छह/g, " 6 ")
+              .replace(/पांच|पाँच/g, " 5 ")
+              .replace(/चार/g, " 4 ")
+              .replace(/तीन/g, " 3 ")
+              .replace(/दो/g, " 2 ")
+              .replace(/एक/g, " 1 ")
+              .replace(/\b(twelve|barah)\b/gi, " 12 ")
+              .replace(/\b(eleven|gyarah)\b/gi, " 11 ")
+              .replace(/\b(ten|das)\b/gi, " 10 ")
+              .replace(/\b(nine|nau)\b/gi, " 9 ")
+              .replace(/\b(eight|aath)\b/gi, " 8 ")
+              .replace(/\b(seven|saat)\b/gi, " 7 ")
+              .replace(/\b(six|chhe)\b/gi, " 6 ")
+              .replace(/\b(five|paanch)\b/gi, " 5 ")
+              .replace(/\b(four|char)\b/gi, " 4 ")
+              .replace(/\b(three|teen)\b/gi, " 3 ")
+              .replace(/\b(two|do)\b/gi, " 2 ")
+              .replace(/\b(one|ek)\b/gi, " 1 "),
+          );
+        }
+
+        function tokenNumber(token) {
+          if (!token) return NaN;
+          const n = parseFloat(token);
+          if (!isNaN(n)) return n;
+          return NUM_WORDS[token] !== undefined ? NUM_WORDS[token] : NaN;
+        }
+
+        function findBestWithScore(query, list, keyFn, minScore) {
+          if (!query || !list.length) return null;
+          let best = null;
+          let second = null;
+          list.forEach((item) => {
+            const keys = keyFn ? keyFn(item) : [item];
+            keys.filter(Boolean).forEach((k) => {
+              const score = fuzzyScore(query, k);
+              const hit = { item, score, key: k };
+              if (!best || score > best.score) {
+                second = best;
+                best = hit;
+              } else if (!second || score > second.score) {
+                second = hit;
+              }
+            });
+          });
+          if (!best || best.score < (minScore || 0.48)) return null;
+          best.ambiguous =
+            second &&
+            second.item !== best.item &&
+            best.score < 0.92 &&
+            best.score - second.score < 0.08;
+          return best;
+        }
+
+        function productKeys(p) {
+          const name = normalize(p.name);
+          const parts = name.split(/\s+/).filter(Boolean);
+          const keys = [name, name.replace(/\s+/g, "")];
+          for (let i = 0; i < parts.length; i++) {
+            for (let len = 1; len <= Math.min(4, parts.length - i); len++) {
+              const span = parts.slice(i, i + len).join(" ");
+              if (span.length >= 2) keys.push(span);
+            }
+          }
+          return [...new Set(keys)];
+        }
+
+        function customerKeys(c) {
+          return [c.name, c.searchName, c.location]
+            .map(normalize)
+            .filter((v) => v && v.length >= 2);
+        }
+
+        function cleanProductPhrase(words) {
+          return words
+            .filter((w) => w && !isFillerWord(w) && !isUnitWord(w))
+            .join(" ")
+            .trim();
+        }
+
+        function extractDiscount(text) {
+          if (
+            /\b(no|without|bina|nahi|nahin)\s+(discount|disc|chhoot|choot)\b/.test(text) ||
+            /\b(discount|disc|chhoot|choot)\s+(nahi|nahin|mat)\b/.test(text)
+          )
+            return 0;
+          const direct = text.match(
+            /(\d+(?:\.\d+)?|ek|do|teen|char|paanch|chhe|saat|aath|nau|das|barah|bees)\s*(?:%|percent|chhoot|choot|off|discount|disc)\b/,
+          );
+          if (direct) {
+            const n = tokenNumber(direct[1]);
+            return isNaN(n) ? 0 : n;
+          }
+          return 0;
+        }
+
+        function findCustomerAnywhere(text) {
+          if (!S.customers.length) return null;
+          let best = null;
+          const trigger = text.match(
+            /(?:for|ke liye|k liye|ko|party|customer|cust)\s+([a-z0-9 ]{2,45})/,
+          );
+          if (trigger) {
+            best = findBestWithScore(trigger[1], S.customers, customerKeys, 0.42);
+            if (best && !best.ambiguous) return best.item;
+          }
+
+          const words = text.split(/\s+/).filter(Boolean);
+          for (let i = 0; i < words.length; i++) {
+            for (let len = 1; len <= Math.min(5, words.length - i); len++) {
+              const slice = words.slice(i, i + len);
+              if (slice.some((w) => !isNaN(tokenNumber(w)) || isUnitWord(w))) continue;
+              const phrase = slice.filter((w) => !isFillerWord(w)).join(" ");
+              if (phrase.length < 2) continue;
+              const hit = findBestWithScore(phrase, S.customers, customerKeys, 0.56);
+              if (!hit) continue;
+              const score = hit.score + (i === 0 ? 0.08 : 0);
+              if (!best || score > best.score) best = { ...hit, score };
+            }
+          }
+          return best && !best.ambiguous ? best.item : null;
+        }
+
+        function scoreProductSpan(words) {
+          const phrase = cleanProductPhrase(words);
+          if (phrase.length < 2 || !S.products.length) return null;
+          return findBestWithScore(phrase, S.products, productKeys, 0.5);
+        }
+
+        // Word-to-number parser â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function wordsToNum(tokens) {
           // Try direct parse first
-          const joined = tokens.join(' ');
+          const joined = tokens.join(" ");
           const direct = parseFloat(joined);
           if (!isNaN(direct)) return direct;
 
-          let total=0, current=0;
-          tokens.forEach(t=>{
+          let total = 0,
+            current = 0;
+          tokens.forEach((t) => {
             const n = NUM_WORDS[t];
-            if (n===undefined) return;
-            if (n===1000) { total=(total+current)*1000; current=0; }
-            else if (n===100) { current*=100; if(!current) current=100; }
-            else current+=n;
+            if (n === undefined) return;
+            if (n === 1000) {
+              total = (total + current) * 1000;
+              current = 0;
+            } else if (n === 100) {
+              current *= 100;
+              if (!current) current = 100;
+            } else current += n;
           });
-          const result = total+current;
-          return result>0 ? result : NaN;
+          const result = total + current;
+          return result > 0 ? result : NaN;
         }
 
-        // ── Main parser ────────────────────────────────────────────────
+        // â”€â”€ Main parser â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function parseBillCommand(raw) {
-          const text = normalize(raw);
-          const tokens = text.split(/\s+/);
-          const result = { customer:null, items:[], discount:0, raw };
+          const text = speechNormalize(raw);
+          const tokens = text.split(/\s+/).filter(Boolean);
+          const result = { customer: null, items: [], discount: 0, raw, uncertain: [] };
 
-          // ── Extract discount ─────────────────────────────────────────
-          let discPct = 0;
-          const discMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:%|percent|chhoot|choot|off|discount)/);
-          if (discMatch) { discPct = parseFloat(discMatch[1]); result.discount = discPct; }
+          let discPct = extractDiscount(text);
+          result.discount = discPct;
+          result.customer = findCustomerAnywhere(text);
 
-          // ── Extract customer — look for "for/ke liye/party/customer" ─
-          const custTriggers = /\bfor\b|\bke liye\b|\bparty\b|\bwala\b|\bk liye\b|\bko\b|\bkustomer\b|\bcustomer\b|\bparty name\b/;
-          let custRaw = null;
-          const custMatch = text.match(new RegExp(
-            '(?:for|ke liye|ko|k liye|party|customer)\\s+([a-z0-9 .&-]{2,35}?)(?:\\s+(?:at|pe|par|mein|with|\\d|$)|$)'
-          ));
-          if (custMatch) custRaw = custMatch[1].trim();
-
-          // Fallback: last word cluster after items
-          if (!custRaw) {
-            const m2 = text.match(/(?:for|ke liye|ko)\s+(.+?)(?:\s+at\s+\d|$)/);
-            if (m2) custRaw = m2[1].trim();
-          }
-
-          if (custRaw && S.customers.length) {
-            result.customer = bestMatch(custRaw, S.customers, c=>c.name)
-              || bestMatch(custRaw, S.customers, c=>c.searchName||c.name);
-          }
-
-          // ── Extract items — product qty pairs ────────────────────────
-          // Pattern: NUMBER UNIT? PRODUCT  or  PRODUCT NUMBER UNIT?
-          // e.g: "2 manhole", "teen pc cement", "10 kg sand for raj"
-          const itemPatterns = [
-            // qty + (unit) + product_name
-            /(\b(?:\d+(?:\.\d+)?|[a-z]+)\b)\s+(?:(kg|kilo|pc|pcs|piece|pieces|no|nos|bag|bags|packet|packets|cover|covers|manhole|manholes|ring|rings|pipe|pipes|unit|units|slab|slabs)\s+)?([a-z][a-z0-9 ]{1,30}?)(?=\s+(?:for|ke liye|ko|at|@|\d|and|aur|,|$))/g,
-          ];
-
-          // Better approach: find all numbers with surrounding context
-          const numRe = /(\d+(?:\.\d+)?)\s*([a-z]*)\s+([a-z][a-z0-9 ]{1,25})/g;
-          let m;
           const seen = new Set();
-          while ((m=numRe.exec(text))!==null) {
-            const [,numStr,unitRaw,prodRaw] = m;
-            const qty = parseFloat(numStr);
-            if (!qty || isNaN(qty)) continue;
-            // skip if this number is a discount
-            if (discMatch && numStr===String(Math.round(discPct))) continue;
+          tokens.forEach((tok, i) => {
+            const qty = tokenNumber(tok);
+            if (!qty || isNaN(qty)) return;
+            const around = tokens.slice(Math.max(0, i - 5), Math.min(tokens.length, i + 6));
+            const nextFew = tokens.slice(i + 1, i + 3);
+            if (nextFew.some((w) => ["percent", "discount", "disc", "off", "chhoot", "choot"].includes(w))) return;
+            if (tokens[i - 1] === "x" || tokens[i + 1] === "x") return;
+            let priorProductHit = scoreProductSpan(tokens.slice(Math.max(0, i - 3), i + 1));
+            for (let dimLen = 2; dimLen <= 4; dimLen++) {
+              const dimHit = scoreProductSpan(tokens.slice(Math.max(0, i - dimLen + 1), i + 1));
+              if (dimHit && (!priorProductHit || dimHit.score > priorProductHit.score)) priorProductHit = dimHit;
+            }
+            if (priorProductHit && priorProductHit.score >= 0.85 && !isUnitWord(tokens[i + 1])) return;
 
-            const prodCandidate = (unitRaw && !isUnitWord(unitRaw)) 
-              ? (unitRaw+' '+prodRaw).trim()
-              : prodRaw.trim();
+            let type = "pc";
+            let startAfter = i + 1;
+            if (isUnitWord(tokens[i + 1])) {
+              type = ["kg", "kilo", "kilogram", "kilograms"].includes(tokens[i + 1]) ? "kg" : "pc";
+              startAfter = i + 2;
+            }
 
-            // remove trailing filler words
-            const cleaned = prodCandidate
-              .replace(/\b(for|ke liye|ko|at|and|aur|percent|off|discount)\b.*$/,'')
-              .trim();
-
-            if (cleaned.length < 2) continue;
-            if (seen.has(cleaned)) continue;
-
-            const type = unitRaw && ['kg','kilo','kilogram','kilograms'].includes(unitRaw) ? 'kg' : 'pc';
-            const prod = S.products.length
-              ? bestMatch(cleaned, S.products, p=>p.name)
-              : null;
-
+            const spans = [];
+            for (let len = 1; len <= 5; len++) {
+              spans.push(tokens.slice(startAfter, startAfter + len));
+              spans.push(tokens.slice(Math.max(0, i - len), i));
+            }
+            let best = null;
+            spans.forEach((span) => {
+              const hit = scoreProductSpan(span);
+              if (hit && (!best || hit.score > best.score)) best = hit;
+            });
+            if (!best) return;
+            if (best.ambiguous) result.uncertain.push(cleanProductPhrase(around));
+            const prod = best.item;
             if (prod && !seen.has(prod.id)) {
               seen.add(prod.id);
-              result.items.push({ product:prod, qty, type, discPct, raw:cleaned });
-            } else if (!prod && cleaned.length>=2) {
-              // unknown product — keep as-is, user will fix in edit
-              if (!seen.has(cleaned)) {
-                seen.add(cleaned);
-                result.items.push({ product:null, qty, type, discPct, raw:cleaned });
+              result.items.push({
+                product: prod,
+                qty,
+                type,
+                discPct,
+                raw: best.key,
+              });
+            }
+          });
+
+          if (!result.items.length && S.products.length) {
+            let best = null;
+            for (let i = 0; i < tokens.length; i++) {
+              for (let len = 1; len <= Math.min(5, tokens.length - i); len++) {
+                const hit = scoreProductSpan(tokens.slice(i, i + len));
+                if (hit && (!best || hit.score > best.score)) best = hit;
               }
             }
-          }
-
-          // Also try "word-number" combos: "cement teen bag"
-          const wnRe = /([a-z][a-z0-9 ]{1,20})\s+(\d+(?:\.\d+)?)\s*([a-z]*)/g;
-          while ((m=wnRe.exec(text))!==null) {
-            const [,prodRaw,numStr,unitRaw] = m;
-            const qty = parseFloat(numStr);
-            if (!qty) continue;
-            const cleaned = prodRaw.trim();
-            if (seen.has(cleaned)||cleaned.length<2) continue;
-            if (['for','ke','ko','at','and','aur','discount'].includes(cleaned)) continue;
-
-            const type = unitRaw && ['kg','kilo'].includes(unitRaw) ? 'kg' : 'pc';
-            const prod = S.products.length
-              ? bestMatch(cleaned, S.products, p=>p.name)
-              : null;
-
-            if (prod && !seen.has(prod.id)) {
-              seen.add(prod.id);
-              result.items.push({ product:prod, qty, type, discPct, raw:cleaned });
+            if (best && !best.ambiguous) {
+              result.items.push({
+                product: best.item,
+                qty: 1,
+                type: best.item.type || "pc",
+                discPct,
+                raw: best.key,
+              });
             }
           }
 
           return result;
         }
-
         function isUnitWord(w) {
-          const units = ['kg','kilo','pc','pcs','piece','pieces','no','nos','bag','bags',
-                         'packet','packets','manhole','manholes','cover','ring','rings','pipe','pipes'];
+          const units = [
+            "kg",
+            "kilo",
+            "pc",
+            "pcs",
+            "piece",
+            "pieces",
+            "no",
+            "nos",
+            "bag",
+            "bags",
+            "packet",
+            "packets",
+            "manhole",
+            "manholes",
+            "cover",
+            "ring",
+            "rings",
+            "pipe",
+            "pipes",
+            "unit",
+            "units",
+            "slab",
+            "slabs",
+            "lid",
+            "lids",
+          ];
           return units.includes(w);
         }
 
-        // ── UI helpers ────────────────────────────────────────────────
+        // â”€â”€ UI helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function setHint(txt) {
-          const el = document.getElementById('voice-hint');
+          const el = document.getElementById("voice-hint");
           if (el) el.textContent = txt;
         }
         function setTranscript(txt, dim) {
-          const el = document.getElementById('voice-transcript-text');
+          const el = document.getElementById("voice-transcript-text");
           if (!el) return;
           el.textContent = txt;
-          el.classList.toggle('dim', !!dim);
+          el.classList.toggle("dim", !!dim);
         }
         function showParsed(parsed) {
-          const el = document.getElementById('voice-parsed-preview');
+          const el = document.getElementById("voice-parsed-preview");
           if (!el) return;
           if (!parsed || (!parsed.customer && !parsed.items.length)) {
-            el.classList.remove('show');
+            el.classList.remove("show");
             return;
           }
-          let html = '';
+          let html = "";
           if (parsed.customer) {
             html += `<div class="vp-row"><span class="vp-label">Customer</span><span class="vp-val">${esc(parsed.customer.name)}</span></div>`;
           } else {
-            html += `<div class="vp-row"><span class="vp-label">Customer</span><span class="vp-miss">Not found — tap Edit</span></div>`;
+            html += `<div class="vp-row"><span class="vp-label">Customer</span><span class="vp-miss">Not found â€” tap Edit</span></div>`;
           }
           if (parsed.items.length) {
-            parsed.items.forEach(it=>{
-              const pName = it.product ? it.product.name : ('?' + it.raw);
-              const rate = it.product ? it.product.rate : '?';
-              const amt = it.product ? (it.qty * it.product.rate * (1 - (it.discPct||0)/100)).toFixed(2) : '?';
-              html += `<div class="vp-row"><span class="vp-label">Item</span><span class="vp-val">${esc(pName)}</span><span style="color:var(--muted);font-size:12px;margin-left:auto">${it.qty} ${it.type} · ₹${amt}</span></div>`;
+            parsed.items.forEach((it) => {
+              const pName = it.product ? it.product.name : "?" + it.raw;
+              const rate = it.product ? it.product.rate : "?";
+              const amt = it.product
+                ? (
+                    it.qty *
+                    it.product.rate *
+                    (1 - (it.discPct || 0) / 100)
+                  ).toFixed(2)
+                : "?";
+              html += `<div class="vp-row"><span class="vp-label">Item</span><span class="vp-val">${esc(pName)}</span><span style="color:var(--muted);font-size:12px;margin-left:auto">${it.qty} ${it.type} Â· â‚¹${amt}</span></div>`;
             });
           } else {
-            html += `<div class="vp-row"><span class="vp-label">Items</span><span class="vp-miss">None found — tap Edit</span></div>`;
+            html += `<div class="vp-row"><span class="vp-label">Items</span><span class="vp-miss">None found â€” tap Edit</span></div>`;
           }
-          if (parsed.discount>0) {
+          if (parsed.discount > 0) {
             html += `<div class="vp-row"><span class="vp-label">Discount</span><span class="vp-val">${parsed.discount}%</span></div>`;
           }
           el.innerHTML = html;
-          el.classList.add('show');
+          el.classList.add("show");
         }
-        function setOrbState(state) { // 'idle' | 'listening'
-          const orb = document.getElementById('voice-orb');
-          const mic = document.getElementById('voice-orb-mic');
-          const stop = document.getElementById('voice-orb-stop');
+        function setOrbState(state) {
+          // 'idle' | 'listening' | 'thinking' | 'ready' | 'error'
+          const orb = document.getElementById("voice-orb");
+          const mic = document.getElementById("voice-orb-mic");
+          const stop = document.getElementById("voice-orb-stop");
           if (!orb) return;
-          if (state==='listening') {
-            orb.classList.add('listening');
-            const navBtn = document.getElementById('voice-nav-btn');
-            if (navBtn) navBtn.classList.add('listening');
-            if (mic) mic.style.display='none';
-            if (stop) stop.style.display='block';
+          orb.classList.remove("listening", "thinking", "ready", "error");
+          if (state && state !== "idle") orb.classList.add(state);
+          if (state === "listening") {
+            const navBtn = document.getElementById("voice-nav-btn");
+            if (navBtn) navBtn.classList.add("listening");
+            if (mic) mic.style.display = "none";
+            if (stop) stop.style.display = "block";
           } else {
-            orb.classList.remove('listening');
-            const navBtn = document.getElementById('voice-nav-btn');
-            if (navBtn) navBtn.classList.remove('listening');
-            if (mic) mic.style.display='block';
-            if (stop) stop.style.display='none';
+            const navBtn = document.getElementById("voice-nav-btn");
+            if (navBtn) navBtn.classList.remove("listening");
+            if (mic) mic.style.display = "block";
+            if (stop) stop.style.display = "none";
           }
         }
         function showConfirmBtns(show) {
-          const el = document.getElementById('voice-confirm-btns');
-          if (el) el.style.display = show ? 'flex' : 'none';
+          const el = document.getElementById("voice-confirm-btns");
+          if (el) el.style.display = show ? "flex" : "none";
         }
         function showRetry(show) {
-          const el = document.getElementById('voice-retry-btn');
+          const el = document.getElementById("voice-retry-btn");
           if (!el) return;
-          el.style.opacity = show ? '1' : '0';
-          el.style.pointerEvents = show ? 'auto' : 'none';
+          el.style.opacity = show ? "1" : "0";
+          el.style.pointerEvents = show ? "auto" : "none";
         }
 
-        // ── Web Speech API setup ──────────────────────────────────────
+        // â”€â”€ Web Speech API setup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function initSpeech() {
-          const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          const SpeechRecognition =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
           if (!SpeechRecognition) return null;
           const r = new SpeechRecognition();
           r.continuous = false;
           r.interimResults = true;
           // Accept both Hindi and English
-          r.lang = 'hi-IN'; // Browser will still accept English words
+          r.lang = "hi-IN"; // Browser will still accept English words
           r.maxAlternatives = 3;
 
-          r.onstart = ()=>{
+          r.onstart = () => {
             VB.listening = true;
-            setOrbState('listening');
-            setHint('Bol rahe ho… (speak now)');
-            setTranscript('', false);
+            setOrbState("listening");
+            setHint("Bol rahe hoâ€¦ (speak now)");
+            setTranscript("", false);
           };
 
-          r.onresult = (e)=>{
-            let interim='', final='';
-            for (let i=e.resultIndex;i<e.results.length;i++) {
-              const t = e.results[i][0].transcript;
-              if (e.results[i].isFinal) final+=t;
-              else interim+=t;
+          r.onresult = (e) => {
+            let interim = "",
+              final = "";
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+              const alternatives = Array.from(e.results[i]);
+              const t = alternatives
+                .map((alt) => alt.transcript)
+                .sort((a, b) => {
+                  const pa = parseBillCommand(a);
+                  const pb = parseBillCommand(b);
+                  return (
+                    (pb.items.length + (pb.customer ? 1 : 0)) -
+                    (pa.items.length + (pa.customer ? 1 : 0))
+                  );
+                })[0];
+              if (e.results[i].isFinal) final += t;
+              else interim += t;
             }
-            const display = final||interim;
+            const display = final || interim;
             setTranscript(display, !final);
             if (final) {
               VB.lastTranscript = final;
             }
           };
 
-          r.onend = ()=>{
+          r.onend = () => {
             VB.listening = false;
-            setOrbState('idle');
+            setOrbState("idle");
             if (VB.lastTranscript) {
               processTranscript(VB.lastTranscript);
             } else {
-              setHint('Kuch suna nahi — phir se try karo');
+              setHint("Kuch suna nahi â€” phir se try karo");
               showRetry(true);
             }
           };
 
-          r.onerror = (e)=>{
+          r.onerror = (e) => {
             VB.listening = false;
-            setOrbState('idle');
+            setOrbState("error");
             const msgs = {
-              'no-speech': 'Awaaz nahi aayi — phir tap karo',
-              'not-allowed': 'Mic permission chahiye — browser settings check karo',
-              'network': 'Network error — offline mode mein kaam nahi karta',
-              'aborted': 'Ruk gaya',
+              "no-speech": "Awaaz nahi aayi â€” phir tap karo",
+              "not-allowed":
+                "Mic permission chahiye â€” browser settings check karo",
+              network: "Network error â€” offline mode mein kaam nahi karta",
+              aborted: "Ruk gaya",
             };
-            setHint(msgs[e.error]||('Error: '+e.error));
-            setTranscript('', false);
+            setHint(msgs[e.error] || "Error: " + e.error);
+            setTranscript("", false);
             showRetry(true);
           };
 
@@ -12096,7 +12829,8 @@
 
         function processTranscript(raw) {
           setTranscript(raw, false);
-          setHint('Samajh raha hoon…');
+          setHint("Samajh raha hoonâ€¦");
+          setOrbState("thinking");
           const parsed = parseBillCommand(raw);
           VB.parsed = parsed;
 
@@ -12106,7 +12840,10 @@
           showParsed(parsed);
 
           if (!hasCustomer && !hasItems) {
-            setHint('Kuch samajh nahi aaya — example: "2 manhole XYZ ke liye 10 percent discount"');
+            setHint(
+              'Kuch samajh nahi aaya â€” example: "2 manhole XYZ ke liye 10 percent discount"',
+            );
+            setOrbState("error");
             showRetry(true);
             return;
           }
@@ -12115,15 +12852,18 @@
           showRetry(true);
 
           if (hasCustomer && hasItems) {
-            setHint('Bill ready hai — confirm karein?');
+            setHint("Bill ready hai â€” confirm karein?");
+            setOrbState("ready");
           } else if (!hasCustomer) {
-            setHint('Customer nahi mila — Edit mein select karo');
+            setHint("Customer nahi mila â€” Edit mein select karo");
+            setOrbState("error");
           } else {
-            setHint('Items nahi mile — Edit mein add karo');
+            setHint("Items nahi mile â€” Edit mein add karo");
+            setOrbState("error");
           }
         }
 
-        // ── Apply parsed data to bill ─────────────────────────────────
+        // â”€â”€ Apply parsed data to bill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         function applyParsedToBill() {
           const parsed = VB.parsed;
           if (!parsed) return;
@@ -12137,23 +12877,23 @@
           }
 
           // Add items directly to S.billItems
-          parsed.items.forEach(it=>{
+          parsed.items.forEach((it) => {
             if (!it.product) return;
-            const qty = it.qty||1;
-            const rate = it.product.rate||0;
-            const disc = it.discPct||0;
-            const amt = parseFloat((qty * rate * (1-disc/100)).toFixed(2));
+            const qty = it.qty || 1;
+            const rate = it.product.rate || 0;
+            const disc = it.discPct || 0;
+            const amt = parseFloat((qty * rate * (1 - disc / 100)).toFixed(2));
             S.billItems.push({
               id: uid(),
               productId: it.product.id,
               name: it.product.name,
-              type: it.type||it.product.type||'pc',
-              pcs: it.type!=='kg' ? qty : null,
-              weight: it.type==='kg' ? qty : null,
+              type: it.type || it.product.type || "pc",
+              pcs: it.type !== "kg" ? qty : null,
+              weight: it.type === "kg" ? qty : null,
               rate,
               disc,
               amount: amt,
-              pkgText: '',
+              pkgText: "",
             });
           });
 
@@ -12161,124 +12901,158 @@
           recalcBill();
 
           // Set discount on bill-tax field if uniform discount used
-          if (parsed.discount>0 && !parsed.items.some(i=>i.discPct!==parsed.discount)) {
+          if (
+            parsed.discount > 0 &&
+            !parsed.items.some((i) => i.discPct !== parsed.discount)
+          ) {
             // discount is per-item; bill-level tax stays 0 unless user changes
           }
         }
 
-        // ── Public API ────────────────────────────────────────────────
-        window.openVoiceBill = function() {
-          const overlay = document.getElementById('voice-overlay');
+        // â”€â”€ Public API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        window.openVoiceBill = function () {
+          const overlay = document.getElementById("voice-overlay");
           if (!overlay) return;
           // Check if speech is supported
           if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
-            showToast('Voice not supported in this browser. Use Chrome.');
+            showToast("Voice not supported in this browser. Use Chrome.");
             return;
           }
           // Reset state
-          VB.lastTranscript = '';
+          VB.lastTranscript = "";
           VB.parsed = null;
-          setTranscript('Bolo apna bill…', true);
-          setHint('Tap mic to start · Hindi & English supported');
+          setTranscript("Bolo apna billâ€¦", true);
+          setHint("Tap mic to start Â· Hindi & English supported");
           showConfirmBtns(false);
           showRetry(false);
-          setOrbState('idle');
-          document.getElementById('voice-parsed-preview').classList.remove('show');
-          overlay.classList.add('show');
-          document.body.style.overflow='hidden';
+          setOrbState("idle");
+          document
+            .getElementById("voice-parsed-preview")
+            .classList.remove("show");
+          overlay.classList.add("show");
+          document.body.style.overflow = "hidden";
         };
 
-        window.closeVoiceBill = function() {
-          const overlay = document.getElementById('voice-overlay');
-          if (overlay) overlay.classList.remove('show');
-          document.body.style.overflow='';
+        window.closeVoiceBill = function () {
+          const overlay = document.getElementById("voice-overlay");
+          if (overlay) overlay.classList.remove("show");
+          document.body.style.overflow = "";
           if (VB.recognition && VB.listening) {
-            try { VB.recognition.abort(); } catch(e){}
+            try {
+              VB.recognition.abort();
+            } catch (e) {}
           }
           VB.listening = false;
-          setOrbState('idle');
+          setOrbState("idle");
         };
 
-        window.voiceOverlayBgClick = function(e) {
-          if (e.target.id==='voice-overlay') closeVoiceBill();
+        window.voiceOverlayBgClick = function (e) {
+          if (e.target.id === "voice-overlay") closeVoiceBill();
         };
 
-        window.toggleVoiceListening = function() {
+        window.toggleVoiceListening = function () {
           if (VB.listening) {
-            try { VB.recognition && VB.recognition.stop(); } catch(e){}
+            try {
+              VB.recognition && VB.recognition.stop();
+            } catch (e) {}
             return;
           }
           // fresh recognition each time (more reliable cross-browser)
           VB.recognition = initSpeech();
           if (!VB.recognition) {
-            setHint('Voice not supported — use Chrome');
+            setHint("Voice not supported â€” use Chrome");
             return;
           }
-          VB.lastTranscript = '';
+          VB.lastTranscript = "";
           showConfirmBtns(false);
           showRetry(false);
-          document.getElementById('voice-parsed-preview').classList.remove('show');
+          document
+            .getElementById("voice-parsed-preview")
+            .classList.remove("show");
           try {
             VB.recognition.start();
-          } catch(e) {
-            setHint('Mic start error: '+e.message);
+          } catch (e) {
+            setHint("Mic start error: " + e.message);
           }
         };
 
-        window.voiceRetry = function() {
-          VB.lastTranscript=''; VB.parsed=null;
+        window.voiceRetry = function () {
+          VB.lastTranscript = "";
+          VB.parsed = null;
           showConfirmBtns(false);
           showRetry(false);
-          setTranscript('Bolo apna bill…', true);
-          setHint('Tap mic to start');
-          document.getElementById('voice-parsed-preview').classList.remove('show');
-          setOrbState('idle');
+          setTranscript("Bolo apna billâ€¦", true);
+          setHint("Tap mic to start");
+          document
+            .getElementById("voice-parsed-preview")
+            .classList.remove("show");
+          setOrbState("idle");
         };
 
-        window.voiceConfirmSave = function() {
+        window.voiceConfirmSave = function () {
           applyParsedToBill();
           closeVoiceBill();
           // auto-save the bill
-          setTimeout(()=>{ acceptBill(); }, 300);
-          showToast('✅ Voice bill saved!');
+          setTimeout(() => {
+            acceptBill();
+          }, 300);
+          showToast("âœ… Voice bill saved!");
         };
 
-        window.voiceGoToBill = function() {
+        window.voiceGoToBill = function () {
           applyParsedToBill();
           closeVoiceBill();
-          showToast('Bill ready — review karo');
+          showToast("Bill ready â€” review karo");
         };
 
-        window.voiceAddMore = function() {
+        window.voiceAddMore = function () {
           // keep existing data and start listening again
-          VB.lastTranscript='';
+          VB.lastTranscript = "";
           showConfirmBtns(false);
           showRetry(false);
-          setTranscript('', false);
-          setHint('Aur items bolo…');
+          setTranscript("", false);
+          setHint("Aur items boloâ€¦");
           const prev = VB.parsed;
           // start fresh recognition
           VB.recognition = initSpeech();
           if (!VB.recognition) return;
-          VB.recognition.onend = (function(origOnEnd){
-            return function() {
+          VB.recognition.onend = (function (origOnEnd) {
+            return function () {
               origOnEnd && origOnEnd.call(VB.recognition);
               // merge with prev
               if (VB.parsed && prev) {
-                VB.parsed.items = [...(prev.items||[]), ...(VB.parsed.items||[])];
-                if (!VB.parsed.customer && prev.customer) VB.parsed.customer=prev.customer;
-                if (!VB.parsed.discount && prev.discount) VB.parsed.discount=prev.discount;
+                VB.parsed.items = [
+                  ...(prev.items || []),
+                  ...(VB.parsed.items || []),
+                ];
+                if (!VB.parsed.customer && prev.customer)
+                  VB.parsed.customer = prev.customer;
+                if (!VB.parsed.discount && prev.discount)
+                  VB.parsed.discount = prev.discount;
                 showParsed(VB.parsed);
                 showConfirmBtns(true);
                 showRetry(true);
-                setHint('Items added — confirm karein?');
+                setHint("Items added â€” confirm karein?");
               }
             };
           })(VB.recognition.onend);
-          try { VB.recognition.start(); } catch(e) { setHint('Mic error: '+e.message); }
+          try {
+            VB.recognition.start();
+          } catch (e) {
+            setHint("Mic error: " + e.message);
+          }
         };
-
       })();
     </script>
   </body>
 </html>
+
+
+
+
+
+
+
+
+
+
