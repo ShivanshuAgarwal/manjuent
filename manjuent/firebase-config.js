@@ -3,13 +3,13 @@
 // ================================================================
 // SETUP INSTRUCTIONS:
 // 1. Go to https://console.firebase.google.com
-// 2. Click "Add project" → name it "ManjuEnt" → Continue
-// 3. Disable Google Analytics → Create project
+// 2. Click "Add project" -> name it "ManjuEnt" -> Continue
+// 3. Disable Google Analytics -> Create project
 // 4. Click the </> (Web) icon to register your app
 // 5. Copy the firebaseConfig object values below
-// 6. In left sidebar: Build → Firestore Database → Create database
-//    → Start in production mode → Choose asia-south1 (Mumbai) → Enable
-// 7. In Firestore: Rules tab → replace with:
+// 6. In left sidebar: Build -> Firestore Database -> Create database
+//    -> Start in production mode -> Choose asia-south1 (Mumbai) -> Enable
+// 7. In Firestore: Rules tab -> replace with:
 //    rules_version = '2';
 //    service cloud.firestore {
 //      match /databases/{database}/documents {
@@ -18,7 +18,7 @@
 //        }
 //      }
 //    }
-//    → Publish
+//    -> Publish
 // ================================================================
 
 const FIREBASE_CONFIG = {
