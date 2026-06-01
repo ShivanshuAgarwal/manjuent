@@ -13169,32 +13169,8 @@
           return [...new Set(keys)];
         }
 
-        function customerPhoneticVariants(v) {
-          const variants = [v];
-          [
-            ["agarwal", "agrawal"],
-            ["agrawal", "agarwal"],
-            ["aggarwal", "agarwal"],
-            ["trading", "traders"],
-            ["traders", "trading"],
-            ["company", "co"],
-            ["co", "company"],
-          ].forEach(([from, to]) => {
-            if (v.includes(from))
-              variants.push(v.replace(new RegExp("\\b" + from + "\\b", "g"), to));
-          });
-          return variants;
-        }
-
         function customerKeys(c) {
-          const raw = [
-            c.name,
-            c.searchName,
-            c.location,
-            c.phone,
-            c.name && c.location ? c.name + " " + c.location : "",
-            c.searchName && c.location ? c.searchName + " " + c.location : "",
-          ]
+          const raw = [c.name, c.searchName, c.location, c.phone]
             .map(normalize)
             .filter((v) => v && v.length >= 2);
           const suffixes = new Set([
@@ -13206,14 +13182,8 @@
             "enterprises",
             "agency",
             "agencies",
-            "trading",
             "company",
             "co",
-            "corp",
-            "corporation",
-            "llp",
-            "pvt",
-            "ltd",
             "and",
             "sons",
             "brothers",
@@ -13224,18 +13194,13 @@
           ]);
           const variants = [];
           raw.forEach((v) => {
-            customerPhoneticVariants(v).forEach((variant) => {
-              variants.push(variant, variant.replace(/\s+/g, ""));
-              const parts = variant.split(/\s+/).filter(Boolean);
-              const coreParts = parts.filter((p) => !suffixes.has(p));
-              const compact = coreParts.join(" ");
-              if (compact.length >= 2) variants.push(compact);
-              if (parts.length > 1) variants.push(parts.slice(0, 2).join(" "));
-              if (coreParts.length > 1)
-                variants.push(coreParts.slice(0, 2).join(" "));
-              parts.forEach((p) => {
-                if (p.length >= 3 && !suffixes.has(p)) variants.push(p);
-              });
+            variants.push(v, v.replace(/\s+/g, ""));
+            const parts = v.split(/\s+/).filter(Boolean);
+            const compact = parts.filter((p) => !suffixes.has(p)).join(" ");
+            if (compact.length >= 2) variants.push(compact);
+            if (parts.length > 1) variants.push(parts.slice(0, 2).join(" "));
+            parts.forEach((p) => {
+              if (p.length >= 3 && !suffixes.has(p)) variants.push(p);
             });
           });
           return [...new Set(variants)].filter((v) => v && v.length >= 2);
@@ -13256,18 +13221,12 @@
             /\b(discount|disc|chhoot|choot)\s+(nahi|nahin|mat)\b/.test(text)
           )
             return 0;
-          const numberWord =
-            "\\d+(?:\\.\\d+)?|ek|do|teen|char|paanch|chhe|saat|aath|nau|das|gyarah|barah|bees|tees|chalees|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|twenty|thirty|forty|fifty";
-          const patterns = [
-            new RegExp("\\b(" + numberWord + ")\\s*(?:%|percent|chhoot|choot|off|discount|disc)\\b"),
-            new RegExp("\\b(?:discount|disc|chhoot|choot|off)\\s*(?:ka|ke|of|de|dena)?\\s*(" + numberWord + ")\\b"),
-            new RegExp("\\b(" + numberWord + ")\\s*(?:ka|ke)?\\s*(?:discount|disc|chhoot|choot|off)\\b"),
-          ];
-          for (const rx of patterns) {
-            const hit = text.match(rx);
-            if (!hit) continue;
-            const n = tokenNumber(hit[1]);
-            if (!isNaN(n)) return Math.max(0, Math.min(100, n));
+          const direct = text.match(
+            /(\d+(?:\.\d+)?|ek|do|teen|char|paanch|chhe|saat|aath|nau|das|barah|bees)\s*(?:%|percent|chhoot|choot|off|discount|disc)\b/,
+          );
+          if (direct) {
+            const n = tokenNumber(direct[1]);
+            return isNaN(n) ? 0 : n;
           }
           return 0;
         }
@@ -13758,42 +13717,6 @@
           return r;
         }
 
-        function wakeHotwordHeard(text) {
-          const heard = " " + speechNormalize(text) + " ";
-          if (
-            /\b(?:hey|he|ok|okay|jai|jaya|shree|shri|hare|bolo|sun|suno|start|chalu|chaloo|open)?\s*(?:radhe|raadhe|radhey|radhay|rade|raday|radha|radhika|shyam|krishna|kanha|kanhaiya|govind|gopal|mohan|hari|hare)(?:\s*(?:radhe|shyam|krishna|kanha|govind|gopal|mohan|hari|hare))?\b/.test(
-              heard,
-            )
-          )
-            return true;
-
-          const wakeTerms = [
-            "radhe",
-            "raadhe",
-            "radhey",
-            "radhay",
-            "radha",
-            "shyam",
-            "krishna",
-            "kanha",
-            "govind",
-            "gopal",
-            "mohan",
-            "hari",
-            "hare",
-          ];
-          const tokens = heard.split(/\s+/).filter((w) => w.length >= 3);
-          return tokens.some((token) =>
-            wakeTerms.some((term) => {
-              if (token === term || token.includes(term) || term.includes(token))
-                return true;
-              const score = fuzzyScore(token, term);
-              const dist = editDist(token, term);
-              return score >= 0.76 || (term.length >= 5 && dist <= 1);
-            }),
-          );
-        }
-
 
         function startWakeListener() {
           const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -13807,12 +13730,12 @@
           r.onstart = () => { VB.wakeListening = true; };
           r.onresult = (e) => {
             for (let i = e.resultIndex; i < e.results.length; i++) {
-              const heard = Array.from(e.results[i]).map((alt) => alt.transcript).join(" ");
-              if (wakeHotwordHeard(heard)) {
+              const heard = Array.from(e.results[i]).map((alt) => speechNormalize(alt.transcript)).join(" ");
+              if (/\b(?:hey|he|ok|okay)?\s*(?:radhe|raadhe|rade|raday|radhey)\b/.test(heard)) {
                 VB.wakePaused = true;
                 try { r.abort(); } catch (err) {}
                 openVoiceBill();
-                setHint("Radhe heard - listening...");
+                setHint("Hey Radhe heard - listening...");
                 setTimeout(() => toggleVoiceListening(), 280);
                 break;
               }
