@@ -13199,6 +13199,22 @@
           return [...new Set(keys)];
         }
 
+        function customerPhoneticVariants(v) {
+          const variants = [v];
+          [
+            ["agarwal", "agrawal"],
+            ["agrawal", "agarwal"],
+            ["aggarwal", "agarwal"],
+            ["trading", "traders"],
+            ["traders", "trading"],
+            ["company", "co"],
+            ["co", "company"],
+          ].forEach(([from, to]) => {
+            if (v.includes(from)) variants.push(v.replace(new RegExp("\\b" + from + "\\b", "g"), to));
+          });
+          return variants;
+        }
+
         function customerKeys(c) {
           const raw = [
             c.name,
@@ -13219,8 +13235,14 @@
             "enterprises",
             "agency",
             "agencies",
+            "trading",
             "company",
             "co",
+            "corp",
+            "corporation",
+            "llp",
+            "pvt",
+            "ltd",
             "and",
             "sons",
             "brothers",
@@ -13231,20 +13253,21 @@
           ]);
           const variants = [];
           raw.forEach((v) => {
-            variants.push(v, v.replace(/\s+/g, ""));
-            const parts = v.split(/\s+/).filter(Boolean);
-            const compact = parts.filter((p) => !suffixes.has(p)).join(" ");
-            if (compact.length >= 2) variants.push(compact);
-            if (parts.length > 1) variants.push(parts.slice(0, 2).join(" "));
-            if (parts.length > 1) {
-              const initials = parts
-                .filter((p) => !suffixes.has(p))
-                .map((p) => p[0])
-                .join("");
-              if (initials.length >= 2) variants.push(initials);
-            }
-            parts.forEach((p) => {
-              if (p.length >= 3 && !suffixes.has(p)) variants.push(p);
+            customerPhoneticVariants(v).forEach((variant) => {
+              variants.push(variant, variant.replace(/\s+/g, ""));
+              const parts = variant.split(/\s+/).filter(Boolean);
+              const coreParts = parts.filter((p) => !suffixes.has(p));
+              const compact = coreParts.join(" ");
+              if (compact.length >= 2) variants.push(compact);
+              if (parts.length > 1) variants.push(parts.slice(0, 2).join(" "));
+              if (coreParts.length > 1) variants.push(coreParts.slice(0, 2).join(" "));
+              if (parts.length > 1) {
+                const initials = coreParts.map((p) => p[0]).join("");
+                if (initials.length >= 2) variants.push(initials);
+              }
+              parts.forEach((p) => {
+                if (p.length >= 3 && !suffixes.has(p)) variants.push(p);
+              });
             });
           });
           return [...new Set(variants)].filter((v) => v && v.length >= 2);
@@ -13398,13 +13421,26 @@
           customerCandidatePhrases(text).forEach(({ phrase, boost }) => {
             const words = phrase.split(/\s+/).filter(Boolean);
             if (!words.length) return;
-            const minScore = words.length <= 1 ? 0.66 : 0.43;
+            const minScore = words.length <= 1 ? 0.58 : 0.4;
             const hit = findBestWithScore(phrase, S.customers, customerKeys, minScore);
             if (!hit) return;
-            const score = hit.score + boost + Math.min(words.length, 4) * 0.015;
+            const keyWords = normalize(hit.key).split(/\s+/).filter(Boolean);
+            const strongShortName =
+              words.length === 1 &&
+              words[0].length >= 4 &&
+              keyWords.some((w) => w === words[0] || fuzzyScore(words[0], w) >= 0.86);
+            const strongPrefix =
+              words.length > 1 &&
+              (normalize(hit.key).startsWith(phrase) || phrase.startsWith(normalize(hit.key)));
+            const score =
+              hit.score +
+              boost +
+              Math.min(words.length, 4) * 0.015 +
+              (strongShortName ? 0.22 : 0) +
+              (strongPrefix ? 0.12 : 0);
             if (!best || score > best.score) best = { ...hit, score };
           });
-          if (best && best.ambiguous && best.score >= 0.9) best.ambiguous = false;
+          if (best && best.ambiguous && best.score >= 0.82) best.ambiguous = false;
           return best && !best.ambiguous ? best.item : null;
         }
 
@@ -13787,8 +13823,37 @@
 
         function wakeHotwordHeard(text) {
           const heard = " " + speechNormalize(text) + " ";
-          return /\b(?:hey|he|ok|okay|jai|shree|shri|hare)?\s*(?:radhe|raadhe|radhey|rade|raday|radha|radhika|shyam|krishna|kanha|govind|gopal|mohan|hari|hare)(?:\s*(?:radhe|shyam|krishna|kanha|govind|gopal|mohan|hari|hare))?\b/.test(
-            heard,
+          if (
+            /\b(?:hey|he|ok|okay|jai|jaya|shree|shri|hare|bolo|sun|suno|start|chalu|chaloo|open)?\s*(?:radhe|raadhe|radhey|radhay|rade|raday|radha|radhika|shyam|krishna|kanha|kanhaiya|govind|gopal|mohan|hari|hare)(?:\s*(?:radhe|shyam|krishna|kanha|govind|gopal|mohan|hari|hare))?\b/.test(
+              heard,
+            )
+          )
+            return true;
+
+          const wakeTerms = [
+            "radhe",
+            "raadhe",
+            "radhey",
+            "radhay",
+            "radha",
+            "shyam",
+            "krishna",
+            "kanha",
+            "govind",
+            "gopal",
+            "mohan",
+            "hari",
+            "hare",
+          ];
+          const tokens = heard.split(/\s+/).filter((w) => w.length >= 3);
+          return tokens.some((token) =>
+            wakeTerms.some((term) => {
+              if (token === term || token.includes(term) || term.includes(token))
+                return true;
+              const score = fuzzyScore(token, term);
+              const dist = editDist(token, term);
+              return score >= 0.72 || (term.length >= 5 && dist <= 2);
+            }),
           );
         }
 
