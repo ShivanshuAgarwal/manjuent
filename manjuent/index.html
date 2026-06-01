@@ -4326,16 +4326,16 @@
         <section class="premium-hero liquid-card">
           <div class="premium-kicker" id="gw-date-display">Today</div>
           <div class="premium-title">Manju<br />Enterprises</div>
-          <div class="premium-total" id="hero-month-total">&#8377;0</div>
+          <div class="premium-total" id="hero-month-total" style="font-size:52px;letter-spacing:-1px">0</div>
           <div class="premium-subrow">
-            <span id="hero-month-count">Revenue this month</span>
+            <span id="hero-month-count">Orders this month</span>
             <span class="growth-pill" id="hero-growth">+0.0%</span>
           </div>
           <div class="hero-chart-wrap liquid-card">
             <div class="chart-tooltip liquid-card" id="hero-chart-tooltip">
               <div class="chart-tip-date">Today</div>
-              <div class="chart-tip-value">&#8377;0</div>
-              <div class="chart-tip-bills">0 bills</div>
+              <div class="chart-tip-value">0 orders</div>
+              <div class="chart-tip-bills">&#8377;0</div>
             </div>
             <div
               style="
@@ -4349,7 +4349,7 @@
                 <div
                   style="font-size: 13px; font-weight: 800; color: var(--text)"
                 >
-                  Revenue
+                  Daily Orders
                 </div>
                 <div
                   style="font-size: 11px; color: var(--muted)"
@@ -4374,22 +4374,10 @@
 
         <section class="premium-grid">
           <div class="kpi-card liquid-card">
-            <div class="kpi-label">Today</div>
-            <div class="kpi-value" id="kpi-today">&#8377;0</div>
+            <div class="kpi-label">Today's Orders</div>
+            <div class="kpi-value" id="kpi-today">0</div>
             <div class="kpi-note" id="kpi-today-count">0 bills</div>
             <canvas class="sparkline" id="spark-today"></canvas>
-          </div>
-          <div class="kpi-card liquid-card">
-            <div class="kpi-label">Delivered</div>
-            <div class="kpi-value" id="kpi-delivered">&#8377;0</div>
-            <div class="kpi-note" id="kpi-delivered-count">0 bills</div>
-            <canvas class="sparkline" id="spark-delivered"></canvas>
-          </div>
-          <div class="kpi-card liquid-card">
-            <div class="kpi-label">Average Bill</div>
-            <div class="kpi-value" id="kpi-average">&#8377;0</div>
-            <div class="kpi-note" id="kpi-average-note">This month</div>
-            <canvas class="sparkline" id="spark-average"></canvas>
           </div>
           <div class="kpi-card liquid-card">
             <div class="kpi-label">Top Customer</div>
@@ -4402,6 +4390,18 @@
             </div>
             <div class="kpi-note" id="kpi-top-customer-note">&#8377;0</div>
             <canvas class="sparkline" id="spark-growth"></canvas>
+          </div>
+          <div class="kpi-card liquid-card" onclick="goToBillsTab('delivered')" style="cursor:pointer">
+            <div class="kpi-label">Delivered Bills</div>
+            <div class="kpi-value" id="kpi-delivered">0</div>
+            <div class="kpi-note" id="kpi-delivered-note">This month</div>
+            <canvas class="sparkline" id="spark-delivered"></canvas>
+          </div>
+          <div class="kpi-card liquid-card" onclick="goToBillsTab('pending')" style="cursor:pointer">
+            <div class="kpi-label">Pending Bills</div>
+            <div class="kpi-value" id="kpi-pending">0</div>
+            <div class="kpi-note" id="kpi-pending-note">Awaiting delivery</div>
+            <canvas class="sparkline" id="spark-pending"></canvas>
           </div>
         </section>
 
@@ -4641,14 +4641,14 @@
                   margin-bottom: 5px;
                 "
               >
-                Delivered
+                Unpaid
               </div>
               <div
-                id="stat-delivered"
+                id="stat-unpaid"
                 style="
                   font-size: 17px;
                   font-weight: 700;
-                  color: var(--success);
+                  color: var(--danger);
                   font-family: var(--mono);
                   letter-spacing: -0.3px;
                   transition: all 0.3s var(--ease-out);
@@ -4657,7 +4657,7 @@
                 &#8377;0
               </div>
               <div
-                id="stat-delivered-count"
+                id="stat-unpaid-count"
                 style="font-size: 10px; color: var(--muted); margin-top: 2px"
               >
                 0 bills
@@ -5050,7 +5050,7 @@
                 margin-bottom: 12px;
               "
             >
-              Delivered vs Pending
+              Delivery Status
             </div>
             <canvas
               id="donut-canvas"
@@ -5476,6 +5476,37 @@
           </button>
         </div>
       </div>
+      <div
+        id="bills-tab-strip"
+        style="
+          display: flex;
+          gap: 0;
+          background: var(--glass);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-bottom: 0.5px solid var(--separator);
+          position: sticky;
+          top: 100px;
+          z-index: 49;
+          padding: 0 16px;
+        "
+      >
+        <button
+          id="bills-tab-all"
+          onclick="setBillsTab('all')"
+          style="flex:1;padding:10px 0;font-size:13px;font-weight:700;border:none;background:none;border-bottom:2.5px solid var(--accent);color:var(--accent);cursor:pointer;transition:all .18s"
+        >All</button>
+        <button
+          id="bills-tab-delivered"
+          onclick="setBillsTab('delivered')"
+          style="flex:1;padding:10px 0;font-size:13px;font-weight:600;border:none;background:none;border-bottom:2.5px solid transparent;color:var(--muted);cursor:pointer;transition:all .18s"
+        >Delivered</button>
+        <button
+          id="bills-tab-pending"
+          onclick="setBillsTab('pending')"
+          style="flex:1;padding:10px 0;font-size:13px;font-weight:600;border:none;background:none;border-bottom:2.5px solid transparent;color:var(--muted);cursor:pointer;transition:all .18s"
+        >Pending</button>
+      </div>
       <div class="bills-section" id="bills-container">
         <div class="empty-state">
           <div class="empty-icon">
@@ -5628,10 +5659,10 @@
                 margin-bottom: 6px;
               "
             >
-              Delivered
+              Collected
             </div>
             <div
-              id="rpt-delivered"
+              id="rpt-paid"
               style="
                 font-size: 22px;
                 font-weight: 700;
@@ -5642,8 +5673,8 @@
               &#8377;0
             </div>
             <div
-              id="rpt-pending-amt"
-              style="font-size: 11px; color: var(--warn); margin-top: 2px"
+              id="rpt-unpaid-amt"
+              style="font-size: 11px; color: var(--danger); margin-top: 2px"
             >
               &#8377;0 pending
             </div>
@@ -5805,23 +5836,9 @@
                 letter-spacing: -0.2px;
               "
             >
-              Delivered vs Pending
+              Delivery Status
             </div>
-            <canvas
-              id="rpt-donut-canvas"
-              width="110"
-              height="110"
-              style="display: block; margin: 0 auto"
-            ></canvas>
-            <div
-              id="rpt-donut-legend"
-              style="
-                margin-top: 10px;
-                display: flex;
-                flex-direction: column;
-                gap: 5px;
-              "
-            ></div>
+            <div id="rpt-delivery-bar" style="display:flex;flex-direction:column;gap:10px;margin-top:4px"></div>
           </div>
           <div
             style="
@@ -5978,11 +5995,11 @@
           <div class="nav-title">Estimate</div>
           <button
             class="nav-btn"
-            id="deliver-toggle-btn"
-            onclick="toggleBillDelivered()"
-            style="font-size: 12px; font-weight: 600; color: var(--success)"
+            id="pay-toggle-btn"
+            onclick="toggleBillPaid()"
+            style="font-size: 12px; font-weight: 600"
           >
-            Mark Delivered
+            Mark Paid
           </button>
         </div>
       </div>
@@ -5993,7 +6010,11 @@
           -webkit-overflow-scrolling: touch;
           padding-bottom: 88px;
         "
-      ></div>
+      >
+        <div style="padding:8px 16px 0;display:flex;align-items:center;gap:8px">
+          <div id="bill-delivery-badge" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;background:var(--warn-soft);color:var(--warn)">Pending Delivery</div>
+        </div>
+      </div>
       <div class="bottom-bar">
         <div class="bottom-action" onclick="goTo('screen-bills')">
           <div class="icon">
@@ -7235,10 +7256,16 @@
             })
             .filter((r) => r.some((c) => c !== ""));
         }
-        function readXlsx(binary) {
-          const buf = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++)
-            buf[i] = binary.charCodeAt(i) & 0xff;
+        function readXlsx(input) {
+          // Accept ArrayBuffer or binary string
+          let buf;
+          if (input instanceof ArrayBuffer) {
+            buf = new Uint8Array(input);
+          } else {
+            buf = new Uint8Array(input.length);
+            for (let i = 0; i < input.length; i++)
+              buf[i] = input.charCodeAt(i) & 0xff;
+          }
           function getZipEntries(data) {
             const entries = {};
             let i = 0;
@@ -7715,6 +7742,8 @@
           if (bi) bi.value = "";
           const bc = document.getElementById("bills-search-clear");
           if (bc) bc.style.display = "none";
+          _billsTab = "all";
+          setBillsTab("all");
           renderBillsList("");
         }
         if (id === "screen-customers") renderMasterList("cust");
@@ -7844,7 +7873,7 @@
         const prevMonthBills = S.bills.filter((b) =>
           (b.date || "").startsWith(lastMonth),
         );
-        const deliveredBills = S.bills.filter((b) => b.delivered);
+        const unpaidBills = S.bills.filter((b) => !b.paid);
         const fmt = (v) =>
           v >= 100000
             ? "₹" + (v / 100000).toFixed(1) + "L"
@@ -7857,7 +7886,7 @@
           (s, b) => s + (b.grand || 0),
           0,
         );
-        const deliveredTotal = deliveredBills.reduce((s, b) => s + (b.grand || 0), 0);
+        const unpaidTotal = unpaidBills.reduce((s, b) => s + (b.grand || 0), 0);
         const avgBill = monthBills.length ? monthTotal / monthBills.length : 0;
         const growth =
           prevMonthTotal > 0
@@ -7879,39 +7908,43 @@
           el("stat-month-count").textContent =
             monthBills.length + " bill" + (monthBills.length !== 1 ? "s" : "");
         }
-        if (el("stat-delivered")) {
-          el("stat-delivered").textContent = fmt(deliveredTotal);
-          el("stat-delivered-count").textContent =
-            deliveredBills.length +
+        if (el("stat-unpaid")) {
+          el("stat-unpaid").textContent = fmt(unpaidTotal);
+          el("stat-unpaid-count").textContent =
+            unpaidBills.length +
             " bill" +
-            (deliveredBills.length !== 1 ? "s" : "");
+            (unpaidBills.length !== 1 ? "s" : "");
         }
-        animateMoney("hero-month-total", monthTotal);
+        animateMoney("hero-month-total", monthBills.length, 950, true);
         if (el("hero-month-count"))
           el("hero-month-count").textContent =
             monthBills.length +
-            " bill" +
+            " order" +
             (monthBills.length !== 1 ? "s" : "") +
             " this month";
         if (el("hero-growth"))
           el("hero-growth").textContent =
             (growth >= 0 ? "+" : "") + growth.toFixed(1) + "%";
-        animateMoney("kpi-today", todayTotal);
-        animateMoney("kpi-delivered", deliveredTotal);
-        animateMoney("kpi-average", avgBill);
+        // Today's orders (count)
+        const todayEl = el("kpi-today");
+        if (todayEl) {
+          todayEl.textContent = todayBills.length;
+        }
         if (el("kpi-today-count"))
           el("kpi-today-count").textContent =
             todayBills.length + " bill" + (todayBills.length !== 1 ? "s" : "");
-        if (el("kpi-delivered-count"))
-          el("kpi-delivered-count").textContent = deliveredBills.length + " delivered";
-        if (el("kpi-average-note"))
-          el("kpi-average-note").textContent = monthBills.length
-            ? "Across this month"
-            : "No bills yet";
+        // Top customer
         if (el("kpi-top-customer"))
           el("kpi-top-customer").textContent = topCustomer.name || "None";
         if (el("kpi-top-customer-note"))
           el("kpi-top-customer-note").textContent = fmt(topCustomer.value || 0);
+        // Delivered / Pending counts (month)
+        const deliveredBills = monthBills.filter((b) => b.delivered);
+        const pendingBills = monthBills.filter((b) => !b.delivered);
+        if (el("kpi-delivered")) el("kpi-delivered").textContent = deliveredBills.length;
+        if (el("kpi-delivered-note")) el("kpi-delivered-note").textContent = "This month";
+        if (el("kpi-pending")) el("kpi-pending").textContent = pendingBills.length;
+        if (el("kpi-pending-note")) el("kpi-pending-note").textContent = pendingBills.length === 1 ? "Awaiting delivery" : "Awaiting delivery";
         scheduleDashboardCharts();
       }
 
@@ -7991,7 +8024,7 @@
                   b.customer?.name,
                   b.date,
                   b.grand,
-                  b.delivered ? "delivered" : "pending",
+                  b.paid ? "paid" : "unpaid",
                 ].join(" "),
               ),
             )
@@ -8767,9 +8800,12 @@
           return;
         }
         let filtered = S.bills;
+        // Apply delivery tab filter
+        if (_billsTab === "delivered") filtered = filtered.filter((b) => b.delivered);
+        else if (_billsTab === "pending") filtered = filtered.filter((b) => !b.delivered);
         if (q && q.trim()) {
           const ql = q.trim().toLowerCase();
-          filtered = S.bills.filter(
+          filtered = filtered.filter(
             (b) =>
               (b.customer.name || "").toLowerCase().includes(ql) ||
               String(b.invno || "")
@@ -8777,7 +8813,7 @@
                 .includes(ql),
           );
         }
-        const isFiltered = !!(q && q.trim());
+        const isFiltered = !!(q && q.trim()) || _billsTab !== "all";
         if (!filtered.length) {
           c.innerHTML =
             '<div class="empty-state"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="empty-title">No Results</div><div class="empty-sub">Try a different name or invoice number</div></div><div class="bottom-spacer"></div>';
@@ -8799,7 +8835,8 @@
           return esc(text);
         }
         const filteredTotal = filtered.reduce((s, b) => s + (b.grand || 0), 0);
-        c.innerHTML = `<div class="bills-summary"><div class="bills-summary-label">${isFiltered ? "Matching Sales" : "Total Sales"}</div><div class="bills-summary-val">&#8377;${filteredTotal.toFixed(2)}</div><div class="bills-summary-count">${isFiltered ? filtered.length + " of " + S.bills.length + " bills" : S.bills.length + " bill" + (S.bills.length !== 1 ? "s" : "")}</div></div>${filtered.map((b, idx) => `<div class="bill-card" style="animation-delay:${Math.min(idx * 0.04, 0.3)}s" onclick="viewBill('${b.id}')"><div class="bill-card-top"><div class="bill-inv">No. ${hlB(String(b.invno), q)}</div><div class="bill-date">${fmtDate(b.date)}</div></div><div class="bill-party">${hlB(b.customer.name, q)}</div><div class="bill-location">${esc(b.customer.location || "")}${b.transport ? " · " + esc(b.transport.name) : ""}</div><div class="bill-card-bottom"><div style="display:flex;align-items:center;gap:6px"><div class="bill-meta">${b.items.length} item${b.items.length !== 1 ? "s" : ""}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.delivered ? "var(--success-soft)" : "var(--warn-soft)"};color:${b.delivered ? "var(--success)" : "var(--warn)"}">${b.delivered ? "DELIVERED" : "PENDING"}</div></div><div class="bill-amount">&#8377;${b.grand.toFixed(2)}</div></div></div>`).join("")}<div class="bottom-spacer"></div>`;
+        const summaryLabel = _billsTab === "delivered" ? "Delivered Bills" : _billsTab === "pending" ? "Pending Bills" : isFiltered ? "Matching Sales" : "Total Sales";
+        c.innerHTML = `<div class="bills-summary"><div class="bills-summary-label">${summaryLabel}</div><div class="bills-summary-val">&#8377;${filteredTotal.toFixed(2)}</div><div class="bills-summary-count">${isFiltered ? filtered.length + " of " + S.bills.length + " bills" : S.bills.length + " bill" + (S.bills.length !== 1 ? "s" : "")}</div></div>${filtered.map((b, idx) => `<div class="bill-card" style="animation-delay:${Math.min(idx * 0.04, 0.3)}s" onclick="viewBill('${b.id}')"><div class="bill-card-top"><div class="bill-inv">No. ${hlB(String(b.invno), q)}</div><div class="bill-date">${fmtDate(b.date)}</div></div><div class="bill-party">${hlB(b.customer.name, q)}</div><div class="bill-location">${esc(b.customer.location || "")}${b.transport ? " · " + esc(b.transport.name) : ""}</div><div class="bill-card-bottom"><div style="display:flex;align-items:center;gap:6px"><div class="bill-meta">${b.items.length} item${b.items.length !== 1 ? "s" : ""}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.paid ? "var(--success-soft)" : "var(--danger-soft)"};color:${b.paid ? "var(--success)" : "var(--danger)"}">${b.paid ? "PAID" : "UNPAID"}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.delivered ? "var(--success-soft)" : "var(--warn-soft)"};color:${b.delivered ? "var(--success)" : "var(--warn)"}">${b.delivered ? "✓ DELIVERED" : "PENDING"}</div></div><div class="bill-amount">&#8377;${b.grand.toFixed(2)}</div></div></div>`).join("")}<div class="bottom-spacer"></div>`;
       }
 
       function filterBillsList() {
@@ -8815,6 +8852,34 @@
         if (cb) cb.style.display = "none";
         renderBillsList("");
         if (inp) inp.focus();
+      }
+
+      // Bills delivery tab state
+      let _billsTab = "all"; // "all" | "delivered" | "pending"
+
+      function setBillsTab(tab) {
+        _billsTab = tab;
+        ["all", "delivered", "pending"].forEach((t) => {
+          const btn = document.getElementById("bills-tab-" + t);
+          if (!btn) return;
+          if (t === tab) {
+            btn.style.borderBottom = "2.5px solid var(--accent)";
+            btn.style.color = "var(--accent)";
+            btn.style.fontWeight = "700";
+          } else {
+            btn.style.borderBottom = "2.5px solid transparent";
+            btn.style.color = "var(--muted)";
+            btn.style.fontWeight = "600";
+          }
+        });
+        const q = document.getElementById("bills-search");
+        renderBillsList(q ? q.value : "");
+      }
+
+      function goToBillsTab(tab) {
+        goTo("screen-bills");
+        // Defer tab switch so goTo's renderBillsList("") fires first
+        setTimeout(() => setBillsTab(tab), 20);
       }
 
       // BILL DETAIL
@@ -8865,6 +8930,11 @@
         ].join("");
 
         document.getElementById("bill-detail-content").innerHTML = `
+    <div style="padding:8px 16px 0;display:flex;align-items:center;gap:8px">
+      <div id="bill-delivery-badge" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;background:${b.delivered ? 'var(--success-soft)' : 'var(--warn-soft)'};color:${b.delivered ? 'var(--success)' : 'var(--warn)'}">
+        ${b.delivered ? '✓ Fully Delivered' : 'Pending Delivery'}
+      </div>
+    </div>
     <div class="invoice-card">
       <div class="inv-header">
         <div class="inv-title">Estimate</div>
@@ -8912,12 +8982,8 @@
       <div class="inv-footer">Amount in words: <strong>${b.words}</strong></div>
     </div>`;
 
-        // Update delivery toggle button
-        const deliverBtn = document.getElementById("deliver-toggle-btn");
-        if (deliverBtn) {
-          deliverBtn.textContent = b.delivered ? "Mark Pending" : "Mark Delivered";
-          deliverBtn.style.color = b.delivered ? "var(--warn)" : "var(--success)";
-        }
+        // The delivery badge is now rendered inline in the innerHTML above
+        // so no separate update needed for it here
 
         document.getElementById("del-bill-btn").onclick = () => {
           if (confirm("Delete bill #" + b.invno + "?")) {
@@ -8931,18 +8997,14 @@
         goTo("screen-bill-detail");
       }
 
-      // TOGGLE DELIVERED (per item, bill detail view only — hidden from JPEG/print)
-      // TOGGLE DELIVERED (per item) — with bill-level cascade
+      // TOGGLE DELIVERED (per item — bill is "delivered" only when ALL items delivered)
       function toggleDelivered(billId, itemIdx, checked) {
         const b = S.bills.find((x) => x.id === billId);
         if (!b || !b.items[itemIdx]) return;
         b.items[itemIdx].delivered = checked;
-        // If all items are now delivered → auto-mark bill delivered
-        // If any item is unchecked → bill goes back to pending
-        const allDelivered = b.items.every((it) => it.delivered);
-        b.delivered = allDelivered;
+        // Bill-level delivered = every item is delivered
+        b.delivered = b.items.length > 0 && b.items.every((it) => it.delivered);
         persist('bills');
-        // Update the checkbox UI
         const wraps = document.querySelectorAll('.item-delivered-wrap');
         const wrap = wraps[itemIdx];
         if (wrap) {
@@ -8950,43 +9012,32 @@
           if (lbl) lbl.textContent = checked ? '✓ Delivered' : 'Delivered?';
           wrap.classList.toggle('checked', checked);
         }
-        // Update the bill-level toggle button
-        _refreshDeliveryBtn(b);
-        updateDashboardStats();
-        if (allDelivered && checked) {
-          showToast('✅ All items delivered!');
-        } else {
-          showToast(checked ? '✓ Item marked delivered' : 'Item delivery removed');
+        // Update the bill-level delivery badge in the detail view if present
+        const billDelivBadge = document.getElementById('bill-delivery-badge');
+        if (billDelivBadge) {
+          billDelivBadge.textContent = b.delivered ? '✓ Fully Delivered' : 'Pending Delivery';
+          billDelivBadge.style.background = b.delivered ? 'var(--success-soft)' : 'var(--warn-soft)';
+          billDelivBadge.style.color = b.delivered ? 'var(--success)' : 'var(--warn)';
         }
-      }
-
-      function _refreshDeliveryBtn(b) {
-        const btn = document.getElementById('deliver-toggle-btn');
-        if (!btn) return;
-        btn.textContent = b.delivered ? 'Mark Pending' : 'Mark Delivered';
-        btn.style.color = b.delivered ? 'var(--warn)' : 'var(--success)';
+        const msg = b.delivered ? '✅ Bill fully delivered!' : checked ? '✓ Item marked delivered' : 'Delivery mark removed';
+        showToast(msg);
+        updateDashboardStats();
       }
 
       // ================================================================
-      // TOGGLE BILL-LEVEL DELIVERED (cascades to all items)
+      // TOGGLE PAID/UNPAID
       // ================================================================
-      function toggleBillDelivered() {
+      function toggleBillPaid() {
         const b = S.bills.find((x) => x.id === S.currentBillId);
         if (!b) return;
-        b.delivered = !b.delivered;
-        // Cascade to all items
-        b.items.forEach((it) => { it.delivered = b.delivered; });
-        persist('bills');
-        // Refresh all item checkboxes in the DOM
-        document.querySelectorAll('.item-delivered-wrap').forEach((wrap, i) => {
-          wrap.classList.toggle('checked', b.delivered);
-          const cb = wrap.querySelector('.item-delivered-cb');
-          if (cb) cb.checked = b.delivered;
-          const lbl = wrap.querySelector('.item-delivered-label');
-          if (lbl) lbl.textContent = b.delivered ? '✓ Delivered' : 'Delivered?';
-        });
-        _refreshDeliveryBtn(b);
-        showToast(b.delivered ? '✅ Bill marked delivered' : 'Bill marked pending');
+        b.paid = !b.paid;
+        persist("bills");
+        const payBtn = document.getElementById("pay-toggle-btn");
+        if (payBtn) {
+          payBtn.textContent = b.paid ? "Mark Unpaid" : "Mark Paid";
+          payBtn.style.color = b.paid ? "var(--danger)" : "var(--success)";
+        }
+        showToast(b.paid ? "✅ Marked as Paid" : "Bill marked unpaid");
         updateDashboardStats();
       }
 
@@ -9143,10 +9194,10 @@
           renderReportTopCustomersMini(bills);
         }, 100);
         const total = bills.reduce((s, b) => s + (b.grand || 0), 0);
-        const delivered = bills
-          .filter((b) => b.delivered)
+        const paid = bills
+          .filter((b) => b.paid)
           .reduce((s, b) => s + (b.grand || 0), 0);
-        const pending = total - delivered;
+        const unpaid = total - paid;
 
         const fmt = (v) => "₹" + v.toFixed(2);
         const el = (id) => document.getElementById(id);
@@ -9154,9 +9205,9 @@
         if (el("rpt-bill-count"))
           el("rpt-bill-count").textContent =
             bills.length + " bill" + (bills.length !== 1 ? "s" : "");
-        if (el("rpt-delivered")) el("rpt-delivered").textContent = fmt(delivered);
-        if (el("rpt-pending-amt"))
-          el("rpt-pending-amt").textContent = fmt(pending) + " pending";
+        if (el("rpt-paid")) el("rpt-paid").textContent = fmt(paid);
+        if (el("rpt-unpaid-amt"))
+          el("rpt-unpaid-amt").textContent = fmt(unpaid) + " pending";
 
         // Top customers
         const custMap = {};
@@ -9248,13 +9299,13 @@
           .filter((b) => b.customer?.name === name)
           .sort((a, b) => b.date.localeCompare(a.date));
         const total = bills.reduce((s, b) => s + (b.grand || 0), 0);
-        const pending = bills
-          .filter((b) => !b.delivered)
+        const unpaid = bills
+          .filter((b) => !b.paid)
           .reduce((s, b) => s + (b.grand || 0), 0);
         el.innerHTML = `
     <div style="padding:10px 14px;background:var(--surface2);border-bottom:0.5px solid var(--separator);display:flex;justify-content:space-between;">
       <div style="font-size:12px;color:var(--muted)">${bills.length} bills total</div>
-      <div style="font-size:12px;font-weight:700;color:var(--warn)">₹${pending.toFixed(0)} pending</div>
+      <div style="font-size:12px;font-weight:700;color:var(--danger)">₹${unpaid.toFixed(0)} pending</div>
     </div>
     ${bills
       .map(
@@ -9265,7 +9316,7 @@
         <div style="font-size:13px;font-weight:500;color:var(--text)">#${b.invno} · ${fmtDate(b.date)}</div>
         <div style="font-size:11px;color:var(--muted);margin-top:1px">${b.items?.length || 0} items</div>
       </div>
-      <div style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.delivered ? "var(--success-soft)" : "var(--warn-soft)"};color:${b.delivered ? "var(--success)" : "var(--warn)"};margin-right:4px">${b.delivered ? "DELIVERED" : "PENDING"}</div>
+      <div style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.paid ? "var(--success-soft)" : "var(--danger-soft)"};color:${b.paid ? "var(--success)" : "var(--danger)"};margin-right:4px">${b.paid ? "PAID" : "DUE"}</div>
       <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--text)">₹${b.grand.toFixed(0)}</div>
     </div>`,
       )
@@ -9631,15 +9682,25 @@
             processRows(XLSX._parseCSV(e.target.result));
           };
           reader.readAsText(file);
+        } else if (fname.endsWith(".xlsx") || fname.endsWith(".xls") || fname.endsWith(".xlsm")) {
+          reader.onload = (e) => {
+            try {
+              processRows(XLSX._readFile(e.target.result));
+            } catch (err) {
+              showToast("Could not read Excel file: " + err.message);
+            }
+          };
+          reader.readAsArrayBuffer(file);
         } else {
+          // Try as binary for other formats
           reader.onload = (e) => {
             try {
               processRows(XLSX._readFile(e.target.result));
             } catch {
-              showToast("Try saving as CSV.");
+              showToast("Unsupported file format. Try .xlsx or .csv");
             }
           };
-          reader.readAsBinaryString(file);
+          reader.readAsArrayBuffer(file);
         }
         event.target.value = "";
       }
@@ -10529,7 +10590,7 @@
         return "\u20b9" + Math.round(v).toLocaleString("en-IN");
       }
 
-      function animateMoney(id, to, duration) {
+      function animateMoney(id, to, duration, isCount) {
         const el = document.getElementById(id);
         if (!el) return;
         const from = Number(el.dataset.value || 0);
@@ -10542,7 +10603,8 @@
         }
         function frame(now) {
           const p = Math.min(1, (now - start) / dur);
-          el.textContent = moneyCompact(from + (target - from) * ease(p));
+          const v = from + (target - from) * ease(p);
+          el.textContent = isCount ? Math.round(v).toString() : moneyCompact(v);
           if (p < 1) requestAnimationFrame(frame);
         }
         requestAnimationFrame(frame);
@@ -10672,13 +10734,15 @@
       function renderHeroChart() {
         const canvas = document.getElementById("hero-chart-canvas");
         if (!canvas) return;
-        const data = getRevenueSeries(30);
+        const raw = getRevenueSeries(30);
+        // Remap to use order count as the chart value
+        const data = raw.map((d) => ({ ...d, value: d.count }));
         const total = data.reduce((s, d) => s + d.value, 0);
         const label = document.getElementById("hero-chart-label");
         if (label)
           label.textContent = total
-            ? "30-day total: " + moneyCompact(total)
-            : "No revenue in the last 30 days";
+            ? "30-day total: " + total + " order" + (total !== 1 ? "s" : "")
+            : "No orders in the last 30 days";
         const start = performance.now();
         function frame(now) {
           const p = Math.min(1, (now - start) / 1150);
@@ -10700,14 +10764,13 @@
         function show(e) {
           const idx = idxFromEvent(e);
           const d = data[idx];
+          const raw = getRevenueSeries(30)[idx];
           drawLineChart(canvas, data, idx, 1);
           if (tip) {
             tip.querySelector(".chart-tip-date").textContent = d.label;
-            tip.querySelector(".chart-tip-value").textContent = moneyCompact(
-              d.value,
-            );
-            tip.querySelector(".chart-tip-bills").textContent =
-              d.count + " bill" + (d.count !== 1 ? "s" : "");
+            tip.querySelector(".chart-tip-value").textContent =
+              d.value + " order" + (d.value !== 1 ? "s" : "");
+            tip.querySelector(".chart-tip-bills").textContent = moneyCompact(raw ? raw.value : 0);
             const rect = canvas.getBoundingClientRect();
             const x =
               (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
@@ -10764,9 +10827,9 @@
         const s = getRevenueSeries(14).map((d) => d.value);
         renderSparkline("spark-today", s, "#0a84ff");
         renderSparkline(
-          "spark-delivered",
+          "spark-unpaid",
           s.map((v, i) => (i % 3 === 0 ? v * 0.8 : v * 0.35)),
-          "#30d158",
+          "#ff453a",
         );
         renderSparkline(
           "spark-average",
@@ -11045,10 +11108,9 @@
       function renderDonutChart() {
         const canvas = document.getElementById("donut-canvas");
         if (!canvas) return;
-        const allItems = S.bills.flatMap((b) => b.items || []);
-        const delivered = allItems.filter((it) => it.delivered).length;
-        const pending = allItems.filter((it) => !it.delivered).length;
-        const total = delivered + pending;
+        const deliveredBills = S.bills.filter((b) => b.delivered).length;
+        const pendingBills = S.bills.filter((b) => !b.delivered).length;
+        const total = deliveredBills + pendingBills;
         const dpr = window.devicePixelRatio || 1;
         canvas.width = canvas.height = 110 * dpr;
         canvas.style.width = canvas.style.height = "110px";
@@ -11058,20 +11120,23 @@
         const segs = [
           {
             label: "Delivered",
-            value: delivered,
-            ratio: total > 0 ? delivered / total : 0,
+            value: deliveredBills,
+            ratio: total > 0 ? deliveredBills / total : 0,
             color: dark ? "#30d158" : "#34c759",
           },
           {
             label: "Pending",
-            value: pending,
-            ratio: total > 0 ? pending / total : 0,
+            value: pendingBills,
+            ratio: total > 0 ? pendingBills / total : 0,
             color: dark ? "#ff9f0a" : "#ff9500",
           },
         ];
+        // Animate
         const start = performance.now();
         const dur = 480;
-        function ease(t) { return 1 - Math.pow(1 - t, 3); }
+        function ease(t) {
+          return 1 - Math.pow(1 - t, 3);
+        }
         function frame(now) {
           const p = Math.min(1, (now - start) / dur);
           _drawDonut(ctx, segs, total, dark, ease(p));
@@ -11083,7 +11148,7 @@
           legend.innerHTML = segs
             .map(
               (s) =>
-                `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px"><div style="display:flex;align-items:center;gap:5px"><div style="width:7px;height:7px;border-radius:50%;background:${s.color};flex-shrink:0"></div><span style="font-size:11px;color:var(--muted)">${s.label}</span></div><span style="font-size:11px;font-weight:600;font-family:var(--mono);color:var(--text)">${s.value} item${s.value !== 1 ? "s" : ""}</span></div>`,
+                `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px"><div style="display:flex;align-items:center;gap:5px"><div style="width:7px;height:7px;border-radius:50%;background:${s.color};flex-shrink:0"></div><span style="font-size:11px;color:var(--muted)">${s.label}</span></div><span style="font-size:11px;font-weight:600;font-family:var(--mono);color:var(--text)">${s.value} bills</span></div>`,
             )
             .join("");
       }
@@ -11153,83 +11218,31 @@
 
       // ── REPORTS PAGE CHARTS ───────────────────────────────────────────
       function renderReportDonutChart(bills) {
-        const canvas = document.getElementById("rpt-donut-canvas");
-        if (!canvas) return;
-        const allItems = bills.flatMap((b) => b.items || []);
-        const delivered = allItems.filter((it) => it.delivered).length;
-        const pending = allItems.filter((it) => !it.delivered).length;
-        const total = delivered + pending;
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = canvas.height = 110 * dpr;
-        canvas.style.width = canvas.style.height = "110px";
-        const ctx = canvas.getContext("2d");
-        ctx.scale(dpr, dpr);
-        ctx.clearRect(0, 0, 110, 110);
-        const dark = document.body.classList.contains("dark");
+        const el = document.getElementById("rpt-delivery-bar");
+        if (!el) return;
+        const delivered = bills.filter((b) => b.delivered).length;
+        const pending = bills.filter((b) => !b.delivered).length;
+        const total = bills.length;
         if (!total) {
-          ctx.fillStyle = dark ? "#2c2c2e" : "#f2f2f7";
-          ctx.beginPath();
-          ctx.arc(55, 55, 42, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = dark ? "#636366" : "#8e8e93";
-          ctx.font = "500 10px DM Sans,system-ui";
-          ctx.textAlign = "center";
-          ctx.fillText("No data", 55, 59);
-          const leg = document.getElementById("rpt-donut-legend");
-          if (leg) leg.innerHTML = "";
+          el.innerHTML = '<div style="font-size:11px;color:var(--muted);text-align:center;padding:12px 0">No data</div>';
           return;
         }
-        const segs = [
-          {
-            label: "Delivered",
-            value: delivered,
-            ratio: delivered / total,
-            color: dark ? "#30d158" : "#34c759",
-          },
-          {
-            label: "Pending",
-            value: pending,
-            ratio: pending / total,
-            color: dark ? "#ff9f0a" : "#ff9500",
-          },
-        ];
-        let a = -Math.PI / 2;
-        segs.forEach((seg) => {
-          const end = a + seg.ratio * Math.PI * 2;
-          ctx.beginPath();
-          ctx.moveTo(55, 55);
-          ctx.arc(55, 55, 46, a, end);
-          ctx.closePath();
-          ctx.fillStyle = seg.color;
-          ctx.fill();
-          a = end;
-        });
-        ctx.fillStyle = dark ? "#1c1c1e" : "#fff";
-        ctx.beginPath();
-        ctx.arc(55, 55, 30, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = dark ? "#f5f5f7" : "#1c1c1e";
-        ctx.font = "700 11px DM Mono,monospace";
-        ctx.textAlign = "center";
-        ctx.fillText(
-          total > 0 ? Math.round((delivered / total) * 100) + "%" : "0%",
-          55,
-          59,
-        );
-        const leg = document.getElementById("rpt-donut-legend");
-        if (leg)
-          leg.innerHTML = segs
-            .map(
-              (s) =>
-                `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px">
-      <div style="display:flex;align-items:center;gap:5px">
-        <div style="width:7px;height:7px;border-radius:50%;background:${s.color};flex-shrink:0"></div>
-        <span style="font-size:11px;color:var(--muted)">${s.label}</span>
-      </div>
-      <span style="font-size:11px;font-weight:600;font-family:var(--mono);color:var(--text)">${s.value} item${s.value !== 1 ? "s" : ""}</span>
-    </div>`,
-            )
-            .join("");
+        const dark = document.body.classList.contains("dark");
+        const delivColor = dark ? "#30d158" : "#34c759";
+        const pendColor = dark ? "#ff9f0a" : "#ff9500";
+        function barRow(label, count, color) {
+          const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+          return `<div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+              <span style="font-size:11px;color:var(--muted);font-weight:500">${label}</span>
+              <span style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--text)">${count} bills <span style="color:${color};font-size:10px">(${pct}%)</span></span>
+            </div>
+            <div style="height:10px;background:var(--surface2);border-radius:6px;overflow:hidden">
+              <div style="height:100%;width:${pct}%;background:${color};border-radius:6px;transition:width 0.6s cubic-bezier(0.16,1,0.3,1)"></div>
+            </div>
+          </div>`;
+        }
+        el.innerHTML = barRow("Delivered", delivered, delivColor) + barRow("Pending", pending, pendColor);
       }
 
       function renderReportTopCustomersMini(bills) {
