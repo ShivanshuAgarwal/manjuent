@@ -4439,82 +4439,132 @@
       }
       /* Siri-style voice overlay override */
       .voice-overlay {
-        align-items: center;
+        align-items: flex-end;
         justify-content: center;
-        padding: 20px;
-        background: rgba(0, 0, 0, 0.38);
-        backdrop-filter: blur(22px) saturate(1.5);
-        -webkit-backdrop-filter: blur(22px) saturate(1.5);
+        padding: 0 14px calc(env(safe-area-inset-bottom) + 18px);
+        background:
+          linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.58)),
+          rgba(0, 0, 0, 0.18);
+        backdrop-filter: blur(16px) saturate(1.35);
+        -webkit-backdrop-filter: blur(16px) saturate(1.35);
       }
       .voice-panel {
-        width: min(92vw, 430px);
-        max-width: 430px;
-        min-height: min(620px, calc(100vh - 40px));
+        width: min(92vw, 680px);
+        max-width: 680px;
+        min-height: 0;
         background: transparent;
         border: 0;
         border-radius: 0;
         box-shadow: none;
-        padding: 22px 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr) 56px;
+        grid-template-areas:
+          "retry transcript close"
+          ". preview ."
+          ". actions ."
+          ". orb ."
+          ". hint .";
         align-items: center;
-        justify-content: center;
-        gap: 18px;
-        animation: voiceBubbleIn 0.34s var(--ease-out) both;
+        justify-items: center;
+        gap: 10px;
+        position: relative;
+        animation: voiceBubbleIn 0.28s var(--ease-out) both;
       }
       @keyframes voiceBubbleIn {
         from { opacity: 0; transform: scale(0.92) translateY(14px); }
         to { opacity: 1; transform: scale(1) translateY(0); }
       }
       .voice-transcript-area {
-        order: 1;
+        grid-area: transcript;
         width: 100%;
-        min-height: 74px;
-        max-height: 158px;
-        padding: 14px 18px;
-        border-radius: 24px;
-        background: rgba(251, 250, 246, 0.86);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+        align-self: center;
+        min-height: 56px;
+        max-height: 132px;
+        padding: 13px 20px;
+        border-radius: 999px;
+        backdrop-filter: blur(24px) saturate(1.65);
+        -webkit-backdrop-filter: blur(24px) saturate(1.65);
+        background:
+          radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.92), transparent 42%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(242, 245, 250, 0.62));
+        border: 0.5px solid rgba(255, 255, 255, 0.72);
+        box-shadow:
+          0 18px 48px rgba(0, 0, 0, 0.18),
+          0 1px 0 rgba(255, 255, 255, 0.62),
+          0 0 0 0.5px rgba(255, 255, 255, 0.32),
+          inset 0 1px 0 rgba(255, 255, 255, 0.96),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.05),
+          inset 0 0 18px rgba(255, 255, 255, 0.26);
+        display: flex;
+        align-items: center;
       }
       body.dark .voice-transcript-area {
-        background: rgba(20, 20, 24, 0.82);
-        border-color: rgba(255, 255, 255, 0.12);
+        background:
+          linear-gradient(180deg, rgba(42, 42, 48, 0.86), rgba(24, 24, 30, 0.76));
+        border-color: rgba(255, 255, 255, 0.14);
       }
       .voice-transcript-text {
-        font-size: clamp(18px, 4.8vw, 24px);
+        font-size: 18px;
         font-weight: 750;
         line-height: 1.25;
-        color: var(--text);
+        color: #1677ff;
+        width: 100%;
+        max-height: 100px;
+        overflow: auto;
+        text-align: center;
       }
       .voice-transcript-text.dim {
         opacity: 0.62;
       }
       .voice-orb-wrap {
-        order: 2;
-        width: 230px;
-        height: 230px;
+        grid-area: orb;
+        width: 136px;
+        height: 136px;
         position: relative;
       }
       .voice-orb {
-        width: 230px;
-        height: 230px;
+        width: 136px;
+        height: 136px;
         border-radius: 50%;
         isolation: isolate;
       }
       .voice-orb-core {
-        width: 164px;
-        height: 164px;
-        border-radius: 48% 52% 46% 54% / 54% 42% 58% 46%;
+        width: 102px;
+        height: 102px;
+        border-radius: 50%;
         background:
-          radial-gradient(circle at 28% 24%, rgba(255, 255, 255, 0.96), transparent 18%),
-          radial-gradient(circle at 78% 28%, #20d6ff 0, transparent 30%),
-          radial-gradient(circle at 22% 80%, #ff2d75 0, transparent 33%),
-          radial-gradient(circle at 72% 78%, #ffd60a 0, transparent 28%),
-          linear-gradient(135deg, #0a84ff 0%, #7c3aed 48%, #ff375f 100%);
+          radial-gradient(circle at 34% 22%, rgba(255, 255, 255, 0.98) 0 10%, transparent 22%),
+          radial-gradient(circle at 76% 30%, rgba(67, 217, 255, 0.95) 0 20%, transparent 42%),
+          radial-gradient(circle at 24% 76%, rgba(255, 45, 117, 0.98) 0 23%, transparent 45%),
+          radial-gradient(circle at 72% 78%, rgba(255, 214, 10, 0.92) 0 18%, transparent 40%),
+          radial-gradient(circle at 50% 50%, #4b6fff 0, #8338ec 48%, #16181f 100%);
         box-shadow:
-          0 0 34px rgba(10, 132, 255, 0.45),
-          0 24px 80px rgba(255, 55, 95, 0.28),
-          inset 0 0 30px rgba(255, 255, 255, 0.24);
-        animation: siriBlob 5.5s ease-in-out infinite, siriHue 9s linear infinite;
+          0 12px 38px rgba(0, 0, 0, 0.34),
+          0 0 34px rgba(80, 180, 255, 0.38),
+          inset 0 0 22px rgba(255, 255, 255, 0.22),
+          inset 0 -18px 26px rgba(0, 0, 0, 0.24);
+        overflow: hidden;
+        animation: siriFloat 4.8s ease-in-out infinite, siriHue 10s linear infinite;
+      }
+      .voice-orb-core::before,
+      .voice-orb-core::after {
+        content: "";
+        position: absolute;
+        inset: 16px 9px;
+        border-radius: 50%;
+        background: conic-gradient(from 70deg, transparent, rgba(255,255,255,0.86), rgba(87,215,255,0.68), transparent, rgba(255,70,150,0.72), transparent);
+        filter: blur(7px);
+        mix-blend-mode: screen;
+        opacity: 0.72;
+        animation: siriSpin 6.5s linear infinite;
+      }
+      .voice-orb-core::after {
+        inset: 24px 17px;
+        opacity: 0.48;
+        filter: blur(9px);
+        animation-duration: 9s;
+        animation-direction: reverse;
       }
       .voice-orb-core svg {
         display: none !important;
@@ -4523,37 +4573,37 @@
       .voice-orb::after {
         content: "";
         position: absolute;
-        inset: 24px;
+        inset: 17px;
         border-radius: 46% 54% 50% 50% / 48% 46% 54% 52%;
         background: conic-gradient(from 180deg, #0a84ff, #64d2ff, #bf5af2, #ff375f, #ffd60a, #0a84ff);
-        filter: blur(18px);
-        opacity: 0.42;
+        filter: blur(12px);
+        opacity: 0.38;
         z-index: -1;
         animation: siriSpin 7s linear infinite;
       }
       .voice-orb::after {
-        inset: 42px;
+        inset: 25px;
         opacity: 0.26;
-        filter: blur(28px);
+        filter: blur(20px);
         animation-duration: 11s;
         animation-direction: reverse;
       }
       .voice-orb-ring {
-        width: 164px !important;
-        height: 164px !important;
+        width: 102px !important;
+        height: 102px !important;
         border: 0;
         background: radial-gradient(circle, rgba(255,255,255,0.24), transparent 62%);
         filter: blur(5px);
       }
       .voice-orb.listening .voice-orb-core {
-        animation: siriBlob 1.1s ease-in-out infinite, siriHue 3.4s linear infinite;
+        animation: siriFloat 1.25s ease-in-out infinite, siriHue 3.4s linear infinite;
         box-shadow:
           0 0 48px rgba(100, 210, 255, 0.58),
           0 26px 90px rgba(255, 45, 117, 0.38),
           inset 0 0 34px rgba(255, 255, 255, 0.32);
       }
       .voice-orb.thinking .voice-orb-core {
-        animation: siriBlob 1.8s ease-in-out infinite, siriHue 4.5s linear infinite;
+        animation: siriFloat 1.8s ease-in-out infinite, siriHue 4.5s linear infinite;
       }
       .voice-orb.ready .voice-orb-core {
         background:
@@ -4569,10 +4619,9 @@
           radial-gradient(circle at 20% 80%, #ff375f 0, transparent 34%),
           linear-gradient(135deg, #ff453a 0%, #ff9f0a 100%);
       }
-      @keyframes siriBlob {
-        0%, 100% { transform: scale(1) rotate(0deg); border-radius: 48% 52% 46% 54% / 54% 42% 58% 46%; }
-        33% { transform: scale(1.06) rotate(4deg); border-radius: 56% 44% 52% 48% / 46% 58% 42% 54%; }
-        66% { transform: scale(0.97) rotate(-3deg); border-radius: 45% 55% 57% 43% / 57% 44% 56% 43%; }
+      @keyframes siriFloat {
+        0%, 100% { transform: scale(1) translateY(0); }
+        50% { transform: scale(1.035) translateY(-2px); }
       }
       @keyframes siriHue {
         from { filter: hue-rotate(0deg) saturate(1.15); }
@@ -4582,42 +4631,83 @@
         to { transform: rotate(360deg); }
       }
       .voice-parsed-preview {
-        order: 3;
+        grid-area: preview;
         width: 100%;
-        background: rgba(251, 250, 246, 0.88);
+        max-height: 150px;
+        overflow: auto;
+        background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(18px) saturate(1.2);
         -webkit-backdrop-filter: blur(18px) saturate(1.2);
-        border-radius: 22px;
+        border-radius: 18px;
         box-shadow: 0 16px 46px rgba(0, 0, 0, 0.16);
       }
       body.dark .voice-parsed-preview {
         background: rgba(20, 20, 24, 0.86);
       }
       .voice-confirm-btns {
-        order: 4;
+        grid-area: actions;
         width: 100%;
       }
       .voice-bottom-row {
-        order: 5;
-        width: 230px;
-        justify-content: center;
-        gap: 16px;
+        display: contents;
       }
       .voice-close-btn,
       .voice-retry-btn {
-        background: rgba(251, 250, 246, 0.86);
-        color: var(--text);
-        box-shadow: 0 10px 34px rgba(0, 0, 0, 0.18);
+        position: static;
+        z-index: 1;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(24px) saturate(1.65);
+        -webkit-backdrop-filter: blur(24px) saturate(1.65);
+        background:
+          radial-gradient(circle at 28% 18%, rgba(255,255,255,0.94), transparent 42%),
+          linear-gradient(180deg, rgba(255,255,255,0.82), rgba(238,242,248,0.58));
+        border: 0.5px solid rgba(255, 255, 255, 0.72);
+        color: rgba(20, 22, 28, 0.9);
+        box-shadow:
+          0 16px 38px rgba(0, 0, 0, 0.18),
+          0 1px 0 rgba(255, 255, 255, 0.62),
+          0 0 0 0.5px rgba(255, 255, 255, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.94),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.06),
+          inset 0 0 14px rgba(255, 255, 255, 0.24);
+      }
+      .voice-close-btn {
+        grid-area: close;
+        display: flex;
+      }
+      .voice-retry-btn {
+        grid-area: retry;
+      }
+      .voice-close-btn svg,
+      .voice-retry-btn svg {
+        width: 21px;
+        height: 21px;
+        stroke-width: 3;
+        opacity: 0.88;
+        transform: translateY(0.5px);
+      }
+      .voice-retry-btn svg {
+        width: 22px;
+        height: 22px;
+        stroke-width: 2.7;
       }
       body.dark .voice-close-btn,
       body.dark .voice-retry-btn {
-        background: rgba(28, 28, 32, 0.86);
+        background:
+          radial-gradient(circle at 28% 18%, rgba(255,255,255,0.2), transparent 42%),
+          linear-gradient(180deg, rgba(58, 58, 66, 0.82), rgba(28, 28, 34, 0.64));
+        border-color: rgba(255, 255, 255, 0.13);
         color: #fff;
       }
       .voice-hint {
-        order: 6;
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.82);
+        grid-area: hint;
+        min-height: 16px;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.78);
         text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
       }
       body.dark .voice-panel {
@@ -4630,10 +4720,15 @@
           inset 0 0 30px rgba(255, 255, 255, 0.18);
       }
       @media (max-width: 420px) {
-        .voice-panel { min-height: calc(100vh - 30px); gap: 14px; }
-        .voice-orb-wrap, .voice-orb { width: 200px; height: 200px; }
-        .voice-orb-core { width: 144px; height: 144px; }
-        .voice-bottom-row { width: 200px; }
+        .voice-panel {
+          grid-template-columns: 50px minmax(0, 1fr) 50px;
+          gap: 8px;
+          width: min(94vw, 420px);
+        }
+        .voice-transcript-text { font-size: 17px; }
+        .voice-orb-wrap, .voice-orb, .voice-bottom-row { width: 120px; height: 120px; }
+        .voice-orb-core { width: 90px; height: 90px; }
+        .voice-orb-ring { width: 90px !important; height: 90px !important; }
       }
     </style>
   </head>
@@ -4781,13 +4876,13 @@
             class="voice-action-btn voice-action-save"
             onclick="voiceConfirmSave()"
           >
-            âœ“ Save Bill
+            Save Bill
           </button>
           <button
             class="voice-action-btn voice-action-edit"
             onclick="voiceGoToBill()"
           >
-            âœŽ Edit
+            Edit
           </button>
           <button
             class="voice-action-btn voice-action-cancel"
@@ -12515,10 +12610,10 @@
           if (!S.customers.length) return null;
           let best = null;
           const trigger = text.match(
-            /(?:for|ke liye|k liye|ko|party|customer|cust)\s+([a-z0-9 ]{2,45})/,
+            /(?:for|party|customer|cust|bill to|naam)\s+([a-z0-9 ]{2,45})|([a-z0-9 ]{2,45})\s+(?:ke liye|k liye|ko)/,
           );
           if (trigger) {
-            best = findBestWithScore(trigger[1], S.customers, customerKeys, 0.42);
+            best = findBestWithScore(trigger[1] || trigger[2], S.customers, customerKeys, 0.42);
             if (best && !best.ambiguous) return best.item;
           }
 
@@ -12542,6 +12637,70 @@
           const phrase = cleanProductPhrase(words);
           if (phrase.length < 2 || !S.products.length) return null;
           return findBestWithScore(phrase, S.products, productKeys, 0.5);
+        }
+
+        function isQtyUnitWord(w) {
+          return [
+            "kg",
+            "kilo",
+            "kilogram",
+            "kilograms",
+            "pc",
+            "pcs",
+            "piece",
+            "pieces",
+            "no",
+            "nos",
+            "unit",
+            "units",
+            "bag",
+            "bags",
+            "packet",
+            "packets",
+          ].includes(w);
+        }
+
+        function isLikelyDimensionNumber(tokens, i) {
+          const prev = tokens[i - 1];
+          const next = tokens[i + 1];
+          if (prev === "x" || next === "x") return true;
+          const around = tokens.slice(Math.max(0, i - 2), Math.min(tokens.length, i + 3));
+          return around.some((w) => ["inch", "inches", "mm", "cm", "feet", "ft"].includes(w));
+        }
+
+        function commandBoundaryIndexes(tokens) {
+          const stops = new Set(["for", "party", "customer", "cust", "bill", "discount", "disc", "off", "percent", "chhoot", "choot"]);
+          const cuts = [tokens.length];
+          tokens.forEach((t, i) => {
+            if (stops.has(t)) cuts.push(i);
+            if ((t === "ke" || t === "k") && tokens[i + 1] === "liye") cuts.push(i);
+          });
+          return cuts.sort((a, b) => a - b);
+        }
+
+        function itemQuantityNear(tokens, start, end) {
+          let best = null;
+          for (let i = Math.max(0, start - 4); i < Math.min(tokens.length, end + 5); i++) {
+            const qty = tokenNumber(tokens[i]);
+            if (!qty || isNaN(qty)) continue;
+            const nextFew = tokens.slice(i + 1, i + 3);
+            if (nextFew.some((w) => ["percent", "discount", "disc", "off", "chhoot", "choot"].includes(w))) continue;
+            if (isLikelyDimensionNumber(tokens, i)) continue;
+            const beforeItem = i < start;
+            const afterItem = i >= end;
+            const close = beforeItem ? start - i : i - end + 1;
+            const hasQtyUnit = isQtyUnitWord(tokens[i + 1]) || isQtyUnitWord(tokens[i - 1]);
+            if (afterItem && !hasQtyUnit && close > 2) continue;
+            const score = (beforeItem ? 5 : 3) + (hasQtyUnit ? 3 : 0) - close;
+            if (!best || score > best.score) {
+              best = {
+                qty,
+                type: ["kg", "kilo", "kilogram", "kilograms"].includes(tokens[i + 1]) ? "kg" : "pc",
+                score,
+              };
+            }
+          }
+          return best || { qty: 1, type: "pc", score: 0 };
         }
 
         // Word-to-number parser â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -12579,70 +12738,34 @@
           result.customer = findCustomerAnywhere(text);
 
           const seen = new Set();
-          tokens.forEach((tok, i) => {
-            const qty = tokenNumber(tok);
-            if (!qty || isNaN(qty)) return;
-            const around = tokens.slice(Math.max(0, i - 5), Math.min(tokens.length, i + 6));
-            const nextFew = tokens.slice(i + 1, i + 3);
-            if (nextFew.some((w) => ["percent", "discount", "disc", "off", "chhoot", "choot"].includes(w))) return;
-            if (tokens[i - 1] === "x" || tokens[i + 1] === "x") return;
-            let priorProductHit = scoreProductSpan(tokens.slice(Math.max(0, i - 3), i + 1));
-            for (let dimLen = 2; dimLen <= 4; dimLen++) {
-              const dimHit = scoreProductSpan(tokens.slice(Math.max(0, i - dimLen + 1), i + 1));
-              if (dimHit && (!priorProductHit || dimHit.score > priorProductHit.score)) priorProductHit = dimHit;
-            }
-            if (priorProductHit && priorProductHit.score >= 0.85 && !isUnitWord(tokens[i + 1])) return;
-
-            let type = "pc";
-            let startAfter = i + 1;
-            if (isUnitWord(tokens[i + 1])) {
-              type = ["kg", "kilo", "kilogram", "kilograms"].includes(tokens[i + 1]) ? "kg" : "pc";
-              startAfter = i + 2;
-            }
-
-            const spans = [];
-            for (let len = 1; len <= 5; len++) {
-              spans.push(tokens.slice(startAfter, startAfter + len));
-              spans.push(tokens.slice(Math.max(0, i - len), i));
-            }
-            let best = null;
-            spans.forEach((span) => {
+          const boundaries = commandBoundaryIndexes(tokens);
+          for (let i = 0; i < tokens.length; i++) {
+            if (isFillerWord(tokens[i])) continue;
+            for (let len = 1; len <= Math.min(7, tokens.length - i); len++) {
+              const end = i + len;
+              if (boundaries.some((cut) => cut > i && cut < end)) break;
+              const span = tokens.slice(i, end);
+              if (span.some((w, idx) => !isNaN(tokenNumber(w)) && !isLikelyDimensionNumber(span, idx))) continue;
               const hit = scoreProductSpan(span);
-              if (hit && (!best || hit.score > best.score)) best = hit;
-            });
-            if (!best) return;
-            if (best.ambiguous) result.uncertain.push(cleanProductPhrase(around));
-            const prod = best.item;
-            if (prod && !seen.has(prod.id)) {
+              if (!hit || hit.ambiguous) continue;
+              const prod = hit.item;
+              if (!prod || seen.has(prod.id)) continue;
+              const qtyInfo = itemQuantityNear(tokens, i, end);
               seen.add(prod.id);
               result.items.push({
                 product: prod,
-                qty,
-                type,
+                qty: qtyInfo.qty,
+                type: qtyInfo.type || prod.type || "pc",
                 discPct,
-                raw: best.key,
+                raw: hit.key,
+                score: hit.score + qtyInfo.score * 0.01,
               });
-            }
-          });
-
-          if (!result.items.length && S.products.length) {
-            let best = null;
-            for (let i = 0; i < tokens.length; i++) {
-              for (let len = 1; len <= Math.min(5, tokens.length - i); len++) {
-                const hit = scoreProductSpan(tokens.slice(i, i + len));
-                if (hit && (!best || hit.score > best.score)) best = hit;
-              }
-            }
-            if (best && !best.ambiguous) {
-              result.items.push({
-                product: best.item,
-                qty: 1,
-                type: best.item.type || "pc",
-                discPct,
-                raw: best.key,
-              });
+              i = end - 1;
+              break;
             }
           }
+
+          result.items.sort((a, b) => (b.score || 0) - (a.score || 0));
 
           return result;
         }
@@ -12699,7 +12822,7 @@
           if (parsed.customer) {
             html += `<div class="vp-row"><span class="vp-label">Customer</span><span class="vp-val">${esc(parsed.customer.name)}</span></div>`;
           } else {
-            html += `<div class="vp-row"><span class="vp-label">Customer</span><span class="vp-miss">Not found â€” tap Edit</span></div>`;
+            html += `<div class="vp-row"><span class="vp-label">Customer</span><span class="vp-miss">Not found - tap Edit</span></div>`;
           }
           if (parsed.items.length) {
             parsed.items.forEach((it) => {
@@ -12712,10 +12835,10 @@
                     (1 - (it.discPct || 0) / 100)
                   ).toFixed(2)
                 : "?";
-              html += `<div class="vp-row"><span class="vp-label">Item</span><span class="vp-val">${esc(pName)}</span><span style="color:var(--muted);font-size:12px;margin-left:auto">${it.qty} ${it.type} Â· â‚¹${amt}</span></div>`;
+              html += `<div class="vp-row"><span class="vp-label">Item</span><span class="vp-val">${esc(pName)}</span><span style="color:var(--muted);font-size:12px;margin-left:auto">${it.qty} ${it.type} - Rs ${amt}</span></div>`;
             });
           } else {
-            html += `<div class="vp-row"><span class="vp-label">Items</span><span class="vp-miss">None found â€” tap Edit</span></div>`;
+            html += `<div class="vp-row"><span class="vp-label">Items</span><span class="vp-miss">None found - tap Edit</span></div>`;
           }
           if (parsed.discount > 0) {
             html += `<div class="vp-row"><span class="vp-label">Discount</span><span class="vp-val">${parsed.discount}%</span></div>`;
@@ -12769,7 +12892,7 @@
           r.onstart = () => {
             VB.listening = true;
             setOrbState("listening");
-            setHint("Bol rahe hoâ€¦ (speak now)");
+            setHint("Listening... speak now");
             setTranscript("", false);
           };
 
@@ -12804,7 +12927,7 @@
             if (VB.lastTranscript) {
               processTranscript(VB.lastTranscript);
             } else {
-              setHint("Kuch suna nahi â€” phir se try karo");
+              setHint("Kuch suna nahi - phir se try karo");
               showRetry(true);
             }
           };
@@ -12813,10 +12936,10 @@
             VB.listening = false;
             setOrbState("error");
             const msgs = {
-              "no-speech": "Awaaz nahi aayi â€” phir tap karo",
+              "no-speech": "Awaaz nahi aayi - phir tap karo",
               "not-allowed":
-                "Mic permission chahiye â€” browser settings check karo",
-              network: "Network error â€” offline mode mein kaam nahi karta",
+                "Mic permission chahiye - browser settings check karo",
+              network: "Network error - offline mode mein kaam nahi karta",
               aborted: "Ruk gaya",
             };
             setHint(msgs[e.error] || "Error: " + e.error);
@@ -12829,7 +12952,7 @@
 
         function processTranscript(raw) {
           setTranscript(raw, false);
-          setHint("Samajh raha hoonâ€¦");
+          setHint("Samajh raha hoon...");
           setOrbState("thinking");
           const parsed = parseBillCommand(raw);
           VB.parsed = parsed;
@@ -12841,7 +12964,7 @@
 
           if (!hasCustomer && !hasItems) {
             setHint(
-              'Kuch samajh nahi aaya â€” example: "2 manhole XYZ ke liye 10 percent discount"',
+              'Kuch samajh nahi aaya - example: "2 manhole XYZ ke liye 10 percent discount"',
             );
             setOrbState("error");
             showRetry(true);
@@ -12852,13 +12975,13 @@
           showRetry(true);
 
           if (hasCustomer && hasItems) {
-            setHint("Bill ready hai â€” confirm karein?");
+            setHint("Bill ready hai - confirm karein?");
             setOrbState("ready");
           } else if (!hasCustomer) {
-            setHint("Customer nahi mila â€” Edit mein select karo");
+            setHint("Customer nahi mila - Edit mein select karo");
             setOrbState("error");
           } else {
-            setHint("Items nahi mile â€” Edit mein add karo");
+            setHint("Items nahi mile - Edit mein add karo");
             setOrbState("error");
           }
         }
@@ -12921,8 +13044,8 @@
           // Reset state
           VB.lastTranscript = "";
           VB.parsed = null;
-          setTranscript("Bolo apna billâ€¦", true);
-          setHint("Tap mic to start Â· Hindi & English supported");
+          setTranscript("Bolo apna bill...", true);
+          setHint("Tap mic to start - Hindi & English supported");
           showConfirmBtns(false);
           showRetry(false);
           setOrbState("idle");
@@ -12960,7 +13083,7 @@
           // fresh recognition each time (more reliable cross-browser)
           VB.recognition = initSpeech();
           if (!VB.recognition) {
-            setHint("Voice not supported â€” use Chrome");
+            setHint("Voice not supported - use Chrome");
             return;
           }
           VB.lastTranscript = "";
@@ -12981,7 +13104,7 @@
           VB.parsed = null;
           showConfirmBtns(false);
           showRetry(false);
-          setTranscript("Bolo apna billâ€¦", true);
+          setTranscript("Bolo apna bill...", true);
           setHint("Tap mic to start");
           document
             .getElementById("voice-parsed-preview")
@@ -12996,13 +13119,13 @@
           setTimeout(() => {
             acceptBill();
           }, 300);
-          showToast("âœ… Voice bill saved!");
+          showToast("Voice bill saved!");
         };
 
         window.voiceGoToBill = function () {
           applyParsedToBill();
           closeVoiceBill();
-          showToast("Bill ready â€” review karo");
+          showToast("Bill ready - review karo");
         };
 
         window.voiceAddMore = function () {
@@ -13011,7 +13134,7 @@
           showConfirmBtns(false);
           showRetry(false);
           setTranscript("", false);
-          setHint("Aur items boloâ€¦");
+          setHint("Aur items bolo...");
           const prev = VB.parsed;
           // start fresh recognition
           VB.recognition = initSpeech();
@@ -13032,7 +13155,7 @@
                 showParsed(VB.parsed);
                 showConfirmBtns(true);
                 showRetry(true);
-                setHint("Items added â€” confirm karein?");
+                setHint("Items added - confirm karein?");
               }
             };
           })(VB.recognition.onend);
@@ -13046,13 +13169,3 @@
     </script>
   </body>
 </html>
-
-
-
-
-
-
-
-
-
-
