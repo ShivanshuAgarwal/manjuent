@@ -5367,6 +5367,7 @@
           <div class="premium-kicker" id="gw-date-display">Today</div>
           <div class="premium-title">Manju<br />Enterprises</div>
           <div class="premium-total" id="hero-month-total" style="font-size:clamp(44px,12vw,64px);letter-spacing:-2px">0</div>
+          <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:4px" id="hero-month-count">bills this month</div>
           <div class="hero-chart-wrap liquid-card">
             <div class="chart-tooltip liquid-card" id="hero-chart-tooltip">
               <div class="chart-tip-date">Today</div>
@@ -8992,10 +8993,7 @@
         animateNumber("hero-month-total", monthBills.length);
         if (el("hero-month-count"))
           el("hero-month-count").textContent =
-            monthBills.length +
-            " bill" +
-            (monthBills.length !== 1 ? "s" : "") +
-            " this month";
+            monthBills.length === 1 ? "bill this month" : "bills this month";
         if (el("hero-month-revenue"))
           el("hero-month-revenue").textContent = fmt(monthTotal);
         if (el("hero-growth"))
