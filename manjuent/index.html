@@ -12823,6 +12823,7 @@
           wakePaused: false,
           wakeArmed: false,
           wakeRetryTimer: null,
+          skipAutoListenOnce: false,
           lastTranscript: "",
           parsed: null,
           phase: "idle", // idle | listening | parsed | confirmed
@@ -13421,7 +13422,7 @@
           customerCandidatePhrases(text).forEach(({ phrase, boost }) => {
             const words = phrase.split(/\s+/).filter(Boolean);
             if (!words.length) return;
-            const minScore = words.length <= 1 ? 0.58 : 0.4;
+            const minScore = words.length <= 1 ? 0.66 : 0.43;
             const hit = findBestWithScore(phrase, S.customers, customerKeys, minScore);
             if (!hit) return;
             const keyWords = normalize(hit.key).split(/\s+/).filter(Boolean);
@@ -13440,7 +13441,7 @@
               (strongPrefix ? 0.12 : 0);
             if (!best || score > best.score) best = { ...hit, score };
           });
-          if (best && best.ambiguous && best.score >= 0.82) best.ambiguous = false;
+          if (best && best.ambiguous && best.score >= 0.9) best.ambiguous = false;
           return best && !best.ambiguous ? best.item : null;
         }
 
@@ -13857,6 +13858,29 @@
           );
         }
 
+        function stripWakeWords(text) {
+          return speechNormalize(text)
+            .replace(
+              /\b(?:hey|he|ok|okay|jai|jaya|shree|shri|hare|bolo|sun|suno|start|chalu|chaloo|open)?\s*(?:radhe|raadhe|radhey|radhay|rade|raday|radha|radhika|shyam|krishna|kanha|kanhaiya|govind|gopal|mohan|hari|hare)\b/g,
+              " ",
+            )
+            .replace(/\s+/g, " ")
+            .trim();
+        }
+
+        function hasBillLikeSpeech(text) {
+          const cleaned = stripWakeWords(text);
+          if (cleaned.length < 3) return false;
+          const tokens = cleaned.split(/\s+/).filter(Boolean);
+          if (tokens.some((t) => !isNaN(tokenNumber(t)))) return true;
+          if (/\b(?:bill|party|customer|cust|for|ke liye|k liye|discount|disc|chhoot|choot|percent|kg|kilo|pcs|piece|no|nos)\b/.test(cleaned))
+            return true;
+          return (
+            findBestWithScore(cleaned, S.products, productKeys, 0.72) ||
+            findBestWithScore(cleaned, S.customers, customerKeys, 0.72)
+          );
+        }
+
         function scheduleWakeRestart(delay) {
           clearTimeout(VB.wakeRetryTimer);
           VB.wakeRetryTimer = setTimeout(startWakeListener, delay || 900);
@@ -13883,13 +13907,20 @@
             for (let i = e.resultIndex; i < e.results.length; i++) {
               const heard = Array.from(e.results[i]).map((alt) => alt.transcript).join(" ");
               if (wakeHotwordHeard(heard)) {
+                const commandAfterWake = stripWakeWords(heard);
                 VB.wakePaused = true;
                 try { r.abort(); } catch (err) {}
+                if (hasBillLikeSpeech(heard)) VB.skipAutoListenOnce = true;
                 openVoiceBill();
-                setHint("Radhe heard - listening...");
-                setTimeout(() => {
-                  if (!VB.listening) toggleVoiceListening();
-                }, 280);
+                if (hasBillLikeSpeech(heard)) {
+                  setHint("Radhe heard - command samajh raha hoon...");
+                  setTimeout(() => processTranscript(commandAfterWake), 260);
+                } else {
+                  setHint("Radhe heard - listening...");
+                  setTimeout(() => {
+                    if (!VB.listening) toggleVoiceListening();
+                  }, 280);
+                }
                 break;
               }
             }
@@ -14026,6 +14057,10 @@
           overlay.classList.add("show");
           document.body.style.overflow = "hidden";
           setTimeout(() => {
+            if (VB.skipAutoListenOnce) {
+              VB.skipAutoListenOnce = false;
+              return;
+            }
             if (!VB.listening) toggleVoiceListening();
           }, 220);
         };
