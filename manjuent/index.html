@@ -3251,8 +3251,8 @@
       .kpi-card {
         position: relative;
         border-radius: 24px;
-        padding: 15px;
-        min-height: 124px;
+        padding: 15px 15px 50px;
+        min-height: 130px;
         overflow: hidden;
         animation: fadeUp 0.52s var(--ease-out) both;
         transition:
@@ -4699,67 +4699,38 @@
         height: 102px;
         border-radius: 50%;
         background:
-          radial-gradient(
-            circle at 34% 22%,
-            rgba(255, 255, 255, 0.98) 0 10%,
-            transparent 22%
-          ),
-          radial-gradient(
-            circle at 76% 30%,
-            rgba(67, 217, 255, 0.95) 0 20%,
-            transparent 42%
-          ),
-          radial-gradient(
-            circle at 24% 76%,
-            rgba(255, 45, 117, 0.98) 0 23%,
-            transparent 45%
-          ),
-          radial-gradient(
-            circle at 72% 78%,
-            rgba(255, 214, 10, 0.92) 0 18%,
-            transparent 40%
-          ),
-          radial-gradient(
-            circle at 50% 50%,
-            #4b6fff 0,
-            #8338ec 48%,
-            #16181f 100%
-          );
+          radial-gradient(circle at 32% 20%, rgba(255, 255, 255, 0.98) 0 9%, transparent 24%),
+          radial-gradient(circle at 68% 28%, rgba(94, 200, 255, 0.72) 0 22%, transparent 48%),
+          radial-gradient(circle at 28% 72%, rgba(255, 113, 176, 0.68) 0 22%, transparent 50%),
+          radial-gradient(circle at 72% 76%, rgba(112, 255, 214, 0.48) 0 18%, transparent 44%),
+          linear-gradient(145deg, #f7fbff 0%, #bde9ff 24%, #668cff 56%, #1c1d2f 100%);
         box-shadow:
-          0 12px 38px rgba(0, 0, 0, 0.34),
-          0 0 34px rgba(80, 180, 255, 0.38),
-          inset 0 0 22px rgba(255, 255, 255, 0.22),
-          inset 0 -18px 26px rgba(0, 0, 0, 0.24);
+          0 18px 54px rgba(0, 0, 0, 0.28),
+          0 0 38px rgba(77, 184, 255, 0.3),
+          inset 0 1px 10px rgba(255, 255, 255, 0.92),
+          inset 0 -20px 32px rgba(22, 26, 42, 0.28);
         overflow: hidden;
         animation:
-          siriFloat 4.8s ease-in-out infinite,
-          siriHue 10s linear infinite;
+          siriFloat 5.4s ease-in-out infinite,
+          siriHue 14s linear infinite;
       }
       .voice-orb-core::before,
       .voice-orb-core::after {
         content: "";
         position: absolute;
-        inset: 16px 9px;
-        border-radius: 50%;
-        background: conic-gradient(
-          from 70deg,
-          transparent,
-          rgba(255, 255, 255, 0.86),
-          rgba(87, 215, 255, 0.68),
-          transparent,
-          rgba(255, 70, 150, 0.72),
-          transparent
-        );
-        filter: blur(7px);
+        inset: 14px 10px;
+        border-radius: 44% 56% 52% 48% / 48% 42% 58% 52%;
+        background: conic-gradient(from 90deg, transparent, rgba(255, 255, 255, 0.78), rgba(116, 215, 255, 0.5), transparent, rgba(255, 130, 190, 0.48), transparent);
+        filter: blur(8px);
         mix-blend-mode: screen;
-        opacity: 0.72;
-        animation: siriSpin 6.5s linear infinite;
+        opacity: 0.62;
+        animation: siriSpin 9s linear infinite;
       }
       .voice-orb-core::after {
-        inset: 24px 17px;
-        opacity: 0.48;
-        filter: blur(9px);
-        animation-duration: 9s;
+        inset: 26px 18px;
+        opacity: 0.4;
+        filter: blur(12px);
+        animation-duration: 13s;
         animation-direction: reverse;
       }
       .voice-orb-core svg {
@@ -4769,27 +4740,19 @@
       .voice-orb::after {
         content: "";
         position: absolute;
-        inset: 17px;
-        border-radius: 46% 54% 50% 50% / 48% 46% 54% 52%;
-        background: conic-gradient(
-          from 180deg,
-          #0a84ff,
-          #64d2ff,
-          #bf5af2,
-          #ff375f,
-          #ffd60a,
-          #0a84ff
-        );
-        filter: blur(12px);
-        opacity: 0.38;
+        inset: 18px;
+        border-radius: 45% 55% 51% 49% / 48% 44% 56% 52%;
+        background: conic-gradient(from 180deg, rgba(10, 132, 255, 0.92), rgba(100, 210, 255, 0.75), rgba(255, 125, 190, 0.72), rgba(48, 209, 88, 0.44), rgba(10, 132, 255, 0.92));
+        filter: blur(16px);
+        opacity: 0.3;
         z-index: -1;
-        animation: siriSpin 7s linear infinite;
+        animation: siriSpin 10s linear infinite;
       }
       .voice-orb::after {
-        inset: 25px;
-        opacity: 0.26;
-        filter: blur(20px);
-        animation-duration: 11s;
+        inset: 28px;
+        opacity: 0.2;
+        filter: blur(24px);
+        animation-duration: 15s;
         animation-direction: reverse;
       }
       .voice-orb-ring {
@@ -5406,11 +5369,6 @@
           <div class="premium-kicker" id="gw-date-display">Today</div>
           <div class="premium-title">Manju<br />Enterprises</div>
           <div class="premium-total" id="hero-month-total" style="font-size:clamp(44px,12vw,64px);letter-spacing:-2px">0</div>
-          <div class="premium-subrow">
-            <span id="hero-month-count">bills this month</span>
-            <span class="growth-pill" id="hero-growth">+0.0%</span>
-          </div>
-          <div style="margin-top:6px;font-family:var(--mono);font-size:clamp(18px,5vw,26px);font-weight:700;color:var(--text2);opacity:0.75" id="hero-month-revenue">&#8377;0</div>
           <div class="hero-chart-wrap liquid-card">
             <div class="chart-tooltip liquid-card" id="hero-chart-tooltip">
               <div class="chart-tip-date">Today</div>
@@ -5475,13 +5433,13 @@
           <div class="kpi-card liquid-card" onclick="openBillsFilter('delivered')" id="kpi-delivered-card" style="cursor:pointer">
             <div class="kpi-label" style="color:var(--success)">Delivered</div>
             <div class="kpi-value" id="kpi-delivered" style="color:var(--success)">0</div>
-            <div class="kpi-note" id="kpi-delivered-note">bills delivered</div>
+            <div class="kpi-note" id="kpi-delivered-note">0 bills delivered</div>
             <canvas class="sparkline" id="spark-average"></canvas>
           </div>
           <div class="kpi-card liquid-card" onclick="openBillsFilter('pending')" id="kpi-pending-card" style="cursor:pointer">
             <div class="kpi-label" style="color:var(--warn)">Pending</div>
             <div class="kpi-value" id="kpi-pending" style="color:var(--warn)">0</div>
-            <div class="kpi-note" id="kpi-pending-note">awaiting delivery</div>
+            <div class="kpi-note" id="kpi-pending-note">0 bills pending</div>
             <canvas class="sparkline" id="spark-unpaid"></canvas>
           </div>
         </section>
@@ -7088,7 +7046,7 @@
             class="nav-btn"
             id="delivery-toggle-btn"
             onclick="toggleCurrentBillDelivered()"
-            style="font-size: 12px; font-weight: 600"
+            style="font-size: 12px; font-weight: 600; display:none"
           >
             Mark Delivered
           </button>
@@ -7099,7 +7057,7 @@
         style="
           overflow-y: auto;
           -webkit-overflow-scrolling: touch;
-          padding-bottom: 88px;
+          padding-bottom: 100px;
         "
       >
         <div
@@ -7201,6 +7159,14 @@
             </svg>
           </div>
           <div class="label">Repeat</div>
+        </div>
+        <div class="bottom-action" id="deliver-bottom-btn" onclick="toggleCurrentBillDelivered()" style="--ba-color: var(--success)">
+          <div class="icon" id="deliver-bottom-icon" style="color:var(--success)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <div class="label" id="deliver-bottom-label" style="color:var(--success)">Deliver</div>
         </div>
         <div class="bottom-action primary" onclick="editBillFromDetail()">
           <div class="icon">
@@ -10179,6 +10145,23 @@
             deliveryBtn.style.opacity = "1";
           }
         }
+        // Update bottom-bar deliver button
+        const deliverBottomIcon = document.getElementById("deliver-bottom-icon");
+        const deliverBottomLabel = document.getElementById("deliver-bottom-label");
+        const deliverBottomBtn = document.getElementById("deliver-bottom-btn");
+        if (deliverBottomLabel && deliverBottomIcon && deliverBottomBtn) {
+          if (b.delivered) {
+            deliverBottomIcon.style.color = "var(--warn)";
+            deliverBottomLabel.style.color = "var(--warn)";
+            deliverBottomLabel.textContent = "Pending";
+            deliverBottomBtn.style.setProperty("--ba-color", "var(--warn)");
+          } else {
+            deliverBottomIcon.style.color = "var(--success)";
+            deliverBottomLabel.style.color = "var(--success)";
+            deliverBottomLabel.textContent = "Deliver";
+            deliverBottomBtn.style.setProperty("--ba-color", "var(--success)");
+          }
+        }
 
         document.getElementById("del-bill-btn").onclick = () => {
           if (confirm("Delete bill #" + b.invno + "?")) {
@@ -10226,6 +10209,20 @@
         if (deliveryBtn && !b.delivered) {
           deliveryBtn.style.color = "var(--success)";
           deliveryBtn.style.opacity = "1";
+        }
+        // Refresh the bottom-bar deliver button
+        const deliverBottomLabel = document.getElementById("deliver-bottom-label");
+        const deliverBottomIcon = document.getElementById("deliver-bottom-icon");
+        if (deliverBottomLabel && deliverBottomIcon) {
+          if (b.delivered) {
+            deliverBottomIcon.style.color = "var(--warn)";
+            deliverBottomLabel.style.color = "var(--warn)";
+            deliverBottomLabel.textContent = "Pending";
+          } else {
+            deliverBottomIcon.style.color = "var(--success)";
+            deliverBottomLabel.style.color = "var(--success)";
+            deliverBottomLabel.textContent = "Deliver";
+          }
         }
         const msg = b.delivered
           ? "Bill marked delivered"
@@ -10426,7 +10423,7 @@
           .reduce((s, b) => s + (b.grand || 0), 0);
         const unpaid = total - paid;
 
-        const fmt = (v) => "&#8377;" + v.toFixed(2);
+        const fmt = (v) => "₹" + v.toFixed(2);
         const el = (id) => document.getElementById(id);
         if (el("rpt-total")) el("rpt-total").textContent = fmt(total);
         if (el("rpt-bill-count"))
@@ -12235,7 +12232,7 @@
           const total = data.reduce((s, d) => s + d.value, 0);
           lbl.textContent =
             total > 0
-              ? "7-day total: &#8377;" + total.toFixed(0)
+              ? "7-day total: ₹" + total.toFixed(0)
               : "No sales this week";
         }
       }
@@ -12281,7 +12278,7 @@
               d.label +
               " (" +
               d.date.slice(5) +
-              ") - &#8377;" +
+              ") - ₹" +
               d.value.toFixed(0);
           // Redraw with highlight
           const dpr = window.devicePixelRatio || 1;
@@ -12316,7 +12313,7 @@
             const total = data.reduce((s, d) => s + d.value, 0);
             lbl.textContent =
               total > 0
-                ? "7-day total: &#8377;" + total.toFixed(0)
+                ? "7-day total: ₹" + total.toFixed(0)
                 : "No sales this week";
           }
           renderBarChart();
@@ -12830,7 +12827,10 @@
       (function () {
         const VB = {
           recognition: null,
+          wakeRecognition: null,
           listening: false,
+          wakeListening: false,
+          wakePaused: false,
           lastTranscript: "",
           parsed: null,
           phase: "idle", // idle | listening | parsed | confirmed
@@ -13082,51 +13082,42 @@
         function speechNormalize(raw) {
           return normalize(
             String(raw || "")
-              .replace(/[०-९]/g, (d) => "०१२३४५६७८९".indexOf(d))
-              .replace(/ग्राहक|कस्टमर/g, " customer ")
-              .replace(/पार्टी/g, " party ")
-              .replace(/रवि/g, " ravi ")
-              .replace(/जय|जया/g, " jaya ")
-              .replace(/लक्ष्मी/g, " lakshmi ")
-              .replace(/स्टोर्स?|स्टोर/g, " stores ")
-              .replace(/ट्रेडर्स?|ट्रेडर/g, " traders ")
-              .replace(/एंटरप्राइजेज|एंटरप्राइज/g, " enterprises ")
-              .replace(/नाम/g, " naam ")
-              .replace(/बिल/g, " bill ")
-              .replace(/लिए|लिये/g, " liye ")
-              .replace(/को/g, " ko ")
-              .replace(/के/g, " ke ")
-              .replace(/का|की/g, " ka ")
+              .replace(/[\u0966-\u096f]/g, (d) => "\u0966\u0967\u0968\u0969\u096a\u096b\u096c\u096d\u096e\u096f".indexOf(d))
+              .replace(/\u0917\u094d\u0930\u093e\u0939\u0915|\u0915\u0938\u094d\u091f\u092e\u0930/g, " customer ")
+              .replace(/\u092a\u093e\u0930\u094d\u091f\u0940/g, " party ")
+              .replace(/\u0930\u0935\u093f/g, " ravi ")
+              .replace(/\u091c\u092f|\u091c\u092f\u093e/g, " jaya ")
+              .replace(/\u0932\u0915\u094d\u0937\u094d\u092e\u0940/g, " lakshmi ")
+              .replace(/\u0938\u094d\u091f\u094b\u0930\u094d\u0938?|\u0938\u094d\u091f\u094b\u0930/g, " stores ")
+              .replace(/\u091f\u094d\u0930\u0947\u0921\u0930\u094d\u0938?|\u091f\u094d\u0930\u0947\u0921\u0930/g, " traders ")
+              .replace(/\u090f\u0902\u091f\u0930\u092a\u094d\u0930\u093e\u0907\u091c\u0947\u091c|\u090f\u0902\u091f\u0930\u092a\u094d\u0930\u093e\u0907\u091c/g, " enterprises ")
+              .replace(/\u0928\u093e\u092e/g, " naam ")
+              .replace(/\u092c\u093f\u0932/g, " bill ")
+              .replace(/\u0932\u093f\u090f|\u0932\u093f\u092f\u0947/g, " liye ")
+              .replace(/\u0915\u094b/g, " ko ")
+              .replace(/\u0915\u0947/g, " ke ")
+              .replace(/\u0915\u093e|\u0915\u0940/g, " ka ")
+              .replace(/\u090f\u092b\s*\u0906\u0930\s*\u092a\u0940/g, " frp ")
+              .replace(/\u090f\u092b\u0906\u0930\u092a\u0940/g, " frp ")
+              .replace(/\u092c\u093e\u0930\u0939/g, " 12 ")
+              .replace(/\u0917\u094d\u092f\u093e\u0930\u0939/g, " 11 ")
+              .replace(/\u0926\u0938/g, " 10 ")
+              .replace(/\u0928\u094c/g, " 9 ")
+              .replace(/\u0906\u0920/g, " 8 ")
+              .replace(/\u0938\u093e\u0924/g, " 7 ")
+              .replace(/\u091b\u0939/g, " 6 ")
+              .replace(/\u092a\u093e\u0902\u091a|\u092a\u093e\u0901\u091a/g, " 5 ")
+              .replace(/\u091a\u093e\u0930/g, " 4 ")
+              .replace(/\u0924\u0940\u0928/g, " 3 ")
+              .replace(/\u0926\u094b/g, " 2 ")
+              .replace(/\u090f\u0915/g, " 1 ")
               .replace(/\b(per cent|percentage)\b/gi, " percent ")
-              .replace(
-                /\b(custmer|costumer|kastmar|kashtamar|party name)\b/gi,
-                " customer ",
-              )
-              .replace(
-                /\b(billed to|bill 2|bill too|made for|make for)\b/gi,
-                " bill to ",
-              )
-              .replace(
-                /\b(k naam se|ke naam se|naam se|ke nam se|k nam se)\b/gi,
-                " ke liye ",
-              )
+              .replace(/\b(custmer|costumer|kastmar|kashtamar|party name)\b/gi, " customer ")
+              .replace(/\b(billed to|bill 2|bill too|made for|make for)\b/gi, " bill to ")
+              .replace(/\b(k naam se|ke naam se|naam se|ke nam se|k nam se)\b/gi, " ke liye ")
               .replace(/\b(by|into|cross)\b/gi, " x ")
               .replace(/\bf\s*r\s*p\b/gi, " frp ")
               .replace(/\b(fiber|fibre)\b/gi, " frp ")
-              .replace(/एफ\s*आर\s*पी/g, " frp ")
-              .replace(/एफआरपी/g, " frp ")
-              .replace(/बारह/g, " 12 ")
-              .replace(/ग्यारह/g, " 11 ")
-              .replace(/दस/g, " 10 ")
-              .replace(/नौ/g, " 9 ")
-              .replace(/आठ/g, " 8 ")
-              .replace(/सात/g, " 7 ")
-              .replace(/छह/g, " 6 ")
-              .replace(/पांच|पाँच/g, " 5 ")
-              .replace(/चार/g, " 4 ")
-              .replace(/तीन/g, " 3 ")
-              .replace(/दो/g, " 2 ")
-              .replace(/एक/g, " 1 ")
               .replace(/\b(twelve|barah)\b/gi, " 12 ")
               .replace(/\b(eleven|gyarah)\b/gi, " 11 ")
               .replace(/\b(ten|das)\b/gi, " 10 ")
@@ -13326,21 +13317,36 @@
         function findCustomerAnywhere(text) {
           if (!S.customers.length) return null;
           let best = null;
+          const cleanedText = stripProductAndQtyNoise(text);
+          const commandText = " " + normalize(text) + " ";
+          const strippedText = " " + normalize(cleanedText) + " ";
+
+          S.customers.forEach((customer) => {
+            customerKeys(customer)
+              .filter((key) => key.length >= 3)
+              .forEach((key) => {
+                const keyPattern = key
+                  .replace(/[.*+?^${}()|[\]\\]/g, "\$&")
+                  .replace(/\s+/g, "\\s+");
+                const rx = new RegExp("\\b" + keyPattern + "\\b");
+                if (!rx.test(commandText) && !rx.test(strippedText)) return;
+                const score = 1.04 + Math.min(key.length / 80, 0.08);
+                if (!best || score > best.score) {
+                  best = { item: customer, score, key, ambiguous: false };
+                }
+              });
+          });
+
           customerCandidatePhrases(text).forEach(({ phrase, boost }) => {
-            const minScore = phrase.split(/\s+/).length <= 1 ? 0.68 : 0.46;
-            const hit = findBestWithScore(
-              phrase,
-              S.customers,
-              customerKeys,
-              minScore,
-            );
+            const words = phrase.split(/\s+/).filter(Boolean);
+            if (!words.length) return;
+            const minScore = words.length <= 1 ? 0.66 : 0.43;
+            const hit = findBestWithScore(phrase, S.customers, customerKeys, minScore);
             if (!hit) return;
-            const score = hit.score + boost;
+            const score = hit.score + boost + Math.min(words.length, 4) * 0.015;
             if (!best || score > best.score) best = { ...hit, score };
           });
-          if (best && best.ambiguous && best.score >= 0.92) {
-            best.ambiguous = false;
-          }
+          if (best && best.ambiguous && best.score >= 0.9) best.ambiguous = false;
           return best && !best.ambiguous ? best.item : null;
         }
 
@@ -13721,6 +13727,46 @@
           return r;
         }
 
+
+        function startWakeListener() {
+          const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (!SpeechRecognition || VB.wakeListening || VB.listening) return;
+          const r = new SpeechRecognition();
+          r.continuous = true;
+          r.interimResults = true;
+          r.lang = "hi-IN";
+          r.maxAlternatives = 2;
+          VB.wakeRecognition = r;
+          r.onstart = () => { VB.wakeListening = true; };
+          r.onresult = (e) => {
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+              const heard = Array.from(e.results[i]).map((alt) => speechNormalize(alt.transcript)).join(" ");
+              if (/\b(?:hey|he|ok|okay)?\s*(?:radhe|raadhe|rade|raday|radhey)\b/.test(heard)) {
+                VB.wakePaused = true;
+                try { r.abort(); } catch (err) {}
+                openVoiceBill();
+                setHint("Hey Radhe heard - listening...");
+                setTimeout(() => toggleVoiceListening(), 280);
+                break;
+              }
+            }
+          };
+          r.onerror = () => { VB.wakeListening = false; };
+          r.onend = () => {
+            VB.wakeListening = false;
+            if (!VB.wakePaused) setTimeout(startWakeListener, 900);
+            VB.wakePaused = false;
+          };
+          try { r.start(); } catch (e) {}
+        }
+
+        function armWakeListenerAfterGesture() {
+          const arm = () => startWakeListener();
+          ["click", "keydown", "touchstart"].forEach((evt) => {
+            document.addEventListener(evt, arm, { once: true, passive: true });
+          });
+        }
+
         function processTranscript(raw) {
           setTranscript(raw, false);
           setHint("Samajh raha hoon...");
@@ -13816,7 +13862,7 @@
           VB.lastTranscript = "";
           VB.parsed = null;
           setTranscript("Bolo apna bill...", true);
-          setHint("Tap mic to start - Hindi & English supported");
+          setHint("Tap mic, or say Hey Radhe after mic permission is active");
           showConfirmBtns(false);
           showRetry(false);
           setOrbState("idle");
@@ -13838,6 +13884,7 @@
           }
           VB.listening = false;
           setOrbState("idle");
+          setTimeout(startWakeListener, 700);
         };
 
         window.voiceOverlayBgClick = function (e) {
@@ -13852,6 +13899,10 @@
             return;
           }
           // fresh recognition each time (more reliable cross-browser)
+          if (VB.wakeRecognition && VB.wakeListening) {
+            VB.wakePaused = true;
+            try { VB.wakeRecognition.abort(); } catch (e) {}
+          }
           VB.recognition = initSpeech();
           if (!VB.recognition) {
             setHint("Voice not supported - use Chrome");
@@ -13936,6 +13987,8 @@
             setHint("Mic error: " + e.message);
           }
         };
+
+        armWakeListenerAfterGesture();
       })();
     </script>
   </body>
