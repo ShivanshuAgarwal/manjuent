@@ -4118,6 +4118,225 @@
           bottom: 16px !important;
         }
       }
+
+      /* ================================================================
+         VOICE BILL ASSISTANT — SIRI-STYLE
+      ================================================================ */
+      .voice-mic-btn {
+        color: var(--accent);
+        position: relative;
+      }
+      .voice-mic-btn.listening {
+        color: #ff3b30;
+        animation: voicePulse 1.2s ease-in-out infinite;
+      }
+      @keyframes voicePulse {
+        0%,100% { opacity:1; }
+        50% { opacity:0.55; }
+      }
+
+      .voice-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9900;
+        background: rgba(0,0,0,0.55);
+        backdrop-filter: blur(10px) saturate(1.4);
+        -webkit-backdrop-filter: blur(10px) saturate(1.4);
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: calc(env(safe-area-inset-bottom));
+      }
+      .voice-overlay.show {
+        display: flex;
+        animation: voiceOverlayIn 0.32s var(--ease-out) forwards;
+      }
+      @keyframes voiceOverlayIn {
+        from { opacity:0; }
+        to { opacity:1; }
+      }
+
+      .voice-panel {
+        width: 100%;
+        max-width: 480px;
+        background: var(--surface);
+        border-radius: 36px 36px 0 0;
+        padding: 20px 20px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        animation: voicePanelUp 0.38s var(--ease-spring) forwards;
+        border-top: 1px solid var(--glass-border);
+        box-shadow: 0 -8px 40px rgba(0,0,0,0.18);
+      }
+      @keyframes voicePanelUp {
+        from { transform: translateY(120%); }
+        to { transform: translateY(0); }
+      }
+
+      .voice-transcript-area {
+        min-height: 52px;
+        max-height: 120px;
+        overflow-y: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 8px;
+      }
+      .voice-transcript-text {
+        font-size: 17px;
+        font-weight: 500;
+        color: var(--text);
+        text-align: center;
+        line-height: 1.45;
+        transition: opacity 0.2s;
+      }
+      .voice-transcript-text.dim { opacity: 0.35; }
+
+      .voice-parsed-preview {
+        background: var(--surface2);
+        border-radius: 20px;
+        padding: 12px 16px;
+        display: none;
+        flex-direction: column;
+        gap: 7px;
+        border: 1px solid var(--glass-border);
+      }
+      .voice-parsed-preview.show { display: flex; }
+      .vp-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: var(--text);
+      }
+      .vp-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        min-width: 70px;
+      }
+      .vp-val {
+        font-weight: 600;
+        color: var(--accent);
+      }
+      .vp-miss {
+        color: var(--warn);
+        font-weight: 500;
+        font-style: italic;
+        font-size: 13px;
+      }
+
+      .voice-confirm-btns {
+        display: flex;
+        gap: 10px;
+      }
+      .voice-action-btn {
+        flex: 1;
+        padding: 13px 10px;
+        border: 0;
+        border-radius: 18px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.12s var(--ease-spring), opacity 0.15s;
+      }
+      .voice-action-btn:active { transform: scale(0.95); }
+      .voice-action-save { background: var(--accent); color: #fff; }
+      .voice-action-edit { background: var(--surface3); color: var(--text); }
+      .voice-action-cancel { background: var(--surface3); color: var(--text); }
+
+      .voice-bottom-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 8px;
+      }
+      .voice-close-btn, .voice-retry-btn {
+        width: 44px; height: 44px;
+        border: 0; border-radius: 50%;
+        background: var(--surface3);
+        color: var(--muted);
+        cursor: pointer;
+        display: grid; place-items: center;
+        transition: transform 0.12s var(--ease-spring);
+        flex-shrink: 0;
+      }
+      .voice-close-btn:active, .voice-retry-btn:active { transform: scale(0.9); }
+      .voice-retry-btn { transition: opacity 0.2s, transform 0.12s var(--ease-spring); }
+
+      .voice-orb-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .voice-orb {
+        position: relative;
+        width: 80px; height: 80px;
+        border: 0; background: none;
+        cursor: pointer;
+        display: grid; place-items: center;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .voice-orb-ring {
+        position: absolute;
+        border-radius: 50%;
+        border: 2px solid rgba(0,122,255,0.25);
+        pointer-events: none;
+        transform: scale(1);
+        opacity: 0;
+      }
+      .voice-orb.listening .voice-orb-ring {
+        animation: orbRing 2s ease-in-out infinite;
+      }
+      .voice-orb-ring.r1 { width:80px;height:80px; animation-delay:0s !important; }
+      .voice-orb-ring.r2 { width:80px;height:80px; animation-delay:0.5s !important; }
+      .voice-orb-ring.r3 { width:80px;height:80px; animation-delay:1s !important; }
+      @keyframes orbRing {
+        0%   { transform:scale(1); opacity:0.7; }
+        100% { transform:scale(2.1); opacity:0; }
+      }
+      .voice-orb-core {
+        width: 64px; height: 64px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent) 0%, #5e5ce6 100%);
+        display: grid; place-items: center;
+        color: #fff;
+        box-shadow: 0 6px 24px rgba(0,122,255,0.38);
+        transition: background 0.25s, box-shadow 0.25s, transform 0.15s var(--ease-spring);
+        position: relative;
+        z-index: 1;
+      }
+      .voice-orb.listening .voice-orb-core {
+        background: linear-gradient(135deg, #ff3b30 0%, #ff9500 100%);
+        box-shadow: 0 6px 28px rgba(255,59,48,0.42);
+        animation: orbCoreBreath 0.9s ease-in-out infinite alternate;
+      }
+      @keyframes orbCoreBreath {
+        from { transform: scale(1); }
+        to   { transform: scale(1.08); }
+      }
+      .voice-orb:active .voice-orb-core { transform: scale(0.92); }
+
+      .voice-hint {
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 500;
+        min-height: 18px;
+        transition: opacity 0.2s;
+        padding: 0 16px;
+      }
+
+      /* dark mode tweaks */
+      body.dark .voice-panel {
+        box-shadow: 0 -8px 60px rgba(0,0,0,0.6);
+      }
+      body.dark .voice-orb-core {
+        box-shadow: 0 6px 24px rgba(10,132,255,0.45);
+      }
     </style>
   </head>
   <body>
@@ -4244,6 +4463,46 @@
       </div>
     </div>
 
+    <!-- VOICE BILL ASSISTANT OVERLAY -->
+    <div id="voice-overlay" class="voice-overlay" onclick="voiceOverlayBgClick(event)">
+      <div class="voice-panel" id="voice-panel">
+        <div class="voice-transcript-area" id="voice-transcript-area">
+          <div class="voice-transcript-text" id="voice-transcript-text"></div>
+        </div>
+        <div class="voice-parsed-preview" id="voice-parsed-preview"></div>
+        <div class="voice-confirm-btns" id="voice-confirm-btns" style="display:none">
+          <button class="voice-action-btn voice-action-save" onclick="voiceConfirmSave()">✓ Save Bill</button>
+          <button class="voice-action-btn voice-action-edit" onclick="voiceGoToBill()">✎ Edit</button>
+          <button class="voice-action-btn voice-action-cancel" onclick="voiceAddMore()">+ Add More</button>
+        </div>
+        <div class="voice-bottom-row">
+          <button class="voice-close-btn" onclick="closeVoiceBill()" title="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+          <div class="voice-orb-wrap">
+            <button class="voice-orb" id="voice-orb" onclick="toggleVoiceListening()">
+              <div class="voice-orb-ring r1"></div>
+              <div class="voice-orb-ring r2"></div>
+              <div class="voice-orb-ring r3"></div>
+              <div class="voice-orb-core" id="voice-orb-core">
+                <svg id="voice-orb-mic" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <rect x="9" y="2" width="6" height="11" rx="3"/>
+                  <path d="M5 10a7 7 0 0 0 14 0"/>
+                  <line x1="12" y1="19" x2="12" y2="22"/>
+                  <line x1="9" y1="22" x2="15" y2="22"/>
+                </svg>
+                <svg id="voice-orb-stop" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="4" y="4" width="16" height="16" rx="3"/></svg>
+              </div>
+            </button>
+          </div>
+          <button class="voice-retry-btn" id="voice-retry-btn" onclick="voiceRetry()" title="Retry" style="opacity:0;pointer-events:none">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          </button>
+        </div>
+        <div class="voice-hint" id="voice-hint">Tap mic and speak your bill</div>
+      </div>
+    </div>
+
     <!-- JPEG CAPTURE TARGET (hidden off-screen) -->
     <div id="bill-jpeg-target"></div>
 
@@ -4278,6 +4537,19 @@
             Manju Enterprises
           </div>
           <div class="nav-actions">
+            <button
+              class="nav-btn icon voice-mic-btn"
+              onclick="openVoiceBill()"
+              title="Voice Bill"
+              id="voice-nav-btn"
+            >
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="2" width="6" height="11" rx="3"/>
+                <path d="M5 10a7 7 0 0 0 14 0"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+                <line x1="9" y1="22" x2="15" y2="22"/>
+              </svg>
+            </button>
             <button
               class="nav-btn icon nav-search-btn"
               onclick="openUniversalSearch()"
@@ -4326,16 +4598,16 @@
         <section class="premium-hero liquid-card">
           <div class="premium-kicker" id="gw-date-display">Today</div>
           <div class="premium-title">Manju<br />Enterprises</div>
-          <div class="premium-total" id="hero-month-total" style="font-size:52px;letter-spacing:-1px">0</div>
+          <div class="premium-total" id="hero-month-total">&#8377;0</div>
           <div class="premium-subrow">
-            <span id="hero-month-count">Orders this month</span>
+            <span id="hero-month-count">Revenue this month</span>
             <span class="growth-pill" id="hero-growth">+0.0%</span>
           </div>
           <div class="hero-chart-wrap liquid-card">
             <div class="chart-tooltip liquid-card" id="hero-chart-tooltip">
               <div class="chart-tip-date">Today</div>
-              <div class="chart-tip-value">0 orders</div>
-              <div class="chart-tip-bills">&#8377;0</div>
+              <div class="chart-tip-value">&#8377;0</div>
+              <div class="chart-tip-bills">0 bills</div>
             </div>
             <div
               style="
@@ -4349,7 +4621,7 @@
                 <div
                   style="font-size: 13px; font-weight: 800; color: var(--text)"
                 >
-                  Daily Orders
+                  Revenue
                 </div>
                 <div
                   style="font-size: 11px; color: var(--muted)"
@@ -4374,10 +4646,22 @@
 
         <section class="premium-grid">
           <div class="kpi-card liquid-card">
-            <div class="kpi-label">Today's Orders</div>
-            <div class="kpi-value" id="kpi-today">0</div>
+            <div class="kpi-label">Today</div>
+            <div class="kpi-value" id="kpi-today">&#8377;0</div>
             <div class="kpi-note" id="kpi-today-count">0 bills</div>
             <canvas class="sparkline" id="spark-today"></canvas>
+          </div>
+          <div class="kpi-card liquid-card">
+            <div class="kpi-label">Outstanding</div>
+            <div class="kpi-value" id="kpi-unpaid">&#8377;0</div>
+            <div class="kpi-note" id="kpi-unpaid-count">0 pending</div>
+            <canvas class="sparkline" id="spark-unpaid"></canvas>
+          </div>
+          <div class="kpi-card liquid-card">
+            <div class="kpi-label">Average Bill</div>
+            <div class="kpi-value" id="kpi-average">&#8377;0</div>
+            <div class="kpi-note" id="kpi-average-note">This month</div>
+            <canvas class="sparkline" id="spark-average"></canvas>
           </div>
           <div class="kpi-card liquid-card">
             <div class="kpi-label">Top Customer</div>
@@ -4390,18 +4674,6 @@
             </div>
             <div class="kpi-note" id="kpi-top-customer-note">&#8377;0</div>
             <canvas class="sparkline" id="spark-growth"></canvas>
-          </div>
-          <div class="kpi-card liquid-card" onclick="goToBillsTab('delivered')" style="cursor:pointer">
-            <div class="kpi-label">Delivered Bills</div>
-            <div class="kpi-value" id="kpi-delivered">0</div>
-            <div class="kpi-note" id="kpi-delivered-note">This month</div>
-            <canvas class="sparkline" id="spark-delivered"></canvas>
-          </div>
-          <div class="kpi-card liquid-card" onclick="goToBillsTab('pending')" style="cursor:pointer">
-            <div class="kpi-label">Pending Bills</div>
-            <div class="kpi-value" id="kpi-pending">0</div>
-            <div class="kpi-note" id="kpi-pending-note">Awaiting delivery</div>
-            <canvas class="sparkline" id="spark-pending"></canvas>
           </div>
         </section>
 
@@ -5475,37 +5747,6 @@
             &#215;
           </button>
         </div>
-      </div>
-      <div
-        id="bills-tab-strip"
-        style="
-          display: flex;
-          gap: 0;
-          background: var(--glass);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-bottom: 0.5px solid var(--separator);
-          position: sticky;
-          top: 100px;
-          z-index: 49;
-          padding: 0 16px;
-        "
-      >
-        <button
-          id="bills-tab-all"
-          onclick="setBillsTab('all')"
-          style="flex:1;padding:10px 0;font-size:13px;font-weight:700;border:none;background:none;border-bottom:2.5px solid var(--accent);color:var(--accent);cursor:pointer;transition:all .18s"
-        >All</button>
-        <button
-          id="bills-tab-delivered"
-          onclick="setBillsTab('delivered')"
-          style="flex:1;padding:10px 0;font-size:13px;font-weight:600;border:none;background:none;border-bottom:2.5px solid transparent;color:var(--muted);cursor:pointer;transition:all .18s"
-        >Delivered</button>
-        <button
-          id="bills-tab-pending"
-          onclick="setBillsTab('pending')"
-          style="flex:1;padding:10px 0;font-size:13px;font-weight:600;border:none;background:none;border-bottom:2.5px solid transparent;color:var(--muted);cursor:pointer;transition:all .18s"
-        >Pending</button>
       </div>
       <div class="bills-section" id="bills-container">
         <div class="empty-state">
@@ -7742,8 +7983,6 @@
           if (bi) bi.value = "";
           const bc = document.getElementById("bills-search-clear");
           if (bc) bc.style.display = "none";
-          _billsTab = "all";
-          setBillsTab("all");
           renderBillsList("");
         }
         if (id === "screen-customers") renderMasterList("cust");
@@ -7915,36 +8154,32 @@
             " bill" +
             (unpaidBills.length !== 1 ? "s" : "");
         }
-        animateMoney("hero-month-total", monthBills.length, 950, true);
+        animateMoney("hero-month-total", monthTotal);
         if (el("hero-month-count"))
           el("hero-month-count").textContent =
             monthBills.length +
-            " order" +
+            " bill" +
             (monthBills.length !== 1 ? "s" : "") +
             " this month";
         if (el("hero-growth"))
           el("hero-growth").textContent =
             (growth >= 0 ? "+" : "") + growth.toFixed(1) + "%";
-        // Today's orders (count)
-        const todayEl = el("kpi-today");
-        if (todayEl) {
-          todayEl.textContent = todayBills.length;
-        }
+        animateMoney("kpi-today", todayTotal);
+        animateMoney("kpi-unpaid", unpaidTotal);
+        animateMoney("kpi-average", avgBill);
         if (el("kpi-today-count"))
           el("kpi-today-count").textContent =
             todayBills.length + " bill" + (todayBills.length !== 1 ? "s" : "");
-        // Top customer
+        if (el("kpi-unpaid-count"))
+          el("kpi-unpaid-count").textContent = unpaidBills.length + " pending";
+        if (el("kpi-average-note"))
+          el("kpi-average-note").textContent = monthBills.length
+            ? "Across this month"
+            : "No bills yet";
         if (el("kpi-top-customer"))
           el("kpi-top-customer").textContent = topCustomer.name || "None";
         if (el("kpi-top-customer-note"))
           el("kpi-top-customer-note").textContent = fmt(topCustomer.value || 0);
-        // Delivered / Pending counts (month)
-        const deliveredBills = monthBills.filter((b) => b.delivered);
-        const pendingBills = monthBills.filter((b) => !b.delivered);
-        if (el("kpi-delivered")) el("kpi-delivered").textContent = deliveredBills.length;
-        if (el("kpi-delivered-note")) el("kpi-delivered-note").textContent = "This month";
-        if (el("kpi-pending")) el("kpi-pending").textContent = pendingBills.length;
-        if (el("kpi-pending-note")) el("kpi-pending-note").textContent = pendingBills.length === 1 ? "Awaiting delivery" : "Awaiting delivery";
         scheduleDashboardCharts();
       }
 
@@ -8800,12 +9035,9 @@
           return;
         }
         let filtered = S.bills;
-        // Apply delivery tab filter
-        if (_billsTab === "delivered") filtered = filtered.filter((b) => b.delivered);
-        else if (_billsTab === "pending") filtered = filtered.filter((b) => !b.delivered);
         if (q && q.trim()) {
           const ql = q.trim().toLowerCase();
-          filtered = filtered.filter(
+          filtered = S.bills.filter(
             (b) =>
               (b.customer.name || "").toLowerCase().includes(ql) ||
               String(b.invno || "")
@@ -8813,7 +9045,7 @@
                 .includes(ql),
           );
         }
-        const isFiltered = !!(q && q.trim()) || _billsTab !== "all";
+        const isFiltered = !!(q && q.trim());
         if (!filtered.length) {
           c.innerHTML =
             '<div class="empty-state"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="empty-title">No Results</div><div class="empty-sub">Try a different name or invoice number</div></div><div class="bottom-spacer"></div>';
@@ -8835,8 +9067,7 @@
           return esc(text);
         }
         const filteredTotal = filtered.reduce((s, b) => s + (b.grand || 0), 0);
-        const summaryLabel = _billsTab === "delivered" ? "Delivered Bills" : _billsTab === "pending" ? "Pending Bills" : isFiltered ? "Matching Sales" : "Total Sales";
-        c.innerHTML = `<div class="bills-summary"><div class="bills-summary-label">${summaryLabel}</div><div class="bills-summary-val">&#8377;${filteredTotal.toFixed(2)}</div><div class="bills-summary-count">${isFiltered ? filtered.length + " of " + S.bills.length + " bills" : S.bills.length + " bill" + (S.bills.length !== 1 ? "s" : "")}</div></div>${filtered.map((b, idx) => `<div class="bill-card" style="animation-delay:${Math.min(idx * 0.04, 0.3)}s" onclick="viewBill('${b.id}')"><div class="bill-card-top"><div class="bill-inv">No. ${hlB(String(b.invno), q)}</div><div class="bill-date">${fmtDate(b.date)}</div></div><div class="bill-party">${hlB(b.customer.name, q)}</div><div class="bill-location">${esc(b.customer.location || "")}${b.transport ? " · " + esc(b.transport.name) : ""}</div><div class="bill-card-bottom"><div style="display:flex;align-items:center;gap:6px"><div class="bill-meta">${b.items.length} item${b.items.length !== 1 ? "s" : ""}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.paid ? "var(--success-soft)" : "var(--danger-soft)"};color:${b.paid ? "var(--success)" : "var(--danger)"}">${b.paid ? "PAID" : "UNPAID"}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.delivered ? "var(--success-soft)" : "var(--warn-soft)"};color:${b.delivered ? "var(--success)" : "var(--warn)"}">${b.delivered ? "✓ DELIVERED" : "PENDING"}</div></div><div class="bill-amount">&#8377;${b.grand.toFixed(2)}</div></div></div>`).join("")}<div class="bottom-spacer"></div>`;
+        c.innerHTML = `<div class="bills-summary"><div class="bills-summary-label">${isFiltered ? "Matching Sales" : "Total Sales"}</div><div class="bills-summary-val">&#8377;${filteredTotal.toFixed(2)}</div><div class="bills-summary-count">${isFiltered ? filtered.length + " of " + S.bills.length + " bills" : S.bills.length + " bill" + (S.bills.length !== 1 ? "s" : "")}</div></div>${filtered.map((b, idx) => `<div class="bill-card" style="animation-delay:${Math.min(idx * 0.04, 0.3)}s" onclick="viewBill('${b.id}')"><div class="bill-card-top"><div class="bill-inv">No. ${hlB(String(b.invno), q)}</div><div class="bill-date">${fmtDate(b.date)}</div></div><div class="bill-party">${hlB(b.customer.name, q)}</div><div class="bill-location">${esc(b.customer.location || "")}${b.transport ? " · " + esc(b.transport.name) : ""}</div><div class="bill-card-bottom"><div style="display:flex;align-items:center;gap:6px"><div class="bill-meta">${b.items.length} item${b.items.length !== 1 ? "s" : ""}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.paid ? "var(--success-soft)" : "var(--danger-soft)"};color:${b.paid ? "var(--success)" : "var(--danger)"}">${b.paid ? "PAID" : "UNPAID"}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.delivered ? "var(--success-soft)" : "var(--warn-soft)"};color:${b.delivered ? "var(--success)" : "var(--warn)"}">${b.delivered ? "✓ DELIVERED" : "PENDING"}</div></div><div class="bill-amount">&#8377;${b.grand.toFixed(2)}</div></div></div>`).join("")}<div class="bottom-spacer"></div>`;
       }
 
       function filterBillsList() {
@@ -8852,34 +9083,6 @@
         if (cb) cb.style.display = "none";
         renderBillsList("");
         if (inp) inp.focus();
-      }
-
-      // Bills delivery tab state
-      let _billsTab = "all"; // "all" | "delivered" | "pending"
-
-      function setBillsTab(tab) {
-        _billsTab = tab;
-        ["all", "delivered", "pending"].forEach((t) => {
-          const btn = document.getElementById("bills-tab-" + t);
-          if (!btn) return;
-          if (t === tab) {
-            btn.style.borderBottom = "2.5px solid var(--accent)";
-            btn.style.color = "var(--accent)";
-            btn.style.fontWeight = "700";
-          } else {
-            btn.style.borderBottom = "2.5px solid transparent";
-            btn.style.color = "var(--muted)";
-            btn.style.fontWeight = "600";
-          }
-        });
-        const q = document.getElementById("bills-search");
-        renderBillsList(q ? q.value : "");
-      }
-
-      function goToBillsTab(tab) {
-        goTo("screen-bills");
-        // Defer tab switch so goTo's renderBillsList("") fires first
-        setTimeout(() => setBillsTab(tab), 20);
       }
 
       // BILL DETAIL
@@ -10590,7 +10793,7 @@
         return "\u20b9" + Math.round(v).toLocaleString("en-IN");
       }
 
-      function animateMoney(id, to, duration, isCount) {
+      function animateMoney(id, to, duration) {
         const el = document.getElementById(id);
         if (!el) return;
         const from = Number(el.dataset.value || 0);
@@ -10603,8 +10806,7 @@
         }
         function frame(now) {
           const p = Math.min(1, (now - start) / dur);
-          const v = from + (target - from) * ease(p);
-          el.textContent = isCount ? Math.round(v).toString() : moneyCompact(v);
+          el.textContent = moneyCompact(from + (target - from) * ease(p));
           if (p < 1) requestAnimationFrame(frame);
         }
         requestAnimationFrame(frame);
@@ -10734,15 +10936,13 @@
       function renderHeroChart() {
         const canvas = document.getElementById("hero-chart-canvas");
         if (!canvas) return;
-        const raw = getRevenueSeries(30);
-        // Remap to use order count as the chart value
-        const data = raw.map((d) => ({ ...d, value: d.count }));
+        const data = getRevenueSeries(30);
         const total = data.reduce((s, d) => s + d.value, 0);
         const label = document.getElementById("hero-chart-label");
         if (label)
           label.textContent = total
-            ? "30-day total: " + total + " order" + (total !== 1 ? "s" : "")
-            : "No orders in the last 30 days";
+            ? "30-day total: " + moneyCompact(total)
+            : "No revenue in the last 30 days";
         const start = performance.now();
         function frame(now) {
           const p = Math.min(1, (now - start) / 1150);
@@ -10764,13 +10964,14 @@
         function show(e) {
           const idx = idxFromEvent(e);
           const d = data[idx];
-          const raw = getRevenueSeries(30)[idx];
           drawLineChart(canvas, data, idx, 1);
           if (tip) {
             tip.querySelector(".chart-tip-date").textContent = d.label;
-            tip.querySelector(".chart-tip-value").textContent =
-              d.value + " order" + (d.value !== 1 ? "s" : "");
-            tip.querySelector(".chart-tip-bills").textContent = moneyCompact(raw ? raw.value : 0);
+            tip.querySelector(".chart-tip-value").textContent = moneyCompact(
+              d.value,
+            );
+            tip.querySelector(".chart-tip-bills").textContent =
+              d.count + " bill" + (d.count !== 1 ? "s" : "");
             const rect = canvas.getBoundingClientRect();
             const x =
               (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
@@ -11550,6 +11751,533 @@
             ),
           60,
         );
+      })();
+
+      // ================================================================
+      // VOICE BILL ASSISTANT — 100% FREE (Web Speech API, zero paid APIs)
+      // Supports Hindi + English, regex + fuzzy matching
+      // ================================================================
+      (function () {
+        const VB = {
+          recognition: null,
+          listening: false,
+          lastTranscript: '',
+          parsed: null,
+          phase: 'idle', // idle | listening | parsed | confirmed
+        };
+
+        // ── Number word maps (Hindi + English) ────────────────────────
+        const NUM_WORDS = {
+          // English
+          zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,
+          eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,
+          eighteen:18,nineteen:19,twenty:20,thirty:30,forty:40,fifty:50,sixty:60,
+          seventy:70,eighty:80,ninety:90,hundred:100,thousand:1000,
+          'a':1,'an':1,
+          // Hindi transliterated
+          ek:1,do:2,teen:3,char:4,paanch:5,chhe:6,saat:7,aath:8,nau:9,das:10,
+          gyarah:11,barah:12,terah:13,chaudah:14,pandrah:15,solah:16,satrah:17,
+          atharah:18,unees:19,bees:20,tees:30,chalees:40,pachaas:50,saath:60,
+          sattar:70,assi:80,nabbe:90,so:100,hazaar:1000,
+          'ek so':100,'do so':200,'teen so':300,'char so':400,
+        };
+
+        // Unit words that indicate product quantity type
+        const UNIT_KEYWORDS = {
+          kg:['kg','kilo','kilos','kilogram','kilograms','kilo gram','kilo grams'],
+          pc:['pc','pcs','piece','pieces','no','nos','number','packet','packets',
+              'bag','bags','box','boxes','unit','units','nag','nag.','nag ','nag',
+              'manhole','manholes','cover','covers','lid','lids','ring','rings',
+              'pipe','pipes','slab','slabs'],
+        };
+
+        // Discount trigger words
+        const DISC_WORDS = ['discount','disc','off','percent off','% off','rebate',
+                            'chhoot','choot','discount dena','percent','%'];
+
+        // ── Fuzzy string match ─────────────────────────────────────────
+        function normalize(s) {
+          return String(s||'').toLowerCase()
+            .normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
+            .replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim();
+        }
+        function editDist(a, b) {
+          a = normalize(a); b = normalize(b);
+          if (!a || !b) return Math.max(a.length, b.length);
+          const dp = Array.from({length:b.length+1},(_,i)=>i);
+          for (let i=1;i<=a.length;i++) {
+            let prev=dp[0]; dp[0]=i;
+            for (let j=1;j<=b.length;j++) {
+              const tmp=dp[j];
+              dp[j]=a[i-1]===b[j-1]?prev:1+Math.min(prev,dp[j],dp[j-1]);
+              prev=tmp;
+            }
+          }
+          return dp[b.length];
+        }
+        function fuzzyScore(query, candidate) {
+          const q = normalize(query), c = normalize(candidate);
+          if (!q||!c) return 0;
+          if (c===q) return 1;
+          if (c.startsWith(q)||c.includes(q)) return 0.88;
+          const dist = editDist(q,c);
+          const maxLen = Math.max(q.length, c.length);
+          return Math.max(0, 1 - dist/maxLen);
+        }
+        function bestMatch(query, list, keyFn) {
+          if (!query||!list.length) return null;
+          let best=null, bestS=0;
+          list.forEach(item=>{
+            const keys = keyFn ? [keyFn(item)] : [item];
+            keys.forEach(k=>{
+              const s=fuzzyScore(query, k);
+              if(s>bestS){bestS=s;best=item;}
+            });
+          });
+          return bestS>=0.42 ? best : null;
+        }
+
+        // ── Word-to-number parser ──────────────────────────────────────
+        function wordsToNum(tokens) {
+          // Try direct parse first
+          const joined = tokens.join(' ');
+          const direct = parseFloat(joined);
+          if (!isNaN(direct)) return direct;
+
+          let total=0, current=0;
+          tokens.forEach(t=>{
+            const n = NUM_WORDS[t];
+            if (n===undefined) return;
+            if (n===1000) { total=(total+current)*1000; current=0; }
+            else if (n===100) { current*=100; if(!current) current=100; }
+            else current+=n;
+          });
+          const result = total+current;
+          return result>0 ? result : NaN;
+        }
+
+        // ── Main parser ────────────────────────────────────────────────
+        function parseBillCommand(raw) {
+          const text = normalize(raw);
+          const tokens = text.split(/\s+/);
+          const result = { customer:null, items:[], discount:0, raw };
+
+          // ── Extract discount ─────────────────────────────────────────
+          let discPct = 0;
+          const discMatch = text.match(/(\d+(?:\.\d+)?)\s*(?:%|percent|chhoot|choot|off|discount)/);
+          if (discMatch) { discPct = parseFloat(discMatch[1]); result.discount = discPct; }
+
+          // ── Extract customer — look for "for/ke liye/party/customer" ─
+          const custTriggers = /\bfor\b|\bke liye\b|\bparty\b|\bwala\b|\bk liye\b|\bko\b|\bkustomer\b|\bcustomer\b|\bparty name\b/;
+          let custRaw = null;
+          const custMatch = text.match(new RegExp(
+            '(?:for|ke liye|ko|k liye|party|customer)\\s+([a-z0-9 .&-]{2,35}?)(?:\\s+(?:at|pe|par|mein|with|\\d|$)|$)'
+          ));
+          if (custMatch) custRaw = custMatch[1].trim();
+
+          // Fallback: last word cluster after items
+          if (!custRaw) {
+            const m2 = text.match(/(?:for|ke liye|ko)\s+(.+?)(?:\s+at\s+\d|$)/);
+            if (m2) custRaw = m2[1].trim();
+          }
+
+          if (custRaw && S.customers.length) {
+            result.customer = bestMatch(custRaw, S.customers, c=>c.name)
+              || bestMatch(custRaw, S.customers, c=>c.searchName||c.name);
+          }
+
+          // ── Extract items — product qty pairs ────────────────────────
+          // Pattern: NUMBER UNIT? PRODUCT  or  PRODUCT NUMBER UNIT?
+          // e.g: "2 manhole", "teen pc cement", "10 kg sand for raj"
+          const itemPatterns = [
+            // qty + (unit) + product_name
+            /(\b(?:\d+(?:\.\d+)?|[a-z]+)\b)\s+(?:(kg|kilo|pc|pcs|piece|pieces|no|nos|bag|bags|packet|packets|cover|covers|manhole|manholes|ring|rings|pipe|pipes|unit|units|slab|slabs)\s+)?([a-z][a-z0-9 ]{1,30}?)(?=\s+(?:for|ke liye|ko|at|@|\d|and|aur|,|$))/g,
+          ];
+
+          // Better approach: find all numbers with surrounding context
+          const numRe = /(\d+(?:\.\d+)?)\s*([a-z]*)\s+([a-z][a-z0-9 ]{1,25})/g;
+          let m;
+          const seen = new Set();
+          while ((m=numRe.exec(text))!==null) {
+            const [,numStr,unitRaw,prodRaw] = m;
+            const qty = parseFloat(numStr);
+            if (!qty || isNaN(qty)) continue;
+            // skip if this number is a discount
+            if (discMatch && numStr===String(Math.round(discPct))) continue;
+
+            const prodCandidate = (unitRaw && !isUnitWord(unitRaw)) 
+              ? (unitRaw+' '+prodRaw).trim()
+              : prodRaw.trim();
+
+            // remove trailing filler words
+            const cleaned = prodCandidate
+              .replace(/\b(for|ke liye|ko|at|and|aur|percent|off|discount)\b.*$/,'')
+              .trim();
+
+            if (cleaned.length < 2) continue;
+            if (seen.has(cleaned)) continue;
+
+            const type = unitRaw && ['kg','kilo','kilogram','kilograms'].includes(unitRaw) ? 'kg' : 'pc';
+            const prod = S.products.length
+              ? bestMatch(cleaned, S.products, p=>p.name)
+              : null;
+
+            if (prod && !seen.has(prod.id)) {
+              seen.add(prod.id);
+              result.items.push({ product:prod, qty, type, discPct, raw:cleaned });
+            } else if (!prod && cleaned.length>=2) {
+              // unknown product — keep as-is, user will fix in edit
+              if (!seen.has(cleaned)) {
+                seen.add(cleaned);
+                result.items.push({ product:null, qty, type, discPct, raw:cleaned });
+              }
+            }
+          }
+
+          // Also try "word-number" combos: "cement teen bag"
+          const wnRe = /([a-z][a-z0-9 ]{1,20})\s+(\d+(?:\.\d+)?)\s*([a-z]*)/g;
+          while ((m=wnRe.exec(text))!==null) {
+            const [,prodRaw,numStr,unitRaw] = m;
+            const qty = parseFloat(numStr);
+            if (!qty) continue;
+            const cleaned = prodRaw.trim();
+            if (seen.has(cleaned)||cleaned.length<2) continue;
+            if (['for','ke','ko','at','and','aur','discount'].includes(cleaned)) continue;
+
+            const type = unitRaw && ['kg','kilo'].includes(unitRaw) ? 'kg' : 'pc';
+            const prod = S.products.length
+              ? bestMatch(cleaned, S.products, p=>p.name)
+              : null;
+
+            if (prod && !seen.has(prod.id)) {
+              seen.add(prod.id);
+              result.items.push({ product:prod, qty, type, discPct, raw:cleaned });
+            }
+          }
+
+          return result;
+        }
+
+        function isUnitWord(w) {
+          const units = ['kg','kilo','pc','pcs','piece','pieces','no','nos','bag','bags',
+                         'packet','packets','manhole','manholes','cover','ring','rings','pipe','pipes'];
+          return units.includes(w);
+        }
+
+        // ── UI helpers ────────────────────────────────────────────────
+        function setHint(txt) {
+          const el = document.getElementById('voice-hint');
+          if (el) el.textContent = txt;
+        }
+        function setTranscript(txt, dim) {
+          const el = document.getElementById('voice-transcript-text');
+          if (!el) return;
+          el.textContent = txt;
+          el.classList.toggle('dim', !!dim);
+        }
+        function showParsed(parsed) {
+          const el = document.getElementById('voice-parsed-preview');
+          if (!el) return;
+          if (!parsed || (!parsed.customer && !parsed.items.length)) {
+            el.classList.remove('show');
+            return;
+          }
+          let html = '';
+          if (parsed.customer) {
+            html += `<div class="vp-row"><span class="vp-label">Customer</span><span class="vp-val">${esc(parsed.customer.name)}</span></div>`;
+          } else {
+            html += `<div class="vp-row"><span class="vp-label">Customer</span><span class="vp-miss">Not found — tap Edit</span></div>`;
+          }
+          if (parsed.items.length) {
+            parsed.items.forEach(it=>{
+              const pName = it.product ? it.product.name : ('?' + it.raw);
+              const rate = it.product ? it.product.rate : '?';
+              const amt = it.product ? (it.qty * it.product.rate * (1 - (it.discPct||0)/100)).toFixed(2) : '?';
+              html += `<div class="vp-row"><span class="vp-label">Item</span><span class="vp-val">${esc(pName)}</span><span style="color:var(--muted);font-size:12px;margin-left:auto">${it.qty} ${it.type} · ₹${amt}</span></div>`;
+            });
+          } else {
+            html += `<div class="vp-row"><span class="vp-label">Items</span><span class="vp-miss">None found — tap Edit</span></div>`;
+          }
+          if (parsed.discount>0) {
+            html += `<div class="vp-row"><span class="vp-label">Discount</span><span class="vp-val">${parsed.discount}%</span></div>`;
+          }
+          el.innerHTML = html;
+          el.classList.add('show');
+        }
+        function setOrbState(state) { // 'idle' | 'listening'
+          const orb = document.getElementById('voice-orb');
+          const mic = document.getElementById('voice-orb-mic');
+          const stop = document.getElementById('voice-orb-stop');
+          if (!orb) return;
+          if (state==='listening') {
+            orb.classList.add('listening');
+            const navBtn = document.getElementById('voice-nav-btn');
+            if (navBtn) navBtn.classList.add('listening');
+            if (mic) mic.style.display='none';
+            if (stop) stop.style.display='block';
+          } else {
+            orb.classList.remove('listening');
+            const navBtn = document.getElementById('voice-nav-btn');
+            if (navBtn) navBtn.classList.remove('listening');
+            if (mic) mic.style.display='block';
+            if (stop) stop.style.display='none';
+          }
+        }
+        function showConfirmBtns(show) {
+          const el = document.getElementById('voice-confirm-btns');
+          if (el) el.style.display = show ? 'flex' : 'none';
+        }
+        function showRetry(show) {
+          const el = document.getElementById('voice-retry-btn');
+          if (!el) return;
+          el.style.opacity = show ? '1' : '0';
+          el.style.pointerEvents = show ? 'auto' : 'none';
+        }
+
+        // ── Web Speech API setup ──────────────────────────────────────
+        function initSpeech() {
+          const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (!SpeechRecognition) return null;
+          const r = new SpeechRecognition();
+          r.continuous = false;
+          r.interimResults = true;
+          // Accept both Hindi and English
+          r.lang = 'hi-IN'; // Browser will still accept English words
+          r.maxAlternatives = 3;
+
+          r.onstart = ()=>{
+            VB.listening = true;
+            setOrbState('listening');
+            setHint('Bol rahe ho… (speak now)');
+            setTranscript('', false);
+          };
+
+          r.onresult = (e)=>{
+            let interim='', final='';
+            for (let i=e.resultIndex;i<e.results.length;i++) {
+              const t = e.results[i][0].transcript;
+              if (e.results[i].isFinal) final+=t;
+              else interim+=t;
+            }
+            const display = final||interim;
+            setTranscript(display, !final);
+            if (final) {
+              VB.lastTranscript = final;
+            }
+          };
+
+          r.onend = ()=>{
+            VB.listening = false;
+            setOrbState('idle');
+            if (VB.lastTranscript) {
+              processTranscript(VB.lastTranscript);
+            } else {
+              setHint('Kuch suna nahi — phir se try karo');
+              showRetry(true);
+            }
+          };
+
+          r.onerror = (e)=>{
+            VB.listening = false;
+            setOrbState('idle');
+            const msgs = {
+              'no-speech': 'Awaaz nahi aayi — phir tap karo',
+              'not-allowed': 'Mic permission chahiye — browser settings check karo',
+              'network': 'Network error — offline mode mein kaam nahi karta',
+              'aborted': 'Ruk gaya',
+            };
+            setHint(msgs[e.error]||('Error: '+e.error));
+            setTranscript('', false);
+            showRetry(true);
+          };
+
+          return r;
+        }
+
+        function processTranscript(raw) {
+          setTranscript(raw, false);
+          setHint('Samajh raha hoon…');
+          const parsed = parseBillCommand(raw);
+          VB.parsed = parsed;
+
+          const hasCustomer = !!parsed.customer;
+          const hasItems = parsed.items.length > 0;
+
+          showParsed(parsed);
+
+          if (!hasCustomer && !hasItems) {
+            setHint('Kuch samajh nahi aaya — example: "2 manhole XYZ ke liye 10 percent discount"');
+            showRetry(true);
+            return;
+          }
+
+          showConfirmBtns(true);
+          showRetry(true);
+
+          if (hasCustomer && hasItems) {
+            setHint('Bill ready hai — confirm karein?');
+          } else if (!hasCustomer) {
+            setHint('Customer nahi mila — Edit mein select karo');
+          } else {
+            setHint('Items nahi mile — Edit mein add karo');
+          }
+        }
+
+        // ── Apply parsed data to bill ─────────────────────────────────
+        function applyParsedToBill() {
+          const parsed = VB.parsed;
+          if (!parsed) return;
+
+          // Start fresh bill
+          startNewBill();
+
+          // Set customer
+          if (parsed.customer) {
+            selectCustomer(parsed.customer.id);
+          }
+
+          // Add items directly to S.billItems
+          parsed.items.forEach(it=>{
+            if (!it.product) return;
+            const qty = it.qty||1;
+            const rate = it.product.rate||0;
+            const disc = it.discPct||0;
+            const amt = parseFloat((qty * rate * (1-disc/100)).toFixed(2));
+            S.billItems.push({
+              id: uid(),
+              productId: it.product.id,
+              name: it.product.name,
+              type: it.type||it.product.type||'pc',
+              pcs: it.type!=='kg' ? qty : null,
+              weight: it.type==='kg' ? qty : null,
+              rate,
+              disc,
+              amount: amt,
+              pkgText: '',
+            });
+          });
+
+          renderBillItems();
+          recalcBill();
+
+          // Set discount on bill-tax field if uniform discount used
+          if (parsed.discount>0 && !parsed.items.some(i=>i.discPct!==parsed.discount)) {
+            // discount is per-item; bill-level tax stays 0 unless user changes
+          }
+        }
+
+        // ── Public API ────────────────────────────────────────────────
+        window.openVoiceBill = function() {
+          const overlay = document.getElementById('voice-overlay');
+          if (!overlay) return;
+          // Check if speech is supported
+          if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+            showToast('Voice not supported in this browser. Use Chrome.');
+            return;
+          }
+          // Reset state
+          VB.lastTranscript = '';
+          VB.parsed = null;
+          setTranscript('Bolo apna bill…', true);
+          setHint('Tap mic to start · Hindi & English supported');
+          showConfirmBtns(false);
+          showRetry(false);
+          setOrbState('idle');
+          document.getElementById('voice-parsed-preview').classList.remove('show');
+          overlay.classList.add('show');
+          document.body.style.overflow='hidden';
+        };
+
+        window.closeVoiceBill = function() {
+          const overlay = document.getElementById('voice-overlay');
+          if (overlay) overlay.classList.remove('show');
+          document.body.style.overflow='';
+          if (VB.recognition && VB.listening) {
+            try { VB.recognition.abort(); } catch(e){}
+          }
+          VB.listening = false;
+          setOrbState('idle');
+        };
+
+        window.voiceOverlayBgClick = function(e) {
+          if (e.target.id==='voice-overlay') closeVoiceBill();
+        };
+
+        window.toggleVoiceListening = function() {
+          if (VB.listening) {
+            try { VB.recognition && VB.recognition.stop(); } catch(e){}
+            return;
+          }
+          // fresh recognition each time (more reliable cross-browser)
+          VB.recognition = initSpeech();
+          if (!VB.recognition) {
+            setHint('Voice not supported — use Chrome');
+            return;
+          }
+          VB.lastTranscript = '';
+          showConfirmBtns(false);
+          showRetry(false);
+          document.getElementById('voice-parsed-preview').classList.remove('show');
+          try {
+            VB.recognition.start();
+          } catch(e) {
+            setHint('Mic start error: '+e.message);
+          }
+        };
+
+        window.voiceRetry = function() {
+          VB.lastTranscript=''; VB.parsed=null;
+          showConfirmBtns(false);
+          showRetry(false);
+          setTranscript('Bolo apna bill…', true);
+          setHint('Tap mic to start');
+          document.getElementById('voice-parsed-preview').classList.remove('show');
+          setOrbState('idle');
+        };
+
+        window.voiceConfirmSave = function() {
+          applyParsedToBill();
+          closeVoiceBill();
+          // auto-save the bill
+          setTimeout(()=>{ acceptBill(); }, 300);
+          showToast('✅ Voice bill saved!');
+        };
+
+        window.voiceGoToBill = function() {
+          applyParsedToBill();
+          closeVoiceBill();
+          showToast('Bill ready — review karo');
+        };
+
+        window.voiceAddMore = function() {
+          // keep existing data and start listening again
+          VB.lastTranscript='';
+          showConfirmBtns(false);
+          showRetry(false);
+          setTranscript('', false);
+          setHint('Aur items bolo…');
+          const prev = VB.parsed;
+          // start fresh recognition
+          VB.recognition = initSpeech();
+          if (!VB.recognition) return;
+          VB.recognition.onend = (function(origOnEnd){
+            return function() {
+              origOnEnd && origOnEnd.call(VB.recognition);
+              // merge with prev
+              if (VB.parsed && prev) {
+                VB.parsed.items = [...(prev.items||[]), ...(VB.parsed.items||[])];
+                if (!VB.parsed.customer && prev.customer) VB.parsed.customer=prev.customer;
+                if (!VB.parsed.discount && prev.discount) VB.parsed.discount=prev.discount;
+                showParsed(VB.parsed);
+                showConfirmBtns(true);
+                showRetry(true);
+                setHint('Items added — confirm karein?');
+              }
+            };
+          })(VB.recognition.onend);
+          try { VB.recognition.start(); } catch(e) { setHint('Mic error: '+e.message); }
+        };
+
       })();
     </script>
   </body>
