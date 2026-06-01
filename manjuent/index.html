@@ -8684,10 +8684,10 @@
         showSync("syncing", "Syncing...");
 
         const col = db.collection(key);
-        const items = S[key];
+        const items = [...S[key]]; // snapshot at this moment
 
         // -- SAFE SYNC STRATEGY ------------------------------------------
-        // 1. Upsert (set) every item we currently have &mdash; never bulk-delete.
+        // 1. Upsert (set) every item we currently have — never bulk-delete.
         // 2. Remove only docs whose id is no longer in our local array.
         // This prevents two simultaneous users from wiping each other's data.
         _persistInProgress[key] = true;
@@ -8720,8 +8720,10 @@
             _persistInProgress[key] = false;
             console.error("Sync error:", err);
             showSync("err", "Sync failed");
-            // Retry once after 3 seconds
-            setTimeout(() => persist(key), 3000);
+            // Retry once after 4s, but only if no newer persist started
+            setTimeout(() => {
+              if (!_persistInProgress[key]) persist(key);
+            }, 4000);
           });
       }
 
@@ -11276,17 +11278,25 @@
         S.bills = [];
         ["customers", "products", "transports", "bills"].forEach((k) => {
           localStorage.removeItem("me2_" + k);
-          if (_firebaseReady && db) {
-            const batch = db.batch();
-            db.collection(k)
-              .get()
-              .then((snap) => {
-                snap.forEach((doc) => batch.delete(doc.ref));
-                return batch.commit();
-              })
-              .catch((e) => console.error("Clear cloud error:", k, e));
-          }
         });
+        if (_firebaseReady && db) {
+          const cols = ["customers", "products", "transports", "bills"];
+          Promise.all(
+            cols.map((k) =>
+              db.collection(k)
+                .get()
+                .then((snap) => {
+                  if (snap.empty) return;
+                  const batch = db.batch();
+                  snap.forEach((doc) => batch.delete(doc.ref));
+                  return batch.commit();
+                })
+                .catch((e) => console.error("Clear cloud error:", k, e))
+            )
+          ).then(() => {
+            showSync("ok", "Cloud cleared ✓");
+          });
+        }
         showToast("All data cleared");
         updateBackupScreen();
         updateGatewayCounts();
@@ -13733,13 +13743,12 @@
         }
         function scheduleSpeechAutoStop(recognition) {
           clearSpeechSilenceTimer();
-          // Only auto-stop once speech is confirmed (at least one final segment); 2.2s silence window
           VB.silenceTimer = setTimeout(() => {
-            if (!VB.listening || !VB.finalSegments.length) return;
+            if (!VB.listening || !rememberedTranscript()) return;
             try {
               recognition.stop();
             } catch (e) {}
-          }, 2200);
+          }, 1450);
         }
         function stripWakeCommand(text) {
           const wakeFillers = new Set([
@@ -13814,8 +13823,8 @@
           };
 
           r.onresult = (e) => {
-            // Only process new results from e.resultIndex onwards to avoid re-processing old ones
-            for (let i = e.resultIndex; i < e.results.length; i++) {
+            let interim = "";
+            for (let i = 0; i < e.results.length; i++) {
               const alternatives = Array.from(e.results[i]);
               const t = alternatives
                 .map((alt) => alt.transcript)
@@ -13828,13 +13837,10 @@
                     (pa.items.length + (pa.customer ? 1 : 0))
                   );
                 })[0];
-              if (e.results[i].isFinal) {
-                VB.finalSegments.push(t);
-                VB.interimTranscript = "";
-              } else {
-                VB.interimTranscript = t;
-              }
+              if (e.results[i].isFinal) VB.finalSegments[i] = t;
+              else interim += t;
             }
+            VB.interimTranscript = interim;
             VB.lastTranscript = rememberedTranscript();
             setTranscript(VB.lastTranscript, !VB.finalSegments.length);
             scheduleSpeechAutoStop(r);
@@ -14056,17 +14062,6 @@
             showToast("Voice not supported in this browser. Use Chrome.");
             return;
           }
-          // Stop any live recognition
-          clearSpeechSilenceTimer();
-          if (VB.recognition) {
-            try { VB.recognition.abort(); } catch (e) {}
-            VB.recognition = null;
-          }
-          if (VB.wakeRecognition && VB.wakeListening) {
-            VB.wakePaused = true;
-            try { VB.wakeRecognition.abort(); } catch (e) {}
-          }
-          VB.listening = false;
           // Reset state
           resetSpeechMemory();
           VB.parsed = null;
@@ -14086,13 +14081,12 @@
           const overlay = document.getElementById("voice-overlay");
           if (overlay) overlay.classList.remove("show");
           document.body.style.overflow = "";
-          clearSpeechSilenceTimer();
-          if (VB.recognition) {
-            try { VB.recognition.abort(); } catch (e) {}
-            VB.recognition = null;
+          if (VB.recognition && VB.listening) {
+            try {
+              VB.recognition.abort();
+            } catch (e) {}
           }
           VB.listening = false;
-          VB.wakePaused = false;  // allow wake listener to restart
           setOrbState("idle");
           setTimeout(startWakeListener, 700);
         };
@@ -14103,7 +14097,6 @@
 
         window.toggleVoiceListening = function () {
           if (VB.listening) {
-            clearSpeechSilenceTimer();
             try {
               VB.recognition && VB.recognition.stop();
             } catch (e) {}
@@ -14138,13 +14131,11 @@
           showConfirmBtns(false);
           showRetry(false);
           setTranscript("Bolo apna bill...", true);
-          setHint("Listening...");
+          setHint("Tap mic to start");
           document
             .getElementById("voice-parsed-preview")
             .classList.remove("show");
           setOrbState("idle");
-          // auto-start mic so user doesn't need to tap again
-          setTimeout(() => toggleVoiceListening(), 80);
         };
 
         window.voiceConfirmSave = function () {
@@ -14164,47 +14155,38 @@
         };
 
         window.voiceAddMore = function () {
-          const prev = VB.parsed ? JSON.parse(JSON.stringify(VB.parsed)) : null;
-          // stop any existing wake listener
-          if (VB.wakeRecognition && VB.wakeListening) {
-            VB.wakePaused = true;
-            try { VB.wakeRecognition.abort(); } catch (e) {}
-          }
+          // keep existing data and start listening again
           resetSpeechMemory();
           showConfirmBtns(false);
           showRetry(false);
           setTranscript("", false);
           setHint("Aur items bolo...");
-
-          const r = initSpeech();
-          if (!r) { setHint("Voice not supported - use Chrome"); return; }
-          VB.recognition = r;
-
-          // Override onend to merge new result with previous
-          const origOnEnd = r.onend;
-          r.onend = function () {
-            origOnEnd && origOnEnd.call(r);
-            // merge prev + new
-            if (VB.parsed && prev) {
-              // keep prev customer if new one not found
-              if (!VB.parsed.customer && prev.customer)
-                VB.parsed.customer = prev.customer;
-              // keep higher discount
-              if (!VB.parsed.discount && prev.discount)
-                VB.parsed.discount = prev.discount;
-              // merge items, dedup by productId
-              const seenIds = new Set((VB.parsed.items || []).map(i => i.product && i.product.id));
-              const extraItems = (prev.items || []).filter(i => i.product && !seenIds.has(i.product.id));
-              VB.parsed.items = [...extraItems, ...(VB.parsed.items || [])];
-              showParsed(VB.parsed);
-              showConfirmBtns(true);
-              showRetry(true);
-              setHint("Items added - confirm karein?");
-            }
-          };
-
+          const prev = VB.parsed;
+          // start fresh recognition
+          VB.recognition = initSpeech();
+          if (!VB.recognition) return;
+          VB.recognition.onend = (function (origOnEnd) {
+            return function () {
+              origOnEnd && origOnEnd.call(VB.recognition);
+              // merge with prev
+              if (VB.parsed && prev) {
+                VB.parsed.items = [
+                  ...(prev.items || []),
+                  ...(VB.parsed.items || []),
+                ];
+                if (!VB.parsed.customer && prev.customer)
+                  VB.parsed.customer = prev.customer;
+                if (!VB.parsed.discount && prev.discount)
+                  VB.parsed.discount = prev.discount;
+                showParsed(VB.parsed);
+                showConfirmBtns(true);
+                showRetry(true);
+                setHint("Items added - confirm karein?");
+              }
+            };
+          })(VB.recognition.onend);
           try {
-            r.start();
+            VB.recognition.start();
           } catch (e) {
             setHint("Mic error: " + e.message);
           }
