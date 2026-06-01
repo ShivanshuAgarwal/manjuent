@@ -3,16 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Manju Enterprises</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%23ffffff'/%3E%3Ctext x='256' y='390' text-anchor='middle' font-family='-apple-system,BlinkMacSystemFont,Helvetica Neue,Arial,sans-serif' font-size='380' font-weight='800' fill='%231d1d1f'%3EM%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='115' fill='%23ffffff'/%3E%3Ctext x='256' y='390' text-anchor='middle' font-family='-apple-system,BlinkMacSystemFont,Helvetica Neue,Arial,sans-serif' font-size='380' font-weight='800' fill='%231d1d1f'%3EM%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://www.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap&font-display=swap" rel="stylesheet">
 <!-- Firebase v9 compat -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<!-- html2canvas for JPEG bill download -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- html2canvas for JPEG bill download — loaded lazily -->
+<script>
+function _loadHtml2Canvas(cb) {
+  if (window.html2canvas) { cb && cb(); return; }
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+  s.onload = cb;
+  document.head.appendChild(s);
+}
+</script>
 <!-- App config (Firebase keys + PIN) -->
 <script>
 // ── Firebase Configuration ──────────────────────────────────────
@@ -285,7 +298,7 @@ body.dark .total-row.grand .total-value { color:var(--text); }
 .search-icon { color:var(--muted); font-size:15px; flex-shrink:0; }
 .search-input-wrap input { flex:1; border:none; background:transparent; outline:none; font-family:var(--font); font-size:15px; color:var(--text); }
 .search-input-wrap input::placeholder { color:var(--muted); }
-.sheet-body { overflow-y:auto; max-height:calc(92dvh - 130px); -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+.sheet-body { overflow-y:auto; max-height:calc(92dvh - 130px); -webkit-overflow-scrolling:touch; overscroll-behavior:contain; touch-action:pan-y; }
 .sheet-item { display:flex; align-items:center; padding:13px 16px; gap:12px; cursor:pointer; transition:background 0.1s; border-bottom:0.5px solid var(--separator); }
 .sheet-item:last-child { border-bottom:none; }
 .sheet-item:active { background:var(--surface2); }
@@ -368,7 +381,7 @@ body.dark .bills-summary-label { color:var(--muted); }
 body.dark .bills-summary-val { color:var(--text); }
 .bills-summary-count { font-size:13px; color:rgba(255,255,255,0.55); margin-top:3px; }
 body.dark .bills-summary-count { color:var(--muted); }
-.bill-card { background:var(--surface); border-radius:var(--radius); border:0.5px solid var(--glass-border); box-shadow:var(--shadow); padding:15px 16px; cursor:pointer; transition:transform 0.26s var(--ease-spring), box-shadow 0.26s var(--ease-out), background 0.12s; animation:fadeUp 0.4s var(--ease-out) both; -webkit-user-select:none; user-select:none; }
+.bill-card { background:var(--surface); border-radius:var(--radius); border:0.5px solid var(--glass-border); box-shadow:var(--shadow); padding:15px 16px; cursor:pointer; transition:transform 0.26s var(--ease-spring), box-shadow 0.26s var(--ease-out), background 0.12s; animation:fadeUp 0.4s var(--ease-out) both; -webkit-user-select:none; user-select:none; contain:layout style; }
 .bill-card:active { transform:scale(0.978); box-shadow:none; background:var(--surface2); }
 .bill-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:7px; }
 .bill-inv   { font-size:12px; font-weight:600; font-family:var(--mono); color:var(--accent); }
@@ -559,7 +572,7 @@ mark { background:rgba(255,204,0,0.32); color:inherit; border-radius:3px; paddin
 }
 #sync-status.show { opacity:1; }
 .sync-dot { width:7px; height:7px; border-radius:50%; background:var(--muted); transition:background 0.3s; }
-.sync-dot.syncing { background:var(--warn); animation:pulse 0.8s infinite; }
+.sync-dot.syncing { background:var(--warn); opacity: 0.7; }
 .sync-dot.ok { background:var(--success); }
 .sync-dot.err { background:var(--danger); }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -1519,6 +1532,146 @@ body.dark .bottom-action.primary {
     font-size: 12px !important;
   }
 }
+
+/* ================================================================
+   MOBILE PERFORMANCE — kills the expensive GPU work on phones
+   ================================================================ */
+@media (max-width: 768px) {
+  /* 1. Replace all backdrop-blur with solid backgrounds — single biggest win */
+  .nav-bar,
+  .bottom-bar,
+  .sheet-overlay,
+  .sheet,
+  .search-input-wrap,
+  .universal-search-overlay,
+  .universal-search-panel,
+  #toast {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .nav-bar,
+  .bottom-bar {
+    background: var(--surface) !important;
+    border-color: var(--glass-border) !important;
+  }
+  .sheet-overlay {
+    background: rgba(0,0,0,0.45) !important;
+  }
+  .universal-search-overlay {
+    background: var(--bg) !important;
+  }
+  .universal-search-panel {
+    background: var(--surface) !important;
+  }
+  #toast {
+    background: rgba(28,28,30,0.96) !important;
+  }
+
+  /* 2. Strip the glass-surface multi-layer backgrounds — just use flat color */
+  .gw-card-group,
+  .gw-tile,
+  .form-group,
+  .items-card,
+  .totals-card,
+  .sheet,
+  .master-card,
+  .report-card,
+  .voucher-bar,
+  .search-input-wrap,
+  .backup-stat-card,
+  .bill-card,
+  .timeline-card,
+  .kpi-card,
+  .action-chip {
+    background: var(--surface) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important;
+  }
+
+  /* 3. Kill infinite looping animations — they run 24/7 on mobile GPU */
+  .liquid-card::before,
+  .gw-tile::after,
+  .gw-card-group::after,
+  .kpi-card::after,
+  .timeline-card::after,
+  .action-chip::after,
+  .hero-chart-wrap::after,
+  .premium-hero::before {
+    animation: none !important;
+  }
+
+  /* 4. Replace liquid-card multi-gradient with simple flat */
+  .liquid-card,
+  .premium-hero,
+  .hero-chart-wrap {
+    background: var(--surface) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10) !important;
+  }
+
+  /* 5. Kill mesh/noise SVG background textures */
+  .liquid-card,
+  .glass-surface,
+  .gw-card-group,
+  .gw-tile,
+  .form-group,
+  .items-card,
+  .totals-card,
+  .sheet,
+  .master-card {
+    background-image: none !important;
+  }
+
+  /* 6. Remove body radial gradients */
+  body {
+    background: var(--bg) !important;
+  }
+  body::before {
+    display: none !important;
+  }
+
+  /* 7. Reduce will-change to composited-only elements */
+  .kpi-card,
+  .timeline-card,
+  .gw-tile,
+  .action-chip,
+  .hero-chart-wrap {
+    will-change: auto !important;
+  }
+
+  /* 8. Simplify transitions — shorter = less jank */
+  .gw-tile,
+  .bill-card,
+  .kpi-card,
+  .bottom-action,
+  .gw-row,
+  .sheet-item {
+    transition: background 0.1s !important;
+    transform: none !important;
+  }
+  .gw-tile:active,
+  .bill-card:active,
+  .kpi-card:active {
+    background: var(--surface2) !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* 9. Remove hover effects that don't apply on touch anyway */
+  .kpi-card:hover,
+  .timeline-card:hover,
+  .gw-tile:hover,
+  .action-chip:hover {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  /* 10. Simplify sheet slide-up animation */
+  .sheet {
+    animation: slideUp 0.28s ease-out !important;
+  }
+}
+
 /* Apple Premium v4: unclipped hero and clearer scored search */
 .premium-hero {
   min-height: 520px !important;
@@ -1655,99 +1808,6 @@ body.dark .bottom-action.primary {
     left: 16px !important;
     right: 16px !important;
     bottom: 16px !important;
-  }
-}
-/* Apple Premium v5: mobile speed + real active navigation */
-.bottom-action.primary {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-.bottom-action.primary .icon,
-.bottom-action.primary .label {
-  color: rgba(60,60,67,.58) !important;
-}
-.bottom-action.is-active {
-  background:
-    linear-gradient(180deg, rgba(232,244,255,.92), rgba(207,231,251,.62)) !important;
-  box-shadow:
-    0 1px 1px rgba(255,255,255,.86) inset,
-    0 14px 34px rgba(10,132,255,.16),
-    0 0 0 1px rgba(255,255,255,.68) inset !important;
-}
-.bottom-action.is-active .icon,
-.bottom-action.is-active .label {
-  color: var(--accent) !important;
-}
-.bottom-action.is-action {
-  color: var(--accent);
-}
-.bottom-action.is-action .icon {
-  color: var(--accent) !important;
-}
-@media (max-width: 620px), (hover: none), (pointer: coarse) {
-  body {
-    background:
-      linear-gradient(180deg, #f7f4ed 0%, #eee9dd 100%) !important;
-  }
-  body::before,
-  .premium-hero::before,
-  .liquid-card::before,
-  .liquid-card::after,
-  .gw-tile::after,
-  .gw-card-group::after,
-  .kpi-card::after,
-  .timeline-card::after,
-  .action-chip::after,
-  .hero-chart-wrap::after,
-  .sync-health-card::after {
-    animation: none !important;
-  }
-  .nav-bar,
-  .bottom-bar,
-  .liquid-card,
-  .glass-surface,
-  .gw-card-group,
-  .gw-tile,
-  .kpi-card,
-  .sync-health-card,
-  .hero-chart-wrap {
-    backdrop-filter: blur(14px) saturate(135%) !important;
-    -webkit-backdrop-filter: blur(14px) saturate(135%) !important;
-  }
-  .premium-hero {
-    min-height: 560px !important;
-    margin-top: 28px !important;
-    overflow: hidden !important;
-    contain: layout paint;
-  }
-  .premium-title {
-    max-width: 11ch;
-    font-size: 38px !important;
-  }
-  .hero-chart-wrap {
-    top: 318px !important;
-    bottom: auto !important;
-    min-height: 206px;
-  }
-  #hero-chart-canvas {
-    height: 112px !important;
-  }
-  .premium-grid {
-    margin-top: 20px !important;
-  }
-  .kpi-card {
-    min-height: 160px !important;
-  }
-  .smart-actions {
-    gap: 12px !important;
-  }
-  .sync-health-card {
-    margin-top: 18px !important;
-    margin-bottom: 18px !important;
-  }
-  .bottom-bar {
-    overflow: hidden !important;
-    transform: translateZ(0);
   }
 }
 </style>
@@ -2677,24 +2737,42 @@ function showSync(state, label) {
 // ================================================================
 // REAL-TIME CLOUD LISTENERS (data flows from Firestore → app)
 // ================================================================
+let _persistInProgress = {};  // guard: don't overwrite local mid-save
+
 function startCloudListeners() {
   if (!db) return;
   const collections = ['customers','products','transports','bills'];
   collections.forEach(col => {
     db.collection(col).onSnapshot(snap => {
+      // Skip if we're in the middle of persisting this collection
+      // (avoids the listener seeing a partially-written state)
+      if (_persistInProgress[col]) return;
+
       const docs = [];
       snap.forEach(d => docs.push({id: d.id, ...d.data()}));
+
+      // SAFETY: never replace a non-empty local collection with empty cloud data.
+      // An empty snapshot usually means a mid-write race condition.
+      if (docs.length === 0 && S[col].length > 0) {
+        console.warn('[ManjuEnt] Ignoring empty snapshot for', col, '— possible race condition');
+        return;
+      }
+
       S[col] = docs;
-      // Refresh UI if on a relevant screen
-      const active = document.querySelector('.screen.active');
-      if (!active) return;
-      const id = active.id;
-      if (id === 'screen-gateway') updateGatewayCounts();
-      if (id === 'screen-bills') renderBillsList(document.getElementById('bills-search')?.value || '');
-      if (id === 'screen-customers') renderMasterList('cust');
-      if (id === 'screen-products') renderMasterList('prod');
-      if (id === 'screen-transports') renderMasterList('trans');
-      if (id === 'screen-backup') updateBackupScreen();
+      localStorage.setItem('me2_'+col, JSON.stringify(docs));
+
+      // Batch UI updates into next animation frame to avoid layout thrash
+      requestAnimationFrame(() => {
+        const active = document.querySelector('.screen.active');
+        if (!active) return;
+        const id = active.id;
+        if (id === 'screen-gateway') updateGatewayCounts();
+        if (id === 'screen-bills') renderBillsList(document.getElementById('bills-search')?.value || '');
+        if (id === 'screen-customers') renderMasterList('cust');
+        if (id === 'screen-products') renderMasterList('prod');
+        if (id === 'screen-transports') renderMasterList('trans');
+        if (id === 'screen-backup') updateBackupScreen();
+      });
     }, err => {
       console.error('Listener error:', col, err);
       showSync('err', 'Sync error');
@@ -2746,22 +2824,38 @@ function persist(key) {
   const col = db.collection(key);
   const items = S[key];
 
-  // Use batch writes for efficiency
-  const batch = db.batch();
-
-  // We'll do a full replace: delete all then set all
+  // ── SAFE SYNC STRATEGY ──────────────────────────────────────────
+  // 1. Upsert (set) every item we currently have — never bulk-delete.
+  // 2. Remove only docs whose id is no longer in our local array.
+  // This prevents two simultaneous users from wiping each other's data.
+  _persistInProgress[key] = true;
   col.get().then(snap => {
-    snap.forEach(doc => batch.delete(doc.ref));
+    const batch = db.batch();
+    const localIds = new Set(items.map(i => i.id));
+
+    // Delete docs that were removed locally
+    snap.forEach(doc => {
+      if (!localIds.has(doc.id)) {
+        batch.delete(doc.ref);
+      }
+    });
+
+    // Upsert all current items
     items.forEach(item => {
       const ref = col.doc(item.id);
       batch.set(ref, item);
     });
+
     return batch.commit();
   }).then(() => {
+    _persistInProgress[key] = false;
     showSync('ok', 'Saved ✓');
   }).catch(err => {
+    _persistInProgress[key] = false;
     console.error('Sync error:', err);
     showSync('err', 'Sync failed');
+    // Retry once after 3 seconds
+    setTimeout(() => persist(key), 3000);
   });
 }
 
@@ -2881,7 +2975,7 @@ function updateDashboardStats(){
   if(el('kpi-average-note'))el('kpi-average-note').textContent=monthBills.length?'Across this month':'No bills yet';
   if(el('kpi-top-customer'))el('kpi-top-customer').textContent=topCustomer.name||'None';
   if(el('kpi-top-customer-note'))el('kpi-top-customer-note').textContent=fmt(topCustomer.value||0);
-  setTimeout(()=>{renderHeroChart();renderBarChart();renderDonutChart();renderTopCustomersMini();renderRecentActivity();renderSparklines();},80);
+  scheduleDashboardCharts();
 }
 
 function updateGatewayCounts(){
@@ -3030,7 +3124,7 @@ function toggleDark(){
       icon.innerHTML='<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
     }
   }
-  setTimeout(()=>{renderHeroChart();renderBarChart();renderDonutChart();renderTopCustomersMini();renderSparklines();},50);
+  scheduleDashboardCharts();
 }
 
 function startNewBill(){
@@ -3473,6 +3567,7 @@ function shareCurrentBillWhatsApp(){
   const b=S.bills.find(x=>x.id===S.currentBillId);if(!b)return;
   showToast('Preparing…');
   const target=document.getElementById('bill-jpeg-target');
+  _loadHtml2Canvas(() => {
   setTimeout(()=>{
     html2canvas(target,{scale:2.5,useCORS:true,backgroundColor:'#ffffff',logging:false}).then(canvas=>{
       canvas.toBlob(blob=>{
@@ -3491,6 +3586,7 @@ function shareCurrentBillWhatsApp(){
       },'image/jpeg',0.95);
     });
   },100);
+  }); // end _loadHtml2Canvas
 }
 
 
@@ -3760,7 +3856,7 @@ function confirmProductImport(dataStart){const ni=parseInt(document.getElementBy
 function updateBackupScreen(){document.getElementById('bk-bill-count').textContent=S.bills.length;document.getElementById('bk-cust-count').textContent=S.customers.length;document.getElementById('bk-prod-count').textContent=S.products.length;document.getElementById('bk-trans-count').textContent=S.transports.length;const total=S.bills.reduce((s,b)=>s+(b.grand||0),0);document.getElementById('bk-total-val').innerHTML='&#8377;'+total.toFixed(2);const lastBak=localStorage.getItem('me2_last_backup');document.getElementById('bk-last-backup').textContent=lastBak?'Last backup: '+new Date(lastBak).toLocaleString('en-IN'):'Last backup: Never';}
 function exportBackup(){const bd={version:2,exportedAt:new Date().toISOString(),appName:'Manju Enterprises',customers:S.customers,products:S.products,transports:S.transports,bills:S.bills};const blob=new Blob([JSON.stringify(bd,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='manju_backup_'+todayISO().replace(/-/g,'')+'.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);localStorage.setItem('me2_last_backup',new Date().toISOString());showToast('Backup downloaded');updateBackupScreen();updateGatewayCounts();}
 function restoreBackup(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const data=JSON.parse(e.target.result);if(!data.appName||data.appName!=='Manju Enterprises'){showToast('Invalid backup file');return;}if(!confirm('Restore backup?\n\nThis replaces ALL current data.\n\nBills: '+(data.bills||[]).length+'\nCustomers: '+(data.customers||[]).length))return;S.customers=data.customers||[];S.products=data.products||[];S.transports=data.transports||[];S.bills=data.bills||[];['customers','products','transports','bills'].forEach(k=>persist(k));showToast('Data restored');updateBackupScreen();updateGatewayCounts();}catch(err){showToast('Error: '+err.message);}};reader.readAsText(file);event.target.value='';}
-function clearAllData(){if(!confirm('Delete ALL data? Cannot be undone!'))return;if(!confirm('Final confirmation: tap OK to delete everything.'))return;S.customers=[];S.products=[];S.transports=[];S.bills=[];['customers','products','transports','bills'].forEach(k=>localStorage.removeItem('me2_'+k));showToast('All data cleared');updateBackupScreen();updateGatewayCounts();}
+function clearAllData(){if(!confirm('Delete ALL data? Cannot be undone!'))return;if(!confirm('Final confirmation: tap OK to delete everything.'))return;S.customers=[];S.products=[];S.transports=[];S.bills=[];['customers','products','transports','bills'].forEach(k=>{localStorage.removeItem('me2_'+k);if(_firebaseReady&&db){const batch=db.batch();db.collection(k).get().then(snap=>{snap.forEach(doc=>batch.delete(doc.ref));return batch.commit();}).catch(e=>console.error('Clear cloud error:',k,e));}});showToast('All data cleared');updateBackupScreen();updateGatewayCounts();}
 
 function haptic(ms){try{window.navigator?.vibrate?.(ms||10);}catch(e){}}
 function showToast(msg){haptic(10);const el=document.getElementById('toast');el.textContent=String(msg||'').replace(/[✅🏢]/g,'').trim();el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2800);}
@@ -4039,8 +4135,9 @@ function saveCurrentBillAsJpeg() {
   const target = document.getElementById('bill-jpeg-target');
   target.innerHTML = html;
 
-  setTimeout(() => {
-    html2canvas(target, {
+  _loadHtml2Canvas(() => {
+    setTimeout(() => {
+      html2canvas(target, {
       scale: 2.5,
       useCORS: true,
       backgroundColor: '#ffffff',
@@ -4062,7 +4159,63 @@ function saveCurrentBillAsJpeg() {
       showToast('Could not generate image');
     });
   }, 100);
+  }); // end _loadHtml2Canvas
 }
+
+// ================================================================
+// PERFORMANCE UTILITIES
+// ================================================================
+
+// Debounce helper
+function debounce(fn, ms) {
+  let t;
+  return function(...args) { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), ms); };
+}
+
+// Single coalesced chart render — call this instead of rendering charts inline
+let _chartScheduled = false;
+function scheduleDashboardCharts() {
+  if (_chartScheduled) return;
+  _chartScheduled = true;
+  requestAnimationFrame(() => {
+    _chartScheduled = false;
+    renderRecentActivity();
+    // Use IntersectionObserver so charts only render when visible
+    const heroCanvas = document.getElementById('hero-chart-canvas');
+    const barCanvas  = document.getElementById('bar-chart-canvas');
+    const donutCanvas = document.getElementById('donut-canvas');
+    if (!window._chartObserver) {
+      window._chartObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          const id = e.target.id;
+          if (id === 'hero-chart-canvas') renderHeroChart();
+          if (id === 'bar-chart-canvas')  renderBarChart();
+          if (id === 'donut-canvas')      { renderDonutChart(); renderTopCustomersMini(); }
+          if (id === 'spark-today')       renderSparklines();
+        });
+      }, { threshold: 0.1 });
+      [heroCanvas, barCanvas, donutCanvas,
+       document.getElementById('spark-today')].forEach(c => { if(c) window._chartObserver.observe(c); });
+    }
+  });
+}
+
+// Debounced resize handler — replaces the existing one
+const _debouncedResize = debounce(function() {
+  renderHeroChart();
+  renderBarChart();
+  renderDonutChart();
+  renderTopCustomersMini();
+  renderSparklines();
+  const active = document.querySelector('.screen.active');
+  if (active && active.id === 'screen-reports') {
+    const bills = getReportBills();
+    renderReportBarChart(bills);
+    renderReportDonutChart(bills);
+    renderReportTopCustomersMini(bills);
+  }
+}, 250);
 
 // ================================================================
 // INIT
@@ -4554,24 +4707,7 @@ function renderReportTopCustomersMini(bills) {
   }).join('');
 }
 
-window.addEventListener('resize', function() {
-  clearTimeout(window._resizeTimer);
-  window._resizeTimer = setTimeout(function(){
-    renderHeroChart();
-    renderBarChart();
-    renderDonutChart();
-    renderTopCustomersMini();
-    renderSparklines();
-    // Re-render reports charts if that screen is active
-    const active = document.querySelector('.screen.active');
-    if(active && active.id === 'screen-reports') {
-      const bills = getReportBills();
-      renderReportBarChart(bills);
-      renderReportDonutChart(bills);
-      renderReportTopCustomersMini(bills);
-    }
-  }, 200);
-});
+window.addEventListener('resize', _debouncedResize, { passive: true });
 
 // Apple Premium v2 behavior: smarter typo suggestions and richer cloud health.
 (function(){
@@ -4697,69 +4833,6 @@ window.addEventListener('resize', function() {
   window.addEventListener('offline', () => updateSyncHealth('err', 'Offline'));
   setInterval(() => updateSyncHealth(lastSyncState), 30000);
   setTimeout(() => updateSyncHealth(navigator.onLine ? ((typeof _firebaseReady !== 'undefined' && _firebaseReady) ? 'ok' : 'syncing') : 'err'), 60);
-})();
-
-// Apple Premium v5: bottom navigation follows the active screen instead of
-// leaving New Bill highlighted forever.
-(function(){
-  const screenToLabel = {
-    'screen-bill': 'New Bill',
-    'screen-bills': 'Bills',
-    'screen-customers': 'Customers',
-    'screen-backup': 'Backup'
-  };
-
-  function normalize(text){
-    return String(text || '').trim().toLowerCase();
-  }
-
-  function updateBottomNavState(activeScreenId){
-    const activeLabel = screenToLabel[activeScreenId] || '';
-    document.querySelectorAll('.bottom-bar .bottom-action').forEach(action => {
-      const label = action.querySelector('.label')?.textContent || '';
-      action.classList.remove('primary', 'is-active', 'is-action');
-      if(activeLabel && normalize(label) === normalize(activeLabel)){
-        action.classList.add('is-active');
-      }
-      if(!activeLabel && normalize(label) === 'new bill'){
-        action.classList.add('is-action');
-      }
-    });
-  }
-
-  const originalShowScreen = window._showScreen;
-  if(typeof originalShowScreen === 'function'){
-    window._showScreen = function(id){
-      originalShowScreen(id);
-      updateBottomNavState(id);
-    };
-  }
-
-  const originalGoTo = window.goTo;
-  if(typeof originalGoTo === 'function'){
-    window.goTo = function(id){
-      const result = originalGoTo(id);
-      setTimeout(() => {
-        const active = document.querySelector('.screen.active');
-        updateBottomNavState(active?.id || id);
-      }, 0);
-      return result;
-    };
-  }
-
-  const originalStartNewBill = window.startNewBill;
-  if(typeof originalStartNewBill === 'function'){
-    window.startNewBill = function(){
-      const result = originalStartNewBill();
-      setTimeout(() => updateBottomNavState('screen-bill'), 0);
-      return result;
-    };
-  }
-
-  setTimeout(() => {
-    const active = document.querySelector('.screen.active');
-    updateBottomNavState(active?.id || 'screen-gateway');
-  }, 80);
 })();
 
 </script>
