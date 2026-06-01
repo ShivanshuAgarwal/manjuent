@@ -3065,13 +3065,11 @@
           filter: none;
         }
       }
-      .total-row.grand,
       .item-col-row,
       .form-sub,
       .words-row {
         background: rgba(255, 255, 255, 0.38) !important;
       }
-      body.dark .total-row.grand,
       body.dark .item-col-row,
       body.dark .form-sub,
       body.dark .words-row {
@@ -5412,10 +5410,8 @@
 
         <section class="premium-grid">
           <div class="kpi-card liquid-card" onclick="openBillsFilter('all')" style="cursor:pointer">
-            <div class="kpi-label">Today</div>
-            <div class="kpi-value" id="kpi-today">0</div>
-            <div class="kpi-note" id="kpi-today-count">bills today</div>
-            <div style="font-size:11px;font-family:var(--mono);color:var(--muted);margin-top:2px" id="kpi-today-money">&#8377;0</div>
+            <div class="kpi-label">Today's Revenue</div>
+            <div class="kpi-value" id="kpi-today-money" style="font-size:18px">₹0</div>
             <canvas class="sparkline" id="spark-today"></canvas>
           </div>
           <div class="kpi-card liquid-card">
@@ -9005,12 +9001,8 @@
         if (el("hero-growth"))
           el("hero-growth").textContent =
             (growth >= 0 ? "+" : "") + growth.toFixed(1) + "%";
-        animateNumber("kpi-today", todayBills.length);
         animateNumber("kpi-delivered", deliveredBills.length);
         animateNumber("kpi-pending", pendingBills.length);
-        if (el("kpi-today-count"))
-          el("kpi-today-count").textContent =
-            todayBills.length + " bill" + (todayBills.length !== 1 ? "s" : "");
         if (el("kpi-today-money"))
           el("kpi-today-money").textContent = fmt(todayTotal);
         if (el("kpi-delivered-note"))
