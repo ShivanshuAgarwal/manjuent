@@ -29,7 +29,7 @@
     <!-- Firebase v9 compat -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-    <!-- html2canvas for JPEG bill download â€” loaded lazily -->
+    <!-- html2canvas for JPEG bill download &mdash; loaded lazily -->
     <script>
       function _loadHtml2Canvas(cb) {
         if (window.html2canvas) {
@@ -45,7 +45,7 @@
     </script>
     <!-- App config (Firebase keys + PIN) -->
     <script>
-      // â”€â”€ Firebase Configuration â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // -- Firebase Configuration --------------------------------------
       window.FIREBASE_CONFIG = {
         apiKey: "AIzaSyAvq04DKa_7iOn3J2zZvVHU7WBqahpWofk",
         authDomain: "manjuenterprise.firebaseapp.com",
@@ -1524,6 +1524,38 @@
         display: block;
       }
 
+      .bill-filter-hero {
+        padding: 12px 16px 8px;
+        background: var(--bg);
+      }
+      .bill-filter-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+        padding: 4px;
+        border-radius: 14px;
+        background: var(--surface2);
+        border: 0.5px solid var(--glass-border);
+      }
+      .bill-filter-tab {
+        border: 0;
+        border-radius: 10px;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        font-family: var(--font);
+        font-size: 13px;
+        font-weight: 700;
+        min-height: 38px;
+        padding: 8px 6px;
+        transition: all 0.2s var(--ease-spring);
+      }
+      .bill-filter-tab.active {
+        background: var(--surface);
+        color: var(--text);
+        box-shadow: var(--shadow);
+      }
+
       /* ADD FORM */
       .add-form {
         padding: 16px;
@@ -1738,6 +1770,122 @@
       .inv-footer strong {
         color: var(--text);
         font-style: normal;
+      }
+      @media (max-width: 520px) {
+        .invoice-card {
+          margin: 12px;
+          border-radius: 22px;
+        }
+        .inv-header {
+          padding: 16px;
+        }
+        .inv-title {
+          font-size: 19px;
+        }
+        .inv-meta-cell {
+          padding: 10px 12px;
+          min-width: 0;
+        }
+        .inv-meta-val,
+        .inv-meta-sub {
+          overflow-wrap: anywhere;
+        }
+        .inv-table,
+        .inv-table tbody,
+        .inv-table tfoot {
+          display: block;
+          width: 100%;
+        }
+        .inv-table thead {
+          display: none;
+        }
+        .inv-table tr.inv-item-row {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 8px 10px;
+          padding: 14px;
+          border-bottom: 0.5px solid var(--separator);
+        }
+        .inv-table tr.inv-extra-row,
+        .inv-table tr.inv-total-row {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 14px;
+          border-bottom: 0.5px solid var(--separator);
+          background: var(--surface);
+        }
+        .inv-table tr.inv-total-row {
+          background: var(--surface2);
+          padding: 15px 14px;
+        }
+        .inv-table td {
+          display: block;
+          padding: 0;
+          border-bottom: 0;
+          min-width: 0;
+          text-align: left !important;
+          overflow-wrap: anywhere;
+        }
+        .inv-table td::before {
+          content: attr(data-label);
+          display: block;
+          margin-bottom: 3px;
+          color: var(--muted);
+          font-family: var(--font);
+          font-size: 9px;
+          font-weight: 800;
+          letter-spacing: 0.35px;
+          text-transform: uppercase;
+        }
+        .inv-table .inv-bundle-cell {
+          display: none;
+        }
+        .inv-table .inv-item-cell {
+          grid-column: 1 / -1;
+          font-size: 14px;
+          font-weight: 700;
+          line-height: 1.35;
+        }
+        .inv-table .inv-amount-cell {
+          font-size: 14px;
+          font-weight: 800;
+          text-align: right !important;
+        }
+        .inv-table .inv-extra-label,
+        .inv-table .inv-total-label {
+          color: var(--muted);
+          font-size: 13px;
+          font-weight: 600;
+        }
+        .inv-table .inv-extra-label::before,
+        .inv-table .inv-extra-amount::before,
+        .inv-table .inv-total-label::before,
+        .inv-table .inv-total-amount::before {
+          display: none;
+        }
+        .inv-table .inv-extra-amount,
+        .inv-table .inv-total-amount {
+          font-family: var(--mono);
+          font-weight: 800;
+          white-space: nowrap;
+          text-align: right !important;
+        }
+        .inv-table .inv-total-label {
+          color: var(--text);
+          font-weight: 800;
+        }
+        .inv-table .inv-total-amount {
+          font-size: 20px !important;
+        }
+        .item-delivered-wrap {
+          margin-top: 8px;
+        }
+        .inv-footer {
+          font-size: 13px;
+          line-height: 1.4;
+        }
       }
       @media print {
         .no-print-inv {
@@ -2052,7 +2200,7 @@
         border-radius: 3px;
         padding: 0 1px;
       }
-      /* Delivered checkbox â€” hidden from JPEG/print */
+      /* Delivered checkbox &mdash; hidden from JPEG/print */
       #bill-jpeg-target .item-delivered-wrap {
         display: none !important;
       }
@@ -3849,10 +3997,10 @@
       }
 
       /* ================================================================
-   MOBILE PERFORMANCE â€” kills the expensive GPU work on phones
+   MOBILE PERFORMANCE &mdash; kills the expensive GPU work on phones
    ================================================================ */
       @media (max-width: 768px) {
-        /* 1. Replace all backdrop-blur with solid backgrounds â€” single biggest win */
+        /* 1. Replace all backdrop-blur with solid backgrounds &mdash; single biggest win */
         .nav-bar,
         .bottom-bar,
         .sheet-overlay,
@@ -3882,7 +4030,7 @@
           background: rgba(28, 28, 30, 0.96) !important;
         }
 
-        /* 2. Strip the glass-surface multi-layer backgrounds â€” just use flat color */
+        /* 2. Strip the glass-surface multi-layer backgrounds &mdash; just use flat color */
         .gw-card-group,
         .gw-tile,
         .form-group,
@@ -3904,7 +4052,7 @@
           box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
         }
 
-        /* 3. Kill infinite looping animations â€” they run 24/7 on mobile GPU */
+        /* 3. Kill infinite looping animations &mdash; they run 24/7 on mobile GPU */
         .liquid-card::before,
         .gw-tile::after,
         .gw-card-group::after,
@@ -3954,7 +4102,7 @@
           will-change: auto !important;
         }
 
-        /* 8. Simplify transitions â€” shorter = less jank */
+        /* 8. Simplify transitions &mdash; shorter = less jank */
         .gw-tile,
         .bill-card,
         .kpi-card,
@@ -4147,7 +4295,7 @@
       }
 
       /* ================================================================
-         VOICE BILL ASSISTANT â€” SIRI-STYLE
+         VOICE BILL ASSISTANT &mdash; SIRI-STYLE
       ================================================================ */
       .voice-mic-btn {
         color: var(--accent);
@@ -4467,13 +4615,19 @@
           ". hint .";
         align-items: center;
         justify-items: center;
-        gap: 10px;
+        gap: 12px;
         position: relative;
         animation: voiceBubbleIn 0.28s var(--ease-out) both;
       }
       @keyframes voiceBubbleIn {
-        from { opacity: 0; transform: scale(0.92) translateY(14px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
+        from {
+          opacity: 0;
+          transform: scale(0.92) translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
       }
       .voice-transcript-area {
         grid-area: transcript;
@@ -4486,8 +4640,16 @@
         backdrop-filter: blur(24px) saturate(1.65);
         -webkit-backdrop-filter: blur(24px) saturate(1.65);
         background:
-          radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.92), transparent 42%),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(242, 245, 250, 0.62));
+          radial-gradient(
+            circle at 20% 0%,
+            rgba(255, 255, 255, 0.92),
+            transparent 42%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.82),
+            rgba(242, 245, 250, 0.62)
+          );
         border: 0.5px solid rgba(255, 255, 255, 0.72);
         box-shadow:
           0 18px 48px rgba(0, 0, 0, 0.18),
@@ -4500,8 +4662,11 @@
         align-items: center;
       }
       body.dark .voice-transcript-area {
-        background:
-          linear-gradient(180deg, rgba(42, 42, 48, 0.86), rgba(24, 24, 30, 0.76));
+        background: linear-gradient(
+          180deg,
+          rgba(42, 42, 48, 0.86),
+          rgba(24, 24, 30, 0.76)
+        );
         border-color: rgba(255, 255, 255, 0.14);
       }
       .voice-transcript-text {
@@ -4534,18 +4699,41 @@
         height: 102px;
         border-radius: 50%;
         background:
-          radial-gradient(circle at 34% 22%, rgba(255, 255, 255, 0.98) 0 10%, transparent 22%),
-          radial-gradient(circle at 76% 30%, rgba(67, 217, 255, 0.95) 0 20%, transparent 42%),
-          radial-gradient(circle at 24% 76%, rgba(255, 45, 117, 0.98) 0 23%, transparent 45%),
-          radial-gradient(circle at 72% 78%, rgba(255, 214, 10, 0.92) 0 18%, transparent 40%),
-          radial-gradient(circle at 50% 50%, #4b6fff 0, #8338ec 48%, #16181f 100%);
+          radial-gradient(
+            circle at 34% 22%,
+            rgba(255, 255, 255, 0.98) 0 10%,
+            transparent 22%
+          ),
+          radial-gradient(
+            circle at 76% 30%,
+            rgba(67, 217, 255, 0.95) 0 20%,
+            transparent 42%
+          ),
+          radial-gradient(
+            circle at 24% 76%,
+            rgba(255, 45, 117, 0.98) 0 23%,
+            transparent 45%
+          ),
+          radial-gradient(
+            circle at 72% 78%,
+            rgba(255, 214, 10, 0.92) 0 18%,
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 50% 50%,
+            #4b6fff 0,
+            #8338ec 48%,
+            #16181f 100%
+          );
         box-shadow:
           0 12px 38px rgba(0, 0, 0, 0.34),
           0 0 34px rgba(80, 180, 255, 0.38),
           inset 0 0 22px rgba(255, 255, 255, 0.22),
           inset 0 -18px 26px rgba(0, 0, 0, 0.24);
         overflow: hidden;
-        animation: siriFloat 4.8s ease-in-out infinite, siriHue 10s linear infinite;
+        animation:
+          siriFloat 4.8s ease-in-out infinite,
+          siriHue 10s linear infinite;
       }
       .voice-orb-core::before,
       .voice-orb-core::after {
@@ -4553,7 +4741,15 @@
         position: absolute;
         inset: 16px 9px;
         border-radius: 50%;
-        background: conic-gradient(from 70deg, transparent, rgba(255,255,255,0.86), rgba(87,215,255,0.68), transparent, rgba(255,70,150,0.72), transparent);
+        background: conic-gradient(
+          from 70deg,
+          transparent,
+          rgba(255, 255, 255, 0.86),
+          rgba(87, 215, 255, 0.68),
+          transparent,
+          rgba(255, 70, 150, 0.72),
+          transparent
+        );
         filter: blur(7px);
         mix-blend-mode: screen;
         opacity: 0.72;
@@ -4575,7 +4771,15 @@
         position: absolute;
         inset: 17px;
         border-radius: 46% 54% 50% 50% / 48% 46% 54% 52%;
-        background: conic-gradient(from 180deg, #0a84ff, #64d2ff, #bf5af2, #ff375f, #ffd60a, #0a84ff);
+        background: conic-gradient(
+          from 180deg,
+          #0a84ff,
+          #64d2ff,
+          #bf5af2,
+          #ff375f,
+          #ffd60a,
+          #0a84ff
+        );
         filter: blur(12px);
         opacity: 0.38;
         z-index: -1;
@@ -4592,61 +4796,155 @@
         width: 102px !important;
         height: 102px !important;
         border: 0;
-        background: radial-gradient(circle, rgba(255,255,255,0.24), transparent 62%);
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.24),
+          transparent 62%
+        );
         filter: blur(5px);
       }
       .voice-orb.listening .voice-orb-core {
-        animation: siriFloat 1.25s ease-in-out infinite, siriHue 3.4s linear infinite;
+        animation:
+          siriFloat 1.25s ease-in-out infinite,
+          siriHue 3.4s linear infinite;
         box-shadow:
           0 0 48px rgba(100, 210, 255, 0.58),
           0 26px 90px rgba(255, 45, 117, 0.38),
           inset 0 0 34px rgba(255, 255, 255, 0.32);
       }
       .voice-orb.thinking .voice-orb-core {
-        animation: siriFloat 1.8s ease-in-out infinite, siriHue 4.5s linear infinite;
+        animation:
+          siriFloat 1.8s ease-in-out infinite,
+          siriHue 4.5s linear infinite;
       }
       .voice-orb.ready .voice-orb-core {
         background:
-          radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.95), transparent 18%),
+          radial-gradient(
+            circle at 30% 24%,
+            rgba(255, 255, 255, 0.95),
+            transparent 18%
+          ),
           radial-gradient(circle at 74% 30%, #34c759 0, transparent 31%),
           radial-gradient(circle at 20% 80%, #0a84ff 0, transparent 34%),
           linear-gradient(135deg, #30d158 0%, #64d2ff 54%, #0a84ff 100%);
       }
       .voice-orb.error .voice-orb-core {
         background:
-          radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.88), transparent 18%),
+          radial-gradient(
+            circle at 30% 24%,
+            rgba(255, 255, 255, 0.88),
+            transparent 18%
+          ),
           radial-gradient(circle at 72% 30%, #ff9500 0, transparent 31%),
           radial-gradient(circle at 20% 80%, #ff375f 0, transparent 34%),
           linear-gradient(135deg, #ff453a 0%, #ff9f0a 100%);
       }
       @keyframes siriFloat {
-        0%, 100% { transform: scale(1) translateY(0); }
-        50% { transform: scale(1.035) translateY(-2px); }
+        0%,
+        100% {
+          transform: scale(1) translateY(0);
+        }
+        50% {
+          transform: scale(1.035) translateY(-2px);
+        }
       }
       @keyframes siriHue {
-        from { filter: hue-rotate(0deg) saturate(1.15); }
-        to { filter: hue-rotate(360deg) saturate(1.15); }
+        from {
+          filter: hue-rotate(0deg) saturate(1.15);
+        }
+        to {
+          filter: hue-rotate(360deg) saturate(1.15);
+        }
       }
       @keyframes siriSpin {
-        to { transform: rotate(360deg); }
+        to {
+          transform: rotate(360deg);
+        }
       }
       .voice-parsed-preview {
         grid-area: preview;
         width: 100%;
         max-height: 150px;
         overflow: auto;
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(18px) saturate(1.2);
-        -webkit-backdrop-filter: blur(18px) saturate(1.2);
-        border-radius: 18px;
-        box-shadow: 0 16px 46px rgba(0, 0, 0, 0.16);
+        padding: 8px;
+        background:
+          radial-gradient(
+            circle at 18% 0%,
+            rgba(255, 255, 255, 0.88),
+            transparent 42%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.84),
+            rgba(246, 248, 252, 0.68)
+          );
+        backdrop-filter: blur(22px) saturate(1.35);
+        -webkit-backdrop-filter: blur(22px) saturate(1.35);
+        border: 0.5px solid rgba(255, 255, 255, 0.7);
+        border-radius: 22px;
+        box-shadow:
+          0 18px 48px rgba(0, 0, 0, 0.18),
+          inset 0 1px 0 rgba(255, 255, 255, 0.82);
+      }
+      .voice-parsed-preview .vp-row {
+        min-height: 34px;
+        padding: 8px 10px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .voice-parsed-preview .vp-row + .vp-row {
+        border-top: 0.5px solid rgba(60, 60, 67, 0.12);
+      }
+      .voice-parsed-preview .vp-label {
+        flex: 0 0 auto;
+        min-width: 70px;
+        color: #6e6e73;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .voice-parsed-preview .vp-val {
+        color: #1d1d1f;
+        font-size: 14px;
+        font-weight: 750;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .voice-parsed-preview .vp-miss {
+        color: #ff453a;
+        font-size: 13px;
+        font-weight: 700;
       }
       body.dark .voice-parsed-preview {
-        background: rgba(20, 20, 24, 0.86);
+        background:
+          radial-gradient(
+            circle at 18% 0%,
+            rgba(255, 255, 255, 0.16),
+            transparent 42%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(42, 42, 48, 0.84),
+            rgba(22, 22, 28, 0.78)
+          );
+        border-color: rgba(255, 255, 255, 0.13);
+      }
+      body.dark .voice-parsed-preview .vp-row + .vp-row {
+        border-top-color: rgba(255, 255, 255, 0.1);
+      }
+      body.dark .voice-parsed-preview .vp-label {
+        color: rgba(235, 235, 245, 0.62);
+      }
+      body.dark .voice-parsed-preview .vp-val {
+        color: #fff;
       }
       .voice-confirm-btns {
         grid-area: actions;
         width: 100%;
+        gap: 8px;
       }
       .voice-bottom-row {
         display: contents;
@@ -4663,8 +4961,16 @@
         backdrop-filter: blur(24px) saturate(1.65);
         -webkit-backdrop-filter: blur(24px) saturate(1.65);
         background:
-          radial-gradient(circle at 28% 18%, rgba(255,255,255,0.94), transparent 42%),
-          linear-gradient(180deg, rgba(255,255,255,0.82), rgba(238,242,248,0.58));
+          radial-gradient(
+            circle at 28% 18%,
+            rgba(255, 255, 255, 0.94),
+            transparent 42%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.82),
+            rgba(238, 242, 248, 0.58)
+          );
         border: 0.5px solid rgba(255, 255, 255, 0.72);
         color: rgba(20, 22, 28, 0.9);
         box-shadow:
@@ -4698,8 +5004,16 @@
       body.dark .voice-close-btn,
       body.dark .voice-retry-btn {
         background:
-          radial-gradient(circle at 28% 18%, rgba(255,255,255,0.2), transparent 42%),
-          linear-gradient(180deg, rgba(58, 58, 66, 0.82), rgba(28, 28, 34, 0.64));
+          radial-gradient(
+            circle at 28% 18%,
+            rgba(255, 255, 255, 0.2),
+            transparent 42%
+          ),
+          linear-gradient(
+            180deg,
+            rgba(58, 58, 66, 0.82),
+            rgba(28, 28, 34, 0.64)
+          );
         border-color: rgba(255, 255, 255, 0.13);
         color: #fff;
       }
@@ -4725,10 +5039,23 @@
           gap: 8px;
           width: min(94vw, 420px);
         }
-        .voice-transcript-text { font-size: 17px; }
-        .voice-orb-wrap, .voice-orb, .voice-bottom-row { width: 120px; height: 120px; }
-        .voice-orb-core { width: 90px; height: 90px; }
-        .voice-orb-ring { width: 90px !important; height: 90px !important; }
+        .voice-transcript-text {
+          font-size: 17px;
+        }
+        .voice-orb-wrap,
+        .voice-orb,
+        .voice-bottom-row {
+          width: 120px;
+          height: 120px;
+        }
+        .voice-orb-core {
+          width: 90px;
+          height: 90px;
+        }
+        .voice-orb-ring {
+          width: 90px !important;
+          height: 90px !important;
+        }
       }
     </style>
   </head>
@@ -4771,7 +5098,7 @@
         <button class="pin-key" onclick="pinPress('9')">9</button>
         <button class="pin-key empty" disabled></button>
         <button class="pin-key" onclick="pinPress('0')">0</button>
-        <button class="pin-key del" onclick="pinDel()">âŒ«</button>
+        <button class="pin-key del" onclick="pinDel()">&#9003;</button>
       </div>
       <div class="pin-error" id="pin-error"></div>
       <div class="pin-eye-row" onclick="togglePinReveal()" id="pin-eye-row">
@@ -4796,7 +5123,7 @@
     <!-- CLOUD SYNC STATUS -->
     <div id="sync-status">
       <div class="sync-dot" id="sync-dot"></div>
-      <span id="sync-label">Syncingâ€¦</span>
+      <span id="sync-label">Syncing...</span>
     </div>
 
     <!-- UNIVERSAL SEARCH -->
@@ -5078,11 +5405,12 @@
         <section class="premium-hero liquid-card">
           <div class="premium-kicker" id="gw-date-display">Today</div>
           <div class="premium-title">Manju<br />Enterprises</div>
-          <div class="premium-total" id="hero-month-total">&#8377;0</div>
+          <div class="premium-total" id="hero-month-total" style="font-size:clamp(44px,12vw,64px);letter-spacing:-2px">0</div>
           <div class="premium-subrow">
-            <span id="hero-month-count">Revenue this month</span>
+            <span id="hero-month-count">bills this month</span>
             <span class="growth-pill" id="hero-growth">+0.0%</span>
           </div>
+          <div style="margin-top:6px;font-family:var(--mono);font-size:clamp(18px,5vw,26px);font-weight:700;color:var(--text2);opacity:0.75" id="hero-month-revenue">&#8377;0</div>
           <div class="hero-chart-wrap liquid-card">
             <div class="chart-tooltip liquid-card" id="hero-chart-tooltip">
               <div class="chart-tip-date">Today</div>
@@ -5101,7 +5429,7 @@
                 <div
                   style="font-size: 13px; font-weight: 800; color: var(--text)"
                 >
-                  Revenue
+                  Bills (Invoices)
                 </div>
                 <div
                   style="font-size: 11px; color: var(--muted)"
@@ -5125,35 +5453,36 @@
         </section>
 
         <section class="premium-grid">
-          <div class="kpi-card liquid-card">
+          <div class="kpi-card liquid-card" onclick="openBillsFilter('all')" style="cursor:pointer">
             <div class="kpi-label">Today</div>
-            <div class="kpi-value" id="kpi-today">&#8377;0</div>
-            <div class="kpi-note" id="kpi-today-count">0 bills</div>
+            <div class="kpi-value" id="kpi-today">0</div>
+            <div class="kpi-note" id="kpi-today-count">bills today</div>
+            <div style="font-size:11px;font-family:var(--mono);color:var(--muted);margin-top:2px" id="kpi-today-money">&#8377;0</div>
             <canvas class="sparkline" id="spark-today"></canvas>
-          </div>
-          <div class="kpi-card liquid-card">
-            <div class="kpi-label">Outstanding</div>
-            <div class="kpi-value" id="kpi-unpaid">&#8377;0</div>
-            <div class="kpi-note" id="kpi-unpaid-count">0 pending</div>
-            <canvas class="sparkline" id="spark-unpaid"></canvas>
-          </div>
-          <div class="kpi-card liquid-card">
-            <div class="kpi-label">Average Bill</div>
-            <div class="kpi-value" id="kpi-average">&#8377;0</div>
-            <div class="kpi-note" id="kpi-average-note">This month</div>
-            <canvas class="sparkline" id="spark-average"></canvas>
           </div>
           <div class="kpi-card liquid-card">
             <div class="kpi-label">Top Customer</div>
             <div
               class="kpi-value"
               id="kpi-top-customer"
-              style="font-size: 18px; font-family: var(--font)"
+              style="font-size: 16px; font-family: var(--font); line-height:1.2"
             >
               None
             </div>
-            <div class="kpi-note" id="kpi-top-customer-note">&#8377;0</div>
+            <div class="kpi-note" id="kpi-top-customer-note" style="color:var(--success);font-weight:700">&#8377;0</div>
             <canvas class="sparkline" id="spark-growth"></canvas>
+          </div>
+          <div class="kpi-card liquid-card" onclick="openBillsFilter('delivered')" id="kpi-delivered-card" style="cursor:pointer">
+            <div class="kpi-label" style="color:var(--success)">Delivered</div>
+            <div class="kpi-value" id="kpi-delivered" style="color:var(--success)">0</div>
+            <div class="kpi-note" id="kpi-delivered-note">bills delivered</div>
+            <canvas class="sparkline" id="spark-average"></canvas>
+          </div>
+          <div class="kpi-card liquid-card" onclick="openBillsFilter('pending')" id="kpi-pending-card" style="cursor:pointer">
+            <div class="kpi-label" style="color:var(--warn)">Pending</div>
+            <div class="kpi-value" id="kpi-pending" style="color:var(--warn)">0</div>
+            <div class="kpi-note" id="kpi-pending-note">awaiting delivery</div>
+            <canvas class="sparkline" id="spark-unpaid"></canvas>
           </div>
         </section>
 
@@ -5393,7 +5722,7 @@
                   margin-bottom: 5px;
                 "
               >
-                Unpaid
+                Pending
               </div>
               <div
                 id="stat-unpaid"
@@ -6061,20 +6390,46 @@
         <div class="bill-form-section" style="padding-top: 0">
           <div class="form-group">
             <div class="form-row">
-              <div class="form-label">Tax (%)</div>
+              <div class="form-label">Tax</div>
               <div class="form-value">
-                <input
-                  type="number"
-                  id="bill-tax"
-                  value="0"
-                  min="0"
-                  max="100"
-                  step="0.1"
-                  placeholder="0"
-                  style="font-family: var(--mono)"
-                  oninput="recalcBill()"
-                  onfocus="this.select()"
-                />
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    justify-content: flex-end;
+                  "
+                >
+                  <input
+                    type="number"
+                    id="bill-tax"
+                    value="0"
+                    min="0"
+                    step="0.1"
+                    placeholder="0"
+                    style="font-family: var(--mono); max-width: 90px"
+                    oninput="recalcBill()"
+                    onfocus="this.select()"
+                  />
+                  <select
+                    id="bill-tax-mode"
+                    onchange="recalcBill()"
+                    style="
+                      border: none;
+                      background: var(--surface2);
+                      border-radius: 10px;
+                      padding: 7px 8px;
+                      font-family: var(--font);
+                      font-size: 12px;
+                      font-weight: 800;
+                      color: var(--text);
+                      outline: none;
+                    "
+                  >
+                    <option value="pct">%</option>
+                    <option value="amt">&#8377;</option>
+                  </select>
+                </div>
               </div>
             </div>
             <div class="form-row">
@@ -6206,7 +6561,7 @@
           <input
             type="text"
             id="bills-search"
-            placeholder="Search party or invoiceâ€¦"
+            placeholder="Search party or invoice..."
             oninput="filterBillsList()"
             autocomplete="off"
           />
@@ -6226,6 +6581,13 @@
           >
             &#215;
           </button>
+        </div>
+      </div>
+      <div class="bill-filter-hero">
+        <div class="bill-filter-tabs" aria-label="Bill delivery filter">
+          <button class="bill-filter-tab active" data-bill-filter="all" onclick="setBillFilter('all')">All</button>
+          <button class="bill-filter-tab" data-bill-filter="delivered" onclick="setBillFilter('delivered')">Delivered</button>
+          <button class="bill-filter-tab" data-bill-filter="pending" onclick="setBillFilter('pending')">Pending</button>
         </div>
       </div>
       <div class="bills-section" id="bills-container">
@@ -6380,7 +6742,7 @@
                 margin-bottom: 6px;
               "
             >
-              Collected
+              Delivered
             </div>
             <div
               id="rpt-paid"
@@ -6724,11 +7086,11 @@
           <div class="nav-title">Estimate</div>
           <button
             class="nav-btn"
-            id="pay-toggle-btn"
-            onclick="toggleBillPaid()"
+            id="delivery-toggle-btn"
+            onclick="toggleCurrentBillDelivered()"
             style="font-size: 12px; font-weight: 600"
           >
-            Mark Paid
+            Mark Delivered
           </button>
         </div>
       </div>
@@ -7543,7 +7905,7 @@
                   margin-bottom: 8px;
                 "
               >
-                New PIN âœ“ Current verified
+                New PIN &#10003; Current verified
               </div>
               <div class="change-pin-dots" id="cpd-new-dots">
                 <div class="change-pin-dot" id="cpnd0"></div>
@@ -7621,7 +7983,7 @@
                 0
               </button>
               <button class="change-pin-key del" onclick="changePinDel()">
-                âŒ«
+                &#9003;
               </button>
             </div>
             <button
@@ -7823,7 +8185,7 @@
             <input
               type="text"
               id="sheet-search"
-              placeholder="Searchâ€¦"
+              placeholder="Search..."
               oninput="filterSheet()"
             />
           </div>
@@ -7892,7 +8254,7 @@
             </div>
           </div>
 
-          <!-- Packaging â€” free text input -->
+          <!-- Packaging &mdash; free text input -->
           <div class="pe-pkg-row">
             <div class="pe-pkg-label">Bundle</div>
             <input
@@ -8153,6 +8515,7 @@
         currentSheetType: null,
         popupSelProduct: null,
         currentBillId: null,
+        billFilter: "all",
       };
       let _pricingMode = null,
         _importRows = [];
@@ -8170,7 +8533,7 @@
             !FIREBASE_CONFIG.apiKey
           ) {
             console.warn(
-              "[ManjuEnt] Firebase not configured â€” running in local-only mode",
+              "[ManjuEnt] Firebase not configured &mdash; running in local-only mode",
             );
             return;
           }
@@ -8207,7 +8570,7 @@
       }
 
       // ================================================================
-      // REAL-TIME CLOUD LISTENERS (data flows from Firestore â†’ app)
+      // REAL-TIME CLOUD LISTENERS (data flows from Firestore &rarr; app)
       // ================================================================
       let _persistInProgress = {}; // guard: don't overwrite local mid-save
 
@@ -8230,7 +8593,7 @@
                 console.warn(
                   "[ManjuEnt] Ignoring empty snapshot for",
                   col,
-                  "â€” possible race condition",
+                  "&mdash; possible race condition",
                 );
                 return;
               }
@@ -8263,7 +8626,7 @@
       }
 
       // ================================================================
-      // PERSIST â€” saves to both localStorage AND Firestore
+      // PERSIST &mdash; saves to both localStorage AND Firestore
       // ================================================================
       function uid() {
         return (
@@ -8317,10 +8680,10 @@
         });
       }
 
-      // Load from Firebase on startup â€” prevents data loss on redeploy
+      // Load from Firebase on startup &mdash; prevents data loss on redeploy
       function loadFromCloud() {
         if (!db) return;
-        showSync("syncing", "Loading dataâ€¦");
+        showSync("syncing", "Loading data...");
         const cols = ["customers", "products", "transports", "bills"];
         Promise.all(
           cols.map((col) =>
@@ -8338,7 +8701,7 @@
           ),
         )
           .then(() => {
-            showSync("ok", "Data loaded âœ“");
+            showSync("ok", "Data loaded &#10003;");
             updateGatewayCounts();
             updateDashboardStats();
           })
@@ -8355,13 +8718,13 @@
         // If Firebase ready, sync to cloud
         if (!_firebaseReady || !db) return;
 
-        showSync("syncing", "Syncingâ€¦");
+        showSync("syncing", "Syncing...");
 
         const col = db.collection(key);
         const items = S[key];
 
-        // â”€â”€ SAFE SYNC STRATEGY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-        // 1. Upsert (set) every item we currently have â€” never bulk-delete.
+        // -- SAFE SYNC STRATEGY ------------------------------------------
+        // 1. Upsert (set) every item we currently have &mdash; never bulk-delete.
         // 2. Remove only docs whose id is no longer in our local array.
         // This prevents two simultaneous users from wiping each other's data.
         _persistInProgress[key] = true;
@@ -8388,7 +8751,7 @@
           })
           .then(() => {
             _persistInProgress[key] = false;
-            showSync("ok", "Saved âœ“");
+            showSync("ok", "Saved &#10003;");
           })
           .catch((err) => {
             _persistInProgress[key] = false;
@@ -8490,6 +8853,7 @@
           if (bi) bi.value = "";
           const bc = document.getElementById("bills-search-clear");
           if (bc) bc.style.display = "none";
+          updateBillFilterTabs();
           renderBillsList("");
         }
         if (id === "screen-customers") renderMasterList("cust");
@@ -8574,7 +8938,7 @@
           console.log("[Manju] Capacitor backButton listener registered");
         } catch (e) {
           console.log(
-            "[Manju] Not in Capacitor â€” browser back handles navigation",
+            "[Manju] Not in Capacitor &mdash; browser back handles navigation",
           );
         }
       }
@@ -8620,12 +8984,14 @@
           (b.date || "").startsWith(lastMonth),
         );
         const unpaidBills = S.bills.filter((b) => !b.paid);
+        const deliveredBills = S.bills.filter((b) => b.delivered);
+        const pendingBills = S.bills.filter((b) => !b.delivered);
         const fmt = (v) =>
           v >= 100000
-            ? "â‚¹" + (v / 100000).toFixed(1) + "L"
+            ? "\u20b9" + (v / 100000).toFixed(1) + "L"
             : v >= 1000
-              ? "â‚¹" + (v / 1000).toFixed(1) + "K"
-              : "â‚¹" + v.toFixed(0);
+              ? "\u20b9" + (v / 1000).toFixed(1) + "K"
+              : "\u20b9" + v.toFixed(0);
         const todayTotal = todayBills.reduce((s, b) => s + (b.grand || 0), 0);
         const monthTotal = monthBills.reduce((s, b) => s + (b.grand || 0), 0);
         const prevMonthTotal = prevMonthBills.reduce(
@@ -8661,22 +9027,38 @@
             " bill" +
             (unpaidBills.length !== 1 ? "s" : "");
         }
-        animateMoney("hero-month-total", monthTotal);
+        animateNumber("hero-month-total", monthBills.length);
         if (el("hero-month-count"))
           el("hero-month-count").textContent =
             monthBills.length +
             " bill" +
             (monthBills.length !== 1 ? "s" : "") +
             " this month";
+        if (el("hero-month-revenue"))
+          el("hero-month-revenue").textContent = fmt(monthTotal);
         if (el("hero-growth"))
           el("hero-growth").textContent =
             (growth >= 0 ? "+" : "") + growth.toFixed(1) + "%";
-        animateMoney("kpi-today", todayTotal);
-        animateMoney("kpi-unpaid", unpaidTotal);
-        animateMoney("kpi-average", avgBill);
+        animateNumber("kpi-today", todayBills.length);
+        animateNumber("kpi-delivered", deliveredBills.length);
+        animateNumber("kpi-pending", pendingBills.length);
         if (el("kpi-today-count"))
           el("kpi-today-count").textContent =
             todayBills.length + " bill" + (todayBills.length !== 1 ? "s" : "");
+        if (el("kpi-today-money"))
+          el("kpi-today-money").textContent = fmt(todayTotal);
+        if (el("kpi-delivered-note"))
+          el("kpi-delivered-note").textContent =
+            deliveredBills.length +
+            " bill" +
+            (deliveredBills.length !== 1 ? "s" : "") +
+            " delivered";
+        if (el("kpi-pending-note"))
+          el("kpi-pending-note").textContent =
+            pendingBills.length +
+            " bill" +
+            (pendingBills.length !== 1 ? "s" : "") +
+            " pending";
         if (el("kpi-unpaid-count"))
           el("kpi-unpaid-count").textContent = unpaidBills.length + " pending";
         if (el("kpi-average-note"))
@@ -8965,6 +9347,7 @@
         document.getElementById("bill-invno").value = nextInvNo();
         document.getElementById("bill-date").value = todayISO();
         document.getElementById("bill-tax").value = 0;
+        document.getElementById("bill-tax-mode").value = "pct";
         document.getElementById("bill-rikshaw").value = 0;
         document.getElementById("bill-nav-title").textContent = "New Bill";
         document.getElementById("voucher-pill").textContent = "New Estimate";
@@ -8996,7 +9379,7 @@
         const pb = document.getElementById("party-balance");
         pb.textContent =
           (b.customer.location || "") +
-          (b.customer.phone ? " Â· " + b.customer.phone : "");
+          (b.customer.phone ? " &middot; " + b.customer.phone : "");
         pb.style.display = pb.textContent ? "block" : "none";
         if (b.transport) {
           document.getElementById("transport-display").innerHTML = esc(
@@ -9006,7 +9389,11 @@
         }
         document.getElementById("bill-invno").value = b.invno;
         document.getElementById("bill-date").value = b.date;
-        document.getElementById("bill-tax").value = b.taxPct || 0;
+        document.getElementById("bill-tax-mode").value = b.taxMode || "pct";
+        document.getElementById("bill-tax").value =
+          (b.taxMode || "pct") === "amt"
+            ? b.taxAmountInput || b.taxAmt || 0
+            : b.taxPct || 0;
         document.getElementById("bill-rikshaw").value = b.rikshaw || 0;
         document.getElementById("bill-nav-title").textContent =
           "Edit Bill #" + b.invno;
@@ -9121,7 +9508,7 @@
           body.innerHTML = results
             .map(
               ({ item: i }) =>
-                `<div class="sheet-item" onclick="selectCustomer('${i.id}')"><div class="sheet-item-icon" style="background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:700">${(i.name || "?").slice(0, 2).toUpperCase()}</div><div class="sheet-item-body"><div class="sheet-item-name">${hl(i.searchName || i.name, q)}</div><div class="sheet-item-sub">${esc(i.name)}${i.location ? " Â· " + i.location : ""}${i.phone ? " Â· " + i.phone : ""}</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>`,
+                `<div class="sheet-item" onclick="selectCustomer('${i.id}')"><div class="sheet-item-icon" style="background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:700">${(i.name || "?").slice(0, 2).toUpperCase()}</div><div class="sheet-item-body"><div class="sheet-item-name">${hl(i.searchName || i.name, q)}</div><div class="sheet-item-sub">${esc(i.name)}${i.location ? " &middot; " + i.location : ""}${i.phone ? " &middot; " + i.phone : ""}</div></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>`,
             )
             .join("");
         } else {
@@ -9145,7 +9532,7 @@
         const subParts = [];
         if (c.location) subParts.push(c.location);
         if (c.phone) subParts.push(c.phone);
-        pb.textContent = subParts.join(" Â· ");
+        pb.textContent = subParts.join(" &middot; ");
         pb.style.display = pb.textContent ? "block" : "none";
         if (c.preferredTransport && c.preferredTransport.trim()) {
           const pref = c.preferredTransport.trim().toLowerCase();
@@ -9201,7 +9588,7 @@
         document.getElementById("pe-rate").value = p.rate;
         document.getElementById("pe-disc").value = "0";
         document.getElementById("pe-amount").innerHTML = "&#8377;0.00";
-        document.getElementById("pe-formula").textContent = "â€”";
+        document.getElementById("pe-formula").textContent = "&mdash;";
         document.getElementById("pe-pkg-text").value = "";
         document.getElementById("sheet-body").style.display = "none";
         document.getElementById("sheet-search-wrap").style.display = "none";
@@ -9304,7 +9691,7 @@
         showToast("Added: " + p.name);
       }
 
-      // RENDER BILL ITEMS â€” FIX: no typeTag shown under pkg text
+      // RENDER BILL ITEMS &mdash; FIX: no typeTag shown under pkg text
       function renderBillItems() {
         const list = document.getElementById("bill-items-list");
         if (!S.billItems.length) {
@@ -9326,20 +9713,20 @@
           S.billItems.length +
           " item" +
           (S.billItems.length !== 1 ? "s" : "") +
-          (parts.length ? " Â· " + parts.join(", ") : "");
+          (parts.length ? " &middot; " + parts.join(", ") : "");
 
         list.innerHTML = S.billItems
           .map((it, i) => {
             // FIX: pkg text is black (var(--text)) via CSS, no "pc"/"kg" type tag below it
             const pkgCell = it.pkgText
               ? `<div class="item-pkg-text">${esc(it.pkgText)}</div>`
-              : `<div class="item-pkg-none">â€”</div>`;
+              : `<div class="item-pkg-none">&mdash;</div>`;
 
             return `<div class="item-row" onclick="editItem(${i})">
       <div>${pkgCell}</div>
       <div class="item-name">${esc(it.name)}</div>
-      <div class="item-cell">${it.pcs != null ? it.pcs : "â€”"}</div>
-      <div class="item-cell">${it.weight != null ? it.weight.toFixed(2) : "â€”"}</div>
+      <div class="item-cell">${it.pcs != null ? it.pcs : "&mdash;"}</div>
+      <div class="item-cell">${it.weight != null ? it.weight.toFixed(2) : "&mdash;"}</div>
       <div class="item-cell">&#8377;${it.rate}</div>
       <div class="item-amount">&#8377;${it.amount.toFixed(0)}</div>
     </div>`;
@@ -9467,25 +9854,59 @@
         }
       }
 
-      // FIX: use innerHTML so â‚¹ entity renders correctly in totals
-      function recalcBill() {
-        const subtotal = S.billItems.reduce((s, it) => s + it.amount, 0);
-        const taxPct =
-          parseFloat(document.getElementById("bill-tax").value) || 0;
+      function getBillTotals() {
+        const subtotal = S.billItems.reduce((s, it) => s + (it.amount || 0), 0);
         const rikshaw =
           parseFloat(document.getElementById("bill-rikshaw").value) || 0;
-        const taxAmt = (subtotal * taxPct) / 100;
-        const grand = subtotal + taxAmt + rikshaw;
+        const taxMode = document.getElementById("bill-tax-mode").value || "pct";
+        const taxInput =
+          parseFloat(document.getElementById("bill-tax").value) || 0;
+        const taxable = subtotal + rikshaw;
+        const taxPct =
+          taxMode === "pct"
+            ? taxInput
+            : taxable > 0
+              ? (taxInput / taxable) * 100
+              : 0;
+        const taxAmt =
+          taxMode === "amt" ? taxInput : (taxable * taxInput) / 100;
+        const rawGrand = taxable + taxAmt;
+        const grand = Math.round(rawGrand);
+        const roundOff = grand - rawGrand;
+        return {
+          subtotal,
+          rikshaw,
+          taxable,
+          taxMode,
+          taxInput,
+          taxPct,
+          taxAmountInput: taxMode === "amt" ? taxInput : null,
+          taxAmt,
+          rawGrand,
+          grand,
+          roundOff,
+        };
+      }
+
+      // FIX: use innerHTML so rupee entity renders correctly in totals
+      function recalcBill() {
+        const totals = getBillTotals();
         document.getElementById("tot-subtotal").innerHTML =
-          "&#8377;" + subtotal.toFixed(2);
+          "&#8377;" + totals.subtotal.toFixed(2);
         document.getElementById("tot-tax").innerHTML =
-          "&#8377;" + taxAmt.toFixed(2) + (taxPct ? " (" + taxPct + "%)" : "");
+          "&#8377;" +
+          totals.taxAmt.toFixed(2) +
+          (totals.taxInput
+            ? totals.taxMode === "pct"
+              ? " (" + totals.taxInput + "% on items + rikshaw)"
+              : " (fixed)"
+            : "");
         document.getElementById("tot-rikshaw").innerHTML =
-          "&#8377;" + rikshaw.toFixed(2);
+          "&#8377;" + totals.rikshaw.toFixed(2);
         document.getElementById("tot-grand").innerHTML =
-          "&#8377;" + grand.toFixed(2);
+          "&#8377;" + totals.grand.toFixed(0);
         document.getElementById("tot-words").textContent =
-          grand > 0 ? n2w(grand) : "";
+          totals.grand > 0 ? n2w(totals.grand) : "";
       }
 
       function acceptBill() {
@@ -9497,13 +9918,9 @@
           showToast("Add at least one item");
           return;
         }
-        const taxPct =
-          parseFloat(document.getElementById("bill-tax").value) || 0;
-        const rikshaw =
-          parseFloat(document.getElementById("bill-rikshaw").value) || 0;
-        const subtotal = S.billItems.reduce((s, it) => s + it.amount, 0);
-        const taxAmt = (subtotal * taxPct) / 100;
-        const grand = subtotal + taxAmt + rikshaw;
+        const totals = getBillTotals();
+        const delivered =
+          S.billItems.length > 0 && S.billItems.every((it) => it.delivered);
         const bill = {
           id: S.currentBillId || uid(),
           invno: document.getElementById("bill-invno").value,
@@ -9511,12 +9928,20 @@
           customer: { ...S.selCustomer },
           transport: S.selTransport ? { ...S.selTransport } : null,
           items: [...S.billItems],
-          taxPct,
-          rikshaw,
-          subtotal,
-          taxAmt,
-          grand,
-          words: n2w(grand),
+          taxMode: totals.taxMode,
+          taxInput: totals.taxInput,
+          taxAmountInput: totals.taxAmountInput,
+          taxPct: totals.taxPct,
+          rikshaw: totals.rikshaw,
+          subtotal: totals.subtotal,
+          taxable: totals.taxable,
+          taxAmt: totals.taxAmt,
+          rawGrand: totals.rawGrand,
+          roundOff: totals.roundOff,
+          grand: totals.grand,
+          delivered,
+          paid: delivered,
+          words: n2w(totals.grand),
           createdAt: Date.now(),
         };
         if (S.currentBillId) {
@@ -9534,6 +9959,30 @@
       }
 
       // BILLS LIST
+      function updateBillFilterTabs() {
+        document.querySelectorAll(".bill-filter-tab").forEach((btn) => {
+          btn.classList.toggle(
+            "active",
+            btn.dataset.billFilter === (S.billFilter || "all"),
+          );
+        });
+      }
+
+      function setBillFilter(filter) {
+        S.billFilter = ["delivered", "pending"].includes(filter)
+          ? filter
+          : "all";
+        updateBillFilterTabs();
+        filterBillsList();
+      }
+
+      function openBillsFilter(filter) {
+        S.billFilter = ["delivered", "pending"].includes(filter)
+          ? filter
+          : "all";
+        goTo("screen-bills");
+      }
+
       function renderBillsList(q) {
         const c = document.getElementById("bills-container");
         if (!S.bills.length) {
@@ -9541,10 +9990,16 @@
             '<div class="empty-state"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div><div class="empty-title">No Bills Yet</div><div class="empty-sub">Create your first bill to get started</div></div>';
           return;
         }
-        let filtered = S.bills;
+        updateBillFilterTabs();
+        const deliveryFilter = S.billFilter || "all";
+        let filtered = S.bills.filter((b) => {
+          if (deliveryFilter === "delivered") return !!b.delivered;
+          if (deliveryFilter === "pending") return !b.delivered;
+          return true;
+        });
         if (q && q.trim()) {
           const ql = q.trim().toLowerCase();
-          filtered = S.bills.filter(
+          filtered = filtered.filter(
             (b) =>
               (b.customer.name || "").toLowerCase().includes(ql) ||
               String(b.invno || "")
@@ -9552,10 +10007,16 @@
                 .includes(ql),
           );
         }
-        const isFiltered = !!(q && q.trim());
+        const isFiltered = deliveryFilter !== "all" || !!(q && q.trim());
         if (!filtered.length) {
+          const emptyCopy =
+            deliveryFilter === "delivered"
+              ? "No delivered bills yet"
+              : deliveryFilter === "pending"
+                ? "No pending bills"
+                : "Try a different name or invoice number";
           c.innerHTML =
-            '<div class="empty-state"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="empty-title">No Results</div><div class="empty-sub">Try a different name or invoice number</div></div><div class="bottom-spacer"></div>';
+            '<div class="empty-state"><div class="empty-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="empty-title">No Results</div><div class="empty-sub">' + emptyCopy + '</div></div><div class="bottom-spacer"></div>';
           return;
         }
         function hlB(text, q) {
@@ -9574,7 +10035,15 @@
           return esc(text);
         }
         const filteredTotal = filtered.reduce((s, b) => s + (b.grand || 0), 0);
-        c.innerHTML = `<div class="bills-summary"><div class="bills-summary-label">${isFiltered ? "Matching Sales" : "Total Sales"}</div><div class="bills-summary-val">&#8377;${filteredTotal.toFixed(2)}</div><div class="bills-summary-count">${isFiltered ? filtered.length + " of " + S.bills.length + " bills" : S.bills.length + " bill" + (S.bills.length !== 1 ? "s" : "")}</div></div>${filtered.map((b, idx) => `<div class="bill-card" style="animation-delay:${Math.min(idx * 0.04, 0.3)}s" onclick="viewBill('${b.id}')"><div class="bill-card-top"><div class="bill-inv">No. ${hlB(String(b.invno), q)}</div><div class="bill-date">${fmtDate(b.date)}</div></div><div class="bill-party">${hlB(b.customer.name, q)}</div><div class="bill-location">${esc(b.customer.location || "")}${b.transport ? " Â· " + esc(b.transport.name) : ""}</div><div class="bill-card-bottom"><div style="display:flex;align-items:center;gap:6px"><div class="bill-meta">${b.items.length} item${b.items.length !== 1 ? "s" : ""}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.paid ? "var(--success-soft)" : "var(--danger-soft)"};color:${b.paid ? "var(--success)" : "var(--danger)"}">${b.paid ? "PAID" : "UNPAID"}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.delivered ? "var(--success-soft)" : "var(--warn-soft)"};color:${b.delivered ? "var(--success)" : "var(--warn)"}">${b.delivered ? "âœ“ DELIVERED" : "PENDING"}</div></div><div class="bill-amount">&#8377;${b.grand.toFixed(2)}</div></div></div>`).join("")}<div class="bottom-spacer"></div>`;
+        const summaryLabel =
+          deliveryFilter === "delivered"
+            ? "Delivered Bills"
+            : deliveryFilter === "pending"
+              ? "Pending Bills"
+              : isFiltered
+                ? "Matching Sales"
+                : "Total Sales";
+        c.innerHTML = `<div class="bills-summary"><div class="bills-summary-label">${summaryLabel}</div><div class="bills-summary-val">&#8377;${filteredTotal.toFixed(2)}</div><div class="bills-summary-count">${isFiltered ? filtered.length + " of " + S.bills.length + " bills" : S.bills.length + " bill" + (S.bills.length !== 1 ? "s" : "")}</div></div>${filtered.map((b, idx) => `<div class="bill-card" style="animation-delay:${Math.min(idx * 0.04, 0.3)}s" onclick="viewBill('${b.id}')"><div class="bill-card-top"><div class="bill-inv">No. ${hlB(String(b.invno), q)}</div><div class="bill-date">${fmtDate(b.date)}</div></div><div class="bill-party">${hlB(b.customer.name, q)}</div><div class="bill-location">${esc(b.customer.location || "")}${b.transport ? " &middot; " + esc(b.transport.name) : ""}</div><div class="bill-card-bottom"><div style="display:flex;align-items:center;gap:6px"><div class="bill-meta">${b.items.length} item${b.items.length !== 1 ? "s" : ""}</div><div style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.delivered ? "var(--success-soft)" : "var(--warn-soft)"};color:${b.delivered ? "var(--success)" : "var(--warn)"}">${b.delivered ? "DELIVERED" : "PENDING"}</div></div><div class="bill-amount">&#8377;${Math.round(b.grand || 0).toFixed(0)}</div></div></div>`).join("")}<div class="bottom-spacer"></div>`;
       }
 
       function filterBillsList() {
@@ -9600,50 +10069,53 @@
 
         const rows = b.items
           .map((it, idx) => {
-            let pkgCell = "â€”";
+            let pkgCell = "-";
             if (it.pkgText) pkgCell = esc(it.pkgText);
             else if (it.pkgType && it.pkgQty)
-              pkgCell = it.pkgQty + "Ã—" + it.pkgType;
+              pkgCell = it.pkgQty + "&times;" + it.pkgType;
             const rateCell = `&#8377;${it.rate}`;
-            const qtyCell = it.pcs != null ? it.pcs : "â€”";
+            const qtyCell = it.pcs != null ? it.pcs : "-";
             const wtCell =
-              it.weight != null ? it.weight.toFixed(3) + " kg" : "â€”";
-            const discCell = it.disc ? it.disc + "%" : "â€”";
+              it.weight != null ? it.weight.toFixed(3) + " kg" : "-";
+            const discCell = it.disc ? it.disc + "%" : "-";
             const amtCell = `&#8377;${it.amount.toFixed(2)}`;
             const dvId = "dvcb-" + idx;
             const dvCls =
               "item-delivered-wrap" + (it.delivered ? " checked" : "");
-            return `<tr>
-      <td style="font-weight:700;color:var(--text);white-space:nowrap;font-size:11px;font-family:var(--mono)">${pkgCell}</td>
-      <td style="text-align:left">
+            return `<tr class="inv-item-row">
+      <td class="inv-bundle-cell" data-label="Bundle" style="font-weight:700;color:var(--text);white-space:nowrap;font-size:11px;font-family:var(--mono)">${pkgCell}</td>
+      <td class="inv-item-cell" data-label="Item" style="text-align:left">
         ${esc(it.name)}
         <div class="${dvCls}" onclick="event.stopPropagation()">
           <input type="checkbox" class="item-delivered-cb" id="${dvId}" ${it.delivered ? "checked" : ""} onchange="toggleDelivered('${b.id}',${idx},this.checked)">
-          <label class="item-delivered-label" for="${dvId}">${it.delivered ? "âœ“ Delivered" : "Delivered?"}</label>
+          <label class="item-delivered-label" for="${dvId}">${it.delivered ? "&#10003; Delivered" : "Delivered?"}</label>
         </div>
       </td>
-      <td style="font-family:var(--mono)">${rateCell}</td>
-      <td style="font-family:var(--mono)">${qtyCell}</td>
-      <td style="font-family:var(--mono)">${wtCell}</td>
-      <td style="font-family:var(--mono)">${discCell}</td>
-      <td style="font-family:var(--mono)">${amtCell}</td>
+      <td data-label="Rate" style="font-family:var(--mono)">${rateCell}</td>
+      <td data-label="Qty" style="font-family:var(--mono)">${qtyCell}</td>
+      <td data-label="Weight" style="font-family:var(--mono)">${wtCell}</td>
+      <td data-label="Disc" style="font-family:var(--mono)">${discCell}</td>
+      <td class="inv-amount-cell" data-label="Amount" style="font-family:var(--mono)">${amtCell}</td>
     </tr>`;
           })
           .join("");
 
         const extraRows = [
-          b.taxAmt > 0
-            ? `<tr><td colspan="6" style="text-align:left;color:var(--muted);font-size:12px">Tax (${b.taxPct}%)</td><td style="font-family:var(--mono)">&#8377;${b.taxAmt.toFixed(2)}</td></tr>`
-            : "",
           b.rikshaw > 0
-            ? `<tr><td colspan="6" style="text-align:left;color:var(--muted);font-size:12px">Rikshaw Charges</td><td style="font-family:var(--mono)">&#8377;${b.rikshaw.toFixed(2)}</td></tr>`
+            ? `<tr class="inv-extra-row"><td class="inv-extra-label" colspan="6" style="text-align:left;color:var(--muted);font-size:12px">Rikshaw Charges</td><td class="inv-extra-amount" style="font-family:var(--mono)">&#8377;${b.rikshaw.toFixed(2)}</td></tr>`
+            : "",
+          b.taxAmt > 0
+            ? `<tr class="inv-extra-row"><td class="inv-extra-label" colspan="6" style="text-align:left;color:var(--muted);font-size:12px">Tax ${(b.taxMode || "pct") === "amt" ? "(fixed)" : "(" + (b.taxInput ?? b.taxPct ?? 0) + "% on items + rikshaw)"}</td><td class="inv-extra-amount" style="font-family:var(--mono)">&#8377;${b.taxAmt.toFixed(2)}</td></tr>`
+            : "",
+          Math.abs(b.roundOff || 0) >= 0.005
+            ? `<tr class="inv-extra-row"><td class="inv-extra-label" colspan="6" style="text-align:left;color:var(--muted);font-size:12px">Round Off</td><td class="inv-extra-amount" style="font-family:var(--mono)">${(b.roundOff || 0) >= 0 ? "+" : "-"}&#8377;${Math.abs(b.roundOff || 0).toFixed(2)}</td></tr>`
             : "",
         ].join("");
 
         document.getElementById("bill-detail-content").innerHTML = `
     <div style="padding:8px 16px 0;display:flex;align-items:center;gap:8px">
       <div id="bill-delivery-badge" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;background:${b.delivered ? "var(--success-soft)" : "var(--warn-soft)"};color:${b.delivered ? "var(--success)" : "var(--warn)"}">
-        ${b.delivered ? "âœ“ Fully Delivered" : "Pending Delivery"}
+        ${b.delivered ? "Delivered" : "Pending Delivery"}
       </div>
     </div>
     <div class="invoice-card">
@@ -9663,11 +10135,11 @@
         </div>
         <div class="inv-meta-cell">
           <div class="inv-meta-label">Transport</div>
-          <div class="inv-meta-val">${b.transport ? esc(b.transport.name) : "â€”"}</div>
+          <div class="inv-meta-val">${b.transport ? esc(b.transport.name) : "&mdash;"}</div>
         </div>
         <div class="inv-meta-cell">
           <div class="inv-meta-label">Destination</div>
-          <div class="inv-meta-val">${esc(b.customer.location || "â€”")}</div>
+          <div class="inv-meta-val">${esc(b.customer.location || "&mdash;")}</div>
         </div>
       </div>
       <table class="inv-table">
@@ -9684,9 +10156,9 @@
         </thead>
         <tbody>${rows}${extraRows}</tbody>
         <tfoot>
-          <tr>
-            <td colspan="6" style="font-family:var(--font);text-align:left">Total Amount</td>
-            <td style="font-family:var(--mono);font-size:17px">&#8377;${b.grand.toFixed(2)}</td>
+          <tr class="inv-total-row">
+            <td class="inv-total-label" colspan="6" style="font-family:var(--font);text-align:left">Total Amount</td>
+            <td class="inv-total-amount" style="font-family:var(--mono);font-size:17px">&#8377;${Math.round(b.grand || 0).toFixed(0)}</td>
           </tr>
         </tfoot>
       </table>
@@ -9695,6 +10167,18 @@
 
         // The delivery badge is now rendered inline in the innerHTML above
         // so no separate update needed for it here
+        const deliveryBtn = document.getElementById("delivery-toggle-btn");
+        if (deliveryBtn) {
+          if (b.delivered) {
+            deliveryBtn.textContent = "Mark Pending";
+            deliveryBtn.style.color = "var(--warn)";
+            deliveryBtn.style.opacity = "1";
+          } else {
+            deliveryBtn.textContent = "Mark Delivered";
+            deliveryBtn.style.color = "var(--success)";
+            deliveryBtn.style.opacity = "1";
+          }
+        }
 
         document.getElementById("del-bill-btn").onclick = () => {
           if (confirm("Delete bill #" + b.invno + "?")) {
@@ -9708,26 +10192,27 @@
         goTo("screen-bill-detail");
       }
 
-      // TOGGLE DELIVERED (per item â€” bill is "delivered" only when ALL items delivered)
+      // TOGGLE DELIVERED (per item; bill is delivered once all items are delivered)
       function toggleDelivered(billId, itemIdx, checked) {
         const b = S.bills.find((x) => x.id === billId);
         if (!b || !b.items[itemIdx]) return;
         b.items[itemIdx].delivered = checked;
         // Bill-level delivered = every item is delivered
         b.delivered = b.items.length > 0 && b.items.every((it) => it.delivered);
+        b.paid = b.delivered;
         persist("bills");
         const wraps = document.querySelectorAll(".item-delivered-wrap");
         const wrap = wraps[itemIdx];
         if (wrap) {
           const lbl = wrap.querySelector(".item-delivered-label");
-          if (lbl) lbl.textContent = checked ? "âœ“ Delivered" : "Delivered?";
+          if (lbl) lbl.textContent = checked ? "Delivered" : "Delivered?";
           wrap.classList.toggle("checked", checked);
         }
         // Update the bill-level delivery badge in the detail view if present
         const billDelivBadge = document.getElementById("bill-delivery-badge");
         if (billDelivBadge) {
           billDelivBadge.textContent = b.delivered
-            ? "âœ“ Fully Delivered"
+            ? "Delivered"
             : "Pending Delivery";
           billDelivBadge.style.background = b.delivered
             ? "var(--success-soft)"
@@ -9736,29 +10221,46 @@
             ? "var(--success)"
             : "var(--warn)";
         }
+        // Refresh the top-right Mark Delivered button state
+        const deliveryBtn = document.getElementById("delivery-toggle-btn");
+        if (deliveryBtn && !b.delivered) {
+          deliveryBtn.style.color = "var(--success)";
+          deliveryBtn.style.opacity = "1";
+        }
         const msg = b.delivered
-          ? "âœ… Bill fully delivered!"
+          ? "Bill marked delivered"
           : checked
-            ? "âœ“ Item marked delivered"
+            ? "Item marked delivered"
             : "Delivery mark removed";
         showToast(msg);
+        if (S.currentBillId === billId) viewBill(billId);
         updateDashboardStats();
       }
 
       // ================================================================
-      // TOGGLE PAID/UNPAID
+      // TOGGLE BILL DELIVERY
+      // The top-right button marks every item delivered at once.
+      // Un-marking sets the bill and all items back to pending.
       // ================================================================
-      function toggleBillPaid() {
+      function toggleCurrentBillDelivered() {
         const b = S.bills.find((x) => x.id === S.currentBillId);
         if (!b) return;
-        b.paid = !b.paid;
-        persist("bills");
-        const payBtn = document.getElementById("pay-toggle-btn");
-        if (payBtn) {
-          payBtn.textContent = b.paid ? "Mark Unpaid" : "Mark Paid";
-          payBtn.style.color = b.paid ? "var(--danger)" : "var(--success)";
+
+        if (!b.delivered) {
+          b.items = (b.items || []).map((it) => ({ ...it, delivered: true }));
+          b.delivered = true;
+          b.paid = true;
+          persist("bills");
+          showToast("Bill and all items marked delivered");
+        } else {
+          b.items = (b.items || []).map((it) => ({ ...it, delivered: false }));
+          b.delivered = false;
+          b.paid = false;
+          persist("bills");
+          showToast("Bill and all items marked pending");
         }
-        showToast(b.paid ? "âœ… Marked as Paid" : "Bill marked unpaid");
+
+        viewBill(b.id);
         updateDashboardStats();
       }
 
@@ -9777,7 +10279,7 @@
         const pb = document.getElementById("party-balance");
         pb.textContent =
           (b.customer.location || "") +
-          (b.customer.phone ? " Â· " + b.customer.phone : "");
+          (b.customer.phone ? " &middot; " + b.customer.phone : "");
         pb.style.display = pb.textContent ? "block" : "none";
         if (b.transport) {
           const tdisp = document.getElementById("transport-display");
@@ -9786,7 +10288,11 @@
         }
         document.getElementById("bill-invno").value = nextInvNo();
         document.getElementById("bill-date").value = todayISO();
-        document.getElementById("bill-tax").value = b.taxPct || 0;
+        document.getElementById("bill-tax-mode").value = b.taxMode || "pct";
+        document.getElementById("bill-tax").value =
+          (b.taxMode || "pct") === "amt"
+            ? b.taxAmountInput || b.taxAmt || 0
+            : b.taxPct || 0;
         document.getElementById("bill-rikshaw").value = b.rikshaw || 0;
         document.getElementById("bill-nav-title").textContent = "Repeat Bill";
         document.getElementById("voucher-pill").textContent = "New Estimate";
@@ -9796,7 +10302,7 @@
         renderBillItems();
         recalcBill();
         goTo("screen-bill");
-        showToast("Bill duplicated â€” review and save");
+        showToast("Bill duplicated &mdash; review and save");
       }
 
       // ================================================================
@@ -9805,7 +10311,7 @@
       function shareCurrentBillWhatsApp() {
         const b = S.bills.find((x) => x.id === S.currentBillId);
         if (!b) return;
-        showToast("Preparingâ€¦");
+        showToast("Preparing...");
         const target = document.getElementById("bill-jpeg-target");
         _loadHtml2Canvas(() => {
           setTimeout(() => {
@@ -9832,7 +10338,7 @@
                         files: [file],
                         title: "Estimate #" + b.invno,
                         text:
-                          "Estimate from Manju Enterprises â€” â‚¹" +
+                          "Estimate from Manju Enterprises &mdash; &#8377;" +
                           b.grand.toFixed(2),
                       })
                       .catch(() => {});
@@ -9850,9 +10356,9 @@
                       const msg = encodeURIComponent(
                         "Estimate #" +
                           b.invno +
-                          " from Manju Enterprises\nAmount: â‚¹" +
+                          " from Manju Enterprises\nAmount: &#8377;" +
                           b.grand.toFixed(2) +
-                          "\n(Image saved â€” please attach it)",
+                          "\n(Image saved &mdash; please attach it)",
                       );
                       window.open("https://wa.me/?text=" + msg, "_blank");
                     }, 800);
@@ -9920,7 +10426,7 @@
           .reduce((s, b) => s + (b.grand || 0), 0);
         const unpaid = total - paid;
 
-        const fmt = (v) => "â‚¹" + v.toFixed(2);
+        const fmt = (v) => "&#8377;" + v.toFixed(2);
         const el = (id) => document.getElementById(id);
         if (el("rpt-total")) el("rpt-total").textContent = fmt(total);
         if (el("rpt-bill-count"))
@@ -9951,7 +10457,7 @@
       <div style="width:22px;height:22px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">${i + 1}</div>
       <div style="flex:1;font-size:13px;font-weight:500;color:var(--text)">${esc(name)}</div>
       <div style="font-size:11px;color:var(--muted);margin-right:8px">${d.count} bills</div>
-      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--success)">â‚¹${d.total.toFixed(0)}</div>
+      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--success)">&#8377;${d.total.toFixed(0)}</div>
     </div>`,
                 )
                 .join("")
@@ -9981,9 +10487,9 @@
       <div style="width:22px;height:22px;border-radius:50%;background:var(--success-soft);color:var(--success);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;">${i + 1}</div>
       <div style="flex:1;min-width:0;">
         <div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(name)}</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:1px">${d.qty > 0 ? d.qty + " pcs" : ""}${d.wt > 0 ? (d.qty > 0 ? " Â· " : "") + d.wt.toFixed(1) + " kg" : ""}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px">${d.qty > 0 ? d.qty + " pcs" : ""}${d.wt > 0 ? (d.qty > 0 ? " &middot; " : "") + d.wt.toFixed(1) + " kg" : ""}</div>
       </div>
-      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--success)">â‚¹${d.total.toFixed(0)}</div>
+      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--success)">&#8377;${d.total.toFixed(0)}</div>
     </div>`,
                 )
                 .join("")
@@ -10026,7 +10532,7 @@
         el.innerHTML = `
     <div style="padding:10px 14px;background:var(--surface2);border-bottom:0.5px solid var(--separator);display:flex;justify-content:space-between;">
       <div style="font-size:12px;color:var(--muted)">${bills.length} bills total</div>
-      <div style="font-size:12px;font-weight:700;color:var(--danger)">â‚¹${unpaid.toFixed(0)} pending</div>
+      <div style="font-size:12px;font-weight:700;color:var(--danger)">&#8377;${unpaid.toFixed(0)} pending</div>
     </div>
     ${bills
       .map(
@@ -10034,17 +10540,17 @@
           b,
         ) => `<div style="display:flex;align-items:center;padding:10px 14px;border-bottom:0.5px solid var(--separator);gap:8px;" onclick="viewBill('${b.id}')">
       <div style="flex:1">
-        <div style="font-size:13px;font-weight:500;color:var(--text)">#${b.invno} Â· ${fmtDate(b.date)}</div>
+        <div style="font-size:13px;font-weight:500;color:var(--text)">#${b.invno} &middot; ${fmtDate(b.date)}</div>
         <div style="font-size:11px;color:var(--muted);margin-top:1px">${b.items?.length || 0} items</div>
       </div>
       <div style="font-size:11px;font-weight:700;padding:2px 7px;border-radius:10px;background:${b.paid ? "var(--success-soft)" : "var(--danger-soft)"};color:${b.paid ? "var(--success)" : "var(--danger)"};margin-right:4px">${b.paid ? "PAID" : "DUE"}</div>
-      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--text)">â‚¹${b.grand.toFixed(0)}</div>
+      <div style="font-size:13px;font-weight:700;font-family:var(--mono);color:var(--text)">&#8377;${b.grand.toFixed(0)}</div>
     </div>`,
       )
       .join("")}
     <div style="padding:12px 14px;display:flex;justify-content:space-between;background:var(--surface2);">
       <div style="font-size:13px;font-weight:700;color:var(--text)">Total</div>
-      <div style="font-size:15px;font-weight:800;font-family:var(--mono);color:var(--accent)">â‚¹${total.toFixed(2)}</div>
+      <div style="font-size:15px;font-weight:800;font-family:var(--mono);color:var(--accent)">&#8377;${total.toFixed(2)}</div>
     </div>`;
       }
 
@@ -10065,7 +10571,9 @@
           }
         }
         if (/android/i.test(navigator.userAgent)) {
-          showToast("AndroidPrint bridge not found â€” check MainActivity.java");
+          showToast(
+            "AndroidPrint bridge not found &mdash; check MainActivity.java",
+          );
           return;
         }
         const content = document.getElementById(
@@ -10267,7 +10775,7 @@
               if (item.phone) parts.push(item.phone);
               if (item.preferredTransport)
                 parts.push("Transport: " + item.preferredTransport);
-              sub = parts.join(" Â· ");
+              sub = parts.join(" &middot; ");
             }
             if (m.type === "product") {
               sub = item.type === "kg" ? "Per Kg" : "Per Pc";
@@ -10493,10 +11001,10 @@
           return [
             '<option value="-1"' +
               (selected === -1 ? " selected" : "") +
-              ">â€” Skip â€”</option>",
+              ">&mdash; Skip &mdash;</option>",
             ...headers.map(
               (h, i) =>
-                `<option value="${i}"${i === selected ? " selected" : ""}>${h} â€” "${String((rows[dataStart] || [])[i] || "").slice(0, 22)}"</option>`,
+                `<option value="${i}"${i === selected ? " selected" : ""}>${h} &mdash; "${String((rows[dataStart] || [])[i] || "").slice(0, 22)}"</option>`,
             ),
           ].join("");
         }
@@ -10554,7 +11062,7 @@
         document.getElementById("edit-sheet-title").textContent =
           "Map Customer Columns";
         document.getElementById("edit-sheet-body").innerHTML =
-          `<div class="mapping-panel" style="overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:calc(92dvh - 80px);"><div class="mapping-title">Map Your Columns</div><div class="mapping-sub">${rows.length} rows Â· ${hasHeader ? "First row used as header" : "No header detected"} Â· Preview:</div>${previewTable}${fields.map((f) => `<div class="map-row"><div class="map-label">${f.label}</div><div class="map-arrow">&#8594;</div><select id="${f.id}">${optionsList(f.selected)}</select></div>`).join("")}<div style="background:var(--accent-soft);border-radius:var(--radius-xs);padding:10px 12px;font-size:12px;color:var(--accent);margin-bottom:14px;font-weight:500;">Transport column auto-fills when selecting a party in bills</div><div class="add-form-btn-row"><button class="add-form-btn add-form-btn-primary" onclick="confirmCustomerImport(${dataStart})">Import Customers</button><button class="add-form-btn add-form-btn-cancel" onclick="document.getElementById('edit-overlay').classList.remove('show')">Cancel</button></div></div>`;
+          `<div class="mapping-panel" style="overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:calc(92dvh - 80px);"><div class="mapping-title">Map Your Columns</div><div class="mapping-sub">${rows.length} rows &middot; ${hasHeader ? "First row used as header" : "No header detected"} &middot; Preview:</div>${previewTable}${fields.map((f) => `<div class="map-row"><div class="map-label">${f.label}</div><div class="map-arrow">&#8594;</div><select id="${f.id}">${optionsList(f.selected)}</select></div>`).join("")}<div style="background:var(--accent-soft);border-radius:var(--radius-xs);padding:10px 12px;font-size:12px;color:var(--accent);margin-bottom:14px;font-weight:500;">Transport column auto-fills when selecting a party in bills</div><div class="add-form-btn-row"><button class="add-form-btn add-form-btn-primary" onclick="confirmCustomerImport(${dataStart})">Import Customers</button><button class="add-form-btn add-form-btn-cancel" onclick="document.getElementById('edit-overlay').classList.remove('show')">Cancel</button></div></div>`;
         document.getElementById("edit-overlay").classList.add("show");
       }
 
@@ -10643,7 +11151,7 @@
           ]
             .map(
               (f) =>
-                `<div class="map-row"><div class="map-label">${f.label}</div><div class="map-arrow">&#8594;</div><select id="${f.id}">${f.defaultSpecial ? '<option value="-1" selected>â€” Skip (default Pcs) â€”</option>' : ""}${headers.map((h, i) => `<option value="${i}"${!f.defaultSpecial && i === f.default ? " selected" : ""}>${h} â€” "${String(previewRow[i] || "").slice(0, 20)}"</option>`).join("")}</select></div>`,
+                `<div class="map-row"><div class="map-label">${f.label}</div><div class="map-arrow">&#8594;</div><select id="${f.id}">${f.defaultSpecial ? '<option value="-1" selected>&mdash; Skip (default Pcs) &mdash;</option>' : ""}${headers.map((h, i) => `<option value="${i}"${!f.defaultSpecial && i === f.default ? " selected" : ""}>${h} &mdash; "${String(previewRow[i] || "").slice(0, 20)}"</option>`).join("")}</select></div>`,
             )
             .join(
               "",
@@ -10651,7 +11159,7 @@
             .slice(dataStart, dataStart + 2)
             .map(
               (r) =>
-                `<span class="map-chip">${String(r[0] || "â€”").slice(0, 20)}</span><span class="map-chip">&#8377;${guessRate >= 0 ? String(r[guessRate] || "?") : "?"}</span>`,
+                `<span class="map-chip">${String(r[0] || "&mdash;").slice(0, 20)}</span><span class="map-chip">&#8377;${guessRate >= 0 ? String(r[guessRate] || "?") : "?"}</span>`,
             )
             .join(
               "",
@@ -10806,7 +11314,9 @@
         haptic(10);
         const el = document.getElementById("toast");
         el.textContent = String(msg || "")
-          .replace(/[âœ…ðŸ¢]/g, "")
+          .replace(/&mdash;/g, "-")
+          .replace(/&#8377;/g, "\u20b9")
+          .replace(/&#10003;/g, "Done")
           .trim();
         el.classList.add("show");
         setTimeout(() => el.classList.remove("show"), 2800);
@@ -11000,7 +11510,7 @@
           return;
         }
         localStorage.setItem("me_custom_pin", _cpNew);
-        showToast("âœ… PIN changed successfully!");
+        showToast("Done PIN changed successfully!");
         resetChangePinFlow();
       }
 
@@ -11014,39 +11524,39 @@
           return;
         }
 
-        showToast("Preparing imageâ€¦");
+        showToast("Preparing image...");
 
         const rows = b.items
           .map((it) => {
             const pkgCell = it.pkgText
               ? it.pkgText
               : it.pkgType && it.pkgQty
-                ? it.pkgQty + "Ã—" + it.pkgType
-                : "â€”";
-            const qtyCell = it.pcs != null ? it.pcs : "â€”";
+                ? it.pkgQty + "&times;" + it.pkgType
+                : "&mdash;";
+            const qtyCell = it.pcs != null ? it.pcs : "&mdash;";
             const wtCell =
-              it.weight != null ? it.weight.toFixed(2) + " kg" : "â€”";
-            const discCell = it.disc ? it.disc + "%" : "â€”";
+              it.weight != null ? it.weight.toFixed(2) + " kg" : "&mdash;";
+            const discCell = it.disc ? it.disc + "%" : "&mdash;";
             const td =
               "padding:9px 10px;border-bottom:1px solid #ebebeb;vertical-align:middle;color:#1d1d1f;font-weight:500;";
             return `<tr>
       <td style="${td}font-weight:700;white-space:nowrap;font-size:11px;font-family:monospace">${pkgCell}</td>
       <td style="${td}text-align:left;font-size:12px">${it.name}</td>
-      <td style="${td}text-align:right;font-family:monospace">â‚¹${it.rate}</td>
+      <td style="${td}text-align:right;font-family:monospace">&#8377;${it.rate}</td>
       <td style="${td}text-align:right;font-family:monospace">${qtyCell}</td>
       <td style="${td}text-align:right;font-family:monospace">${wtCell}</td>
       <td style="${td}text-align:right;font-family:monospace">${discCell}</td>
-      <td style="${td}text-align:right;font-family:monospace;font-weight:700">â‚¹${it.amount.toFixed(2)}</td>
+      <td style="${td}text-align:right;font-family:monospace;font-weight:700">&#8377;${it.amount.toFixed(2)}</td>
     </tr>`;
           })
           .join("");
 
         const extraRows = [
           b.taxAmt > 0
-            ? `<tr><td colspan="6" style="text-align:left;color:#86868b;font-size:11px">Tax (${b.taxPct}%)</td><td>â‚¹${b.taxAmt.toFixed(2)}</td></tr>`
+            ? `<tr><td colspan="6" style="text-align:left;color:#86868b;font-size:11px">Tax (${b.taxPct}%)</td><td>&#8377;${b.taxAmt.toFixed(2)}</td></tr>`
             : "",
           b.rikshaw > 0
-            ? `<tr><td colspan="6" style="text-align:left;color:#86868b;font-size:11px">Rikshaw Charges</td><td>â‚¹${b.rikshaw.toFixed(2)}</td></tr>`
+            ? `<tr><td colspan="6" style="text-align:left;color:#86868b;font-size:11px">Rikshaw Charges</td><td>&#8377;${b.rikshaw.toFixed(2)}</td></tr>`
             : "",
         ].join("");
 
@@ -11072,11 +11582,11 @@
         </div>
         <div style="padding:12px 16px;border-right:1px solid #e5e5e5;">
           <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px">Transport</div>
-          <div style="font-size:13px;font-weight:600;color:#1d1d1f">${b.transport ? b.transport.name : "â€”"}</div>
+          <div style="font-size:13px;font-weight:600;color:#1d1d1f">${b.transport ? b.transport.name : "&mdash;"}</div>
         </div>
         <div style="padding:12px 16px;">
           <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px">Destination</div>
-          <div style="font-size:13px;font-weight:600;color:#1d1d1f">${b.customer.location || "â€”"}</div>
+          <div style="font-size:13px;font-weight:600;color:#1d1d1f">${b.customer.location || "&mdash;"}</div>
         </div>
       </div>
 
@@ -11104,7 +11614,7 @@
       <!-- TOTAL ROW -->
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f8f8fb;">
         <div style="font-size:14px;font-weight:700;color:#1d1d1f;">Total Amount</div>
-        <div style="font-size:20px;font-weight:800;color:#007aff;font-family:monospace;letter-spacing:-0.5px">â‚¹${b.grand.toFixed(2)}</div>
+        <div style="font-size:20px;font-weight:800;color:#007aff;font-family:monospace;letter-spacing:-0.5px">&#8377;${b.grand.toFixed(2)}</div>
       </div>
 
       <!-- AMOUNT IN WORDS -->
@@ -11146,7 +11656,7 @@
                     a.click();
                     document.body.removeChild(a);
                     URL.revokeObjectURL(url);
-                    showToast("âœ… Bill saved as JPEG!");
+                    showToast("Done Bill saved as JPEG!");
                   },
                   "image/jpeg",
                   0.95,
@@ -11173,7 +11683,7 @@
         };
       }
 
-      // Single coalesced chart render â€” call this instead of rendering charts inline
+      // Single coalesced chart render &mdash; call this instead of rendering charts inline
       let _chartScheduled = false;
       function scheduleDashboardCharts() {
         if (_chartScheduled) return;
@@ -11214,7 +11724,7 @@
         });
       }
 
-      // Debounced resize handler â€” replaces the existing one
+      // Debounced resize handler &mdash; replaces the existing one
       const _debouncedResize = debounce(function () {
         renderHeroChart();
         renderBarChart();
@@ -11335,6 +11845,25 @@
         requestAnimationFrame(frame);
       }
 
+      function animateNumber(id, to, duration) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const from = Number(el.dataset.value || 0);
+        const target = Number(to) || 0;
+        el.dataset.value = target;
+        const start = performance.now();
+        const dur = duration || 650;
+        function ease(t) {
+          return 1 - Math.pow(1 - t, 3);
+        }
+        function frame(now) {
+          const p = Math.min(1, (now - start) / dur);
+          el.textContent = Math.round(from + (target - from) * ease(p)).toLocaleString("en-IN");
+          if (p < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }
+
       function getTopCustomer(bills) {
         const totals = {};
         bills.forEach((b) => {
@@ -11365,6 +11894,14 @@
             count: bills.length,
           };
         });
+      }
+
+      function getBillCountSeries(days) {
+        return getRevenueSeries(days).map((d) => ({
+          ...d,
+          value: d.count,
+          revenue: d.value,
+        }));
       }
 
       function drawLineChart(canvas, data, hoverIdx, progress) {
@@ -11459,13 +11996,13 @@
       function renderHeroChart() {
         const canvas = document.getElementById("hero-chart-canvas");
         if (!canvas) return;
-        const data = getRevenueSeries(30);
+        const data = getBillCountSeries(30);
         const total = data.reduce((s, d) => s + d.value, 0);
         const label = document.getElementById("hero-chart-label");
         if (label)
           label.textContent = total
-            ? "30-day total: " + moneyCompact(total)
-            : "No revenue in the last 30 days";
+            ? "30-day total: " + total + " bill" + (total !== 1 ? "s" : "")
+            : "No bills in the last 30 days";
         const start = performance.now();
         function frame(now) {
           const p = Math.min(1, (now - start) / 1150);
@@ -11490,11 +12027,10 @@
           drawLineChart(canvas, data, idx, 1);
           if (tip) {
             tip.querySelector(".chart-tip-date").textContent = d.label;
-            tip.querySelector(".chart-tip-value").textContent = moneyCompact(
-              d.value,
-            );
-            tip.querySelector(".chart-tip-bills").textContent =
+            tip.querySelector(".chart-tip-value").textContent =
               d.count + " bill" + (d.count !== 1 ? "s" : "");
+            tip.querySelector(".chart-tip-bills").textContent =
+              moneyCompact(d.revenue || 0);
             const rect = canvas.getBoundingClientRect();
             const x =
               (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
@@ -11548,16 +12084,20 @@
       }
 
       function renderSparklines() {
-        const s = getRevenueSeries(14).map((d) => d.value);
+        const s = getBillCountSeries(14).map((d) => d.value);
         renderSparkline("spark-today", s, "#0a84ff");
         renderSparkline(
           "spark-unpaid",
-          s.map((v, i) => (i % 3 === 0 ? v * 0.8 : v * 0.35)),
+          getRevenueSeries(14).map(
+            (d) => S.bills.filter((b) => b.date === d.date && !b.delivered).length,
+          ),
           "#ff453a",
         );
         renderSparkline(
           "spark-average",
-          s.map((v) => v / (S.bills.length || 1)),
+          getRevenueSeries(14).map(
+            (d) => S.bills.filter((b) => b.date === d.date && b.delivered).length,
+          ),
           "#30d158",
         );
         renderSparkline("spark-growth", s, "#5e5ce6");
@@ -11695,7 +12235,7 @@
           const total = data.reduce((s, d) => s + d.value, 0);
           lbl.textContent =
             total > 0
-              ? "7-day total: â‚¹" + total.toFixed(0)
+              ? "7-day total: &#8377;" + total.toFixed(0)
               : "No sales this week";
         }
       }
@@ -11738,7 +12278,11 @@
           const lbl = document.getElementById(labelId);
           if (lbl)
             lbl.textContent =
-              d.label + " (" + d.date.slice(5) + ") â€“ â‚¹" + d.value.toFixed(0);
+              d.label +
+              " (" +
+              d.date.slice(5) +
+              ") - &#8377;" +
+              d.value.toFixed(0);
           // Redraw with highlight
           const dpr = window.devicePixelRatio || 1;
           const W = canvas.clientWidth;
@@ -11772,7 +12316,7 @@
             const total = data.reduce((s, d) => s + d.value, 0);
             lbl.textContent =
               total > 0
-                ? "7-day total: â‚¹" + total.toFixed(0)
+                ? "7-day total: &#8377;" + total.toFixed(0)
                 : "No sales this week";
           }
           renderBarChart();
@@ -11891,9 +12435,9 @@
           .sort((a, b) => b[1] - a[1])
           .slice(0, 4);
         const fmt = (v) => {
-          if (v >= 100000) return "â‚¹" + (v / 100000).toFixed(1) + "L";
-          if (v >= 1000) return "â‚¹" + (v / 1000).toFixed(1) + "K";
-          return "â‚¹" + v.toFixed(0);
+          if (v >= 100000) return "&#8377;" + (v / 100000).toFixed(1) + "L";
+          if (v >= 1000) return "&#8377;" + (v / 1000).toFixed(1) + "K";
+          return "&#8377;" + v.toFixed(0);
         };
         if (!top.length) {
           el.innerHTML =
@@ -11940,7 +12484,7 @@
         _setupBarInteraction(canvas, data, "rpt-chart-label");
       }
 
-      // â”€â”€ REPORTS PAGE CHARTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // -- REPORTS PAGE CHARTS -------------------------------------------
       function renderReportDonutChart(bills) {
         const el = document.getElementById("rpt-delivery-bar");
         if (!el) return;
@@ -11987,10 +12531,10 @@
           .slice(0, 4);
         const fmt = (v) =>
           v >= 100000
-            ? "â‚¹" + (v / 100000).toFixed(1) + "L"
+            ? "&#8377;" + (v / 100000).toFixed(1) + "L"
             : v >= 1000
-              ? "â‚¹" + (v / 1000).toFixed(1) + "K"
-              : "â‚¹" + v.toFixed(0);
+              ? "&#8377;" + (v / 1000).toFixed(1) + "K"
+              : "&#8377;" + v.toFixed(0);
         if (!top.length) {
           el.innerHTML =
             '<div style="font-size:11px;color:var(--muted);text-align:center;padding:16px 0">No data</div>';
@@ -12280,7 +12824,7 @@
       })();
 
       // ================================================================
-      // VOICE BILL ASSISTANT â€” 100% FREE (Web Speech API, zero paid APIs)
+      // VOICE BILL ASSISTANT &mdash; 100% FREE (Web Speech API, zero paid APIs)
       // Supports Hindi + English, regex + fuzzy matching
       // ================================================================
       (function () {
@@ -12292,7 +12836,7 @@
           phase: "idle", // idle | listening | parsed | confirmed
         };
 
-        // â”€â”€ Number word maps (Hindi + English) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // -- Number word maps (Hindi + English) ------------------------
         const NUM_WORDS = {
           // English
           zero: 0,
@@ -12430,7 +12974,7 @@
           "%",
         ];
 
-        // â”€â”€ Fuzzy string match â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // -- Fuzzy string match -----------------------------------------
         function normalize(s) {
           return String(s || "")
             .toLowerCase()
@@ -12466,11 +13010,14 @@
           if (c === q) return 1;
           const qc = q.replace(/\s+/g, "");
           const cc = c.replace(/\s+/g, "");
-          if (c.startsWith(q) || c.includes(q) || cc.startsWith(qc)) return 0.94;
+          if (c.startsWith(q) || c.includes(q) || cc.startsWith(qc))
+            return 0.94;
           const qTokens = q.split(/\s+/).filter(Boolean);
           const cTokens = c.split(/\s+/).filter(Boolean);
           const hits = qTokens.filter((t) =>
-            cTokens.some((ct) => ct === t || ct.startsWith(t) || t.startsWith(ct)),
+            cTokens.some(
+              (ct) => ct === t || ct.startsWith(t) || t.startsWith(ct),
+            ),
           ).length;
           const overlap = hits / Math.max(qTokens.length, 1);
           if (overlap === 1 && qTokens.length > 1) return 0.9;
@@ -12480,17 +13027,55 @@
           return Math.max(0, 1 - dist / maxLen);
         }
         function bestMatch(query, list, keyFn) {
-          const hit = findBestWithScore(query, list, keyFn ? (item) => [keyFn(item)] : null, 0.42);
+          const hit = findBestWithScore(
+            query,
+            list,
+            keyFn ? (item) => [keyFn(item)] : null,
+            0.42,
+          );
           return hit ? hit.item : null;
         }
 
         function isFillerWord(w) {
           return [
-            "for", "ke", "liye", "k", "ko", "party", "customer", "cust",
-            "bill", "bana", "banana", "banado", "ka", "ki", "me", "mein",
-            "mai", "par", "pe", "at", "and", "aur", "or", "with", "discount",
-            "disc", "percent", "off", "chhoot", "choot", "nahi", "nahin", "no",
-            "without", "bina", "mat", "please", "plz",
+            "for",
+            "ke",
+            "liye",
+            "k",
+            "ko",
+            "party",
+            "customer",
+            "cust",
+            "bill",
+            "bana",
+            "banana",
+            "banado",
+            "ka",
+            "ki",
+            "me",
+            "mein",
+            "mai",
+            "par",
+            "pe",
+            "at",
+            "and",
+            "aur",
+            "or",
+            "with",
+            "discount",
+            "disc",
+            "percent",
+            "off",
+            "chhoot",
+            "choot",
+            "nahi",
+            "nahin",
+            "no",
+            "without",
+            "bina",
+            "mat",
+            "please",
+            "plz",
           ].includes(w);
         }
 
@@ -12498,7 +13083,33 @@
           return normalize(
             String(raw || "")
               .replace(/[०-९]/g, (d) => "०१२३४५६७८९".indexOf(d))
+              .replace(/ग्राहक|कस्टमर/g, " customer ")
+              .replace(/पार्टी/g, " party ")
+              .replace(/रवि/g, " ravi ")
+              .replace(/जय|जया/g, " jaya ")
+              .replace(/लक्ष्मी/g, " lakshmi ")
+              .replace(/स्टोर्स?|स्टोर/g, " stores ")
+              .replace(/ट्रेडर्स?|ट्रेडर/g, " traders ")
+              .replace(/एंटरप्राइजेज|एंटरप्राइज/g, " enterprises ")
+              .replace(/नाम/g, " naam ")
+              .replace(/बिल/g, " bill ")
+              .replace(/लिए|लिये/g, " liye ")
+              .replace(/को/g, " ko ")
+              .replace(/के/g, " ke ")
+              .replace(/का|की/g, " ka ")
               .replace(/\b(per cent|percentage)\b/gi, " percent ")
+              .replace(
+                /\b(custmer|costumer|kastmar|kashtamar|party name)\b/gi,
+                " customer ",
+              )
+              .replace(
+                /\b(billed to|bill 2|bill too|made for|make for)\b/gi,
+                " bill to ",
+              )
+              .replace(
+                /\b(k naam se|ke naam se|naam se|ke nam se|k nam se)\b/gi,
+                " ke liye ",
+              )
               .replace(/\b(by|into|cross)\b/gi, " x ")
               .replace(/\bf\s*r\s*p\b/gi, " frp ")
               .replace(/\b(fiber|fibre)\b/gi, " frp ")
@@ -12578,9 +13189,40 @@
         }
 
         function customerKeys(c) {
-          return [c.name, c.searchName, c.location]
+          const raw = [c.name, c.searchName, c.location, c.phone]
             .map(normalize)
             .filter((v) => v && v.length >= 2);
+          const suffixes = new Set([
+            "trader",
+            "traders",
+            "store",
+            "stores",
+            "enterprise",
+            "enterprises",
+            "agency",
+            "agencies",
+            "company",
+            "co",
+            "and",
+            "sons",
+            "brothers",
+            "bro",
+            "cement",
+            "hardware",
+            "steel",
+          ]);
+          const variants = [];
+          raw.forEach((v) => {
+            variants.push(v, v.replace(/\s+/g, ""));
+            const parts = v.split(/\s+/).filter(Boolean);
+            const compact = parts.filter((p) => !suffixes.has(p)).join(" ");
+            if (compact.length >= 2) variants.push(compact);
+            if (parts.length > 1) variants.push(parts.slice(0, 2).join(" "));
+            parts.forEach((p) => {
+              if (p.length >= 3 && !suffixes.has(p)) variants.push(p);
+            });
+          });
+          return [...new Set(variants)].filter((v) => v && v.length >= 2);
         }
 
         function cleanProductPhrase(words) {
@@ -12592,7 +13234,9 @@
 
         function extractDiscount(text) {
           if (
-            /\b(no|without|bina|nahi|nahin)\s+(discount|disc|chhoot|choot)\b/.test(text) ||
+            /\b(no|without|bina|nahi|nahin)\s+(discount|disc|chhoot|choot)\b/.test(
+              text,
+            ) ||
             /\b(discount|disc|chhoot|choot)\s+(nahi|nahin|mat)\b/.test(text)
           )
             return 0;
@@ -12606,29 +13250,96 @@
           return 0;
         }
 
+        function stripProductAndQtyNoise(text) {
+          let cleaned = " " + text + " ";
+          cleaned = cleaned.replace(
+            /\b(no|without|bina|nahi|nahin)?\s*(discount|disc|chhoot|choot|off|percent)\s*\d*(?:\.\d+)?\b/g,
+            " ",
+          );
+          S.products
+            .flatMap((p) => productKeys(p))
+            .filter((k) => k && k.length >= 3)
+            .sort((a, b) => b.length - a.length)
+            .forEach((k) => {
+              const pat = k
+                .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+                .replace(/\s+/g, "\\s+");
+              cleaned = cleaned.replace(
+                new RegExp("\\b" + pat + "\\b", "g"),
+                " ",
+              );
+            });
+          cleaned = cleaned
+            .replace(
+              /\b\d+(?:\.\d+)?\s*(kg|kilo|kilogram|kilograms|pc|pcs|piece|pieces|no|nos|unit|units|bag|bags|packet|packets)?\b/g,
+              " ",
+            )
+            .replace(/\b(x|inch|inches|mm|cm|feet|ft)\b/g, " ");
+          return cleaned.replace(/\s+/g, " ").trim();
+        }
+
+        function customerCandidatePhrases(text) {
+          const phrases = [];
+          const add = (v, boost) => {
+            const phrase = normalize(v)
+              .split(/\s+/)
+              .filter(
+                (w) =>
+                  w &&
+                  ![
+                    "bill",
+                    "bana",
+                    "banana",
+                    "banado",
+                    "please",
+                    "plz",
+                  ].includes(w),
+              )
+              .join(" ");
+            if (phrase.length >= 2) phrases.push({ phrase, boost: boost || 0 });
+          };
+          const triggerPatterns = [
+            /\b(?:for|party|customer|cust|bill to|naam|name)\s+([a-z0-9 ]{2,60})/g,
+            /([a-z0-9 ]{2,60})\s+\b(?:ke liye|k liye|ko|ke naam se|k naam se)\b/g,
+            /\b(?:party|customer|cust)\s+(?:ka|ki)?\s*(?:naam|name)?\s*([a-z0-9 ]{2,60})/g,
+          ];
+          triggerPatterns.forEach((rx) => {
+            let m;
+            while ((m = rx.exec(text))) add(m[1], 0.16);
+          });
+
+          const stripped = stripProductAndQtyNoise(text);
+          add(stripped, 0.08);
+          const words = stripped.split(/\s+/).filter(Boolean);
+          for (let i = 0; i < words.length; i++) {
+            for (let len = Math.min(6, words.length - i); len >= 1; len--) {
+              const slice = words.slice(i, i + len);
+              if (slice.some((w) => !isNaN(tokenNumber(w)) || isUnitWord(w)))
+                continue;
+              const phrase = slice.filter((w) => !isFillerWord(w)).join(" ");
+              add(phrase, i === 0 ? 0.05 : 0);
+            }
+          }
+          return phrases;
+        }
+
         function findCustomerAnywhere(text) {
           if (!S.customers.length) return null;
           let best = null;
-          const trigger = text.match(
-            /(?:for|party|customer|cust|bill to|naam)\s+([a-z0-9 ]{2,45})|([a-z0-9 ]{2,45})\s+(?:ke liye|k liye|ko)/,
-          );
-          if (trigger) {
-            best = findBestWithScore(trigger[1] || trigger[2], S.customers, customerKeys, 0.42);
-            if (best && !best.ambiguous) return best.item;
-          }
-
-          const words = text.split(/\s+/).filter(Boolean);
-          for (let i = 0; i < words.length; i++) {
-            for (let len = 1; len <= Math.min(5, words.length - i); len++) {
-              const slice = words.slice(i, i + len);
-              if (slice.some((w) => !isNaN(tokenNumber(w)) || isUnitWord(w))) continue;
-              const phrase = slice.filter((w) => !isFillerWord(w)).join(" ");
-              if (phrase.length < 2) continue;
-              const hit = findBestWithScore(phrase, S.customers, customerKeys, 0.56);
-              if (!hit) continue;
-              const score = hit.score + (i === 0 ? 0.08 : 0);
-              if (!best || score > best.score) best = { ...hit, score };
-            }
+          customerCandidatePhrases(text).forEach(({ phrase, boost }) => {
+            const minScore = phrase.split(/\s+/).length <= 1 ? 0.68 : 0.46;
+            const hit = findBestWithScore(
+              phrase,
+              S.customers,
+              customerKeys,
+              minScore,
+            );
+            if (!hit) return;
+            const score = hit.score + boost;
+            if (!best || score > best.score) best = { ...hit, score };
+          });
+          if (best && best.ambiguous && best.score >= 0.92) {
+            best.ambiguous = false;
           }
           return best && !best.ambiguous ? best.item : null;
         }
@@ -12664,38 +13375,77 @@
           const prev = tokens[i - 1];
           const next = tokens[i + 1];
           if (prev === "x" || next === "x") return true;
-          const around = tokens.slice(Math.max(0, i - 2), Math.min(tokens.length, i + 3));
-          return around.some((w) => ["inch", "inches", "mm", "cm", "feet", "ft"].includes(w));
+          const around = tokens.slice(
+            Math.max(0, i - 2),
+            Math.min(tokens.length, i + 3),
+          );
+          return around.some((w) =>
+            ["inch", "inches", "mm", "cm", "feet", "ft"].includes(w),
+          );
         }
 
         function commandBoundaryIndexes(tokens) {
-          const stops = new Set(["for", "party", "customer", "cust", "bill", "discount", "disc", "off", "percent", "chhoot", "choot"]);
+          const stops = new Set([
+            "for",
+            "party",
+            "customer",
+            "cust",
+            "bill",
+            "discount",
+            "disc",
+            "off",
+            "percent",
+            "chhoot",
+            "choot",
+          ]);
           const cuts = [tokens.length];
           tokens.forEach((t, i) => {
             if (stops.has(t)) cuts.push(i);
-            if ((t === "ke" || t === "k") && tokens[i + 1] === "liye") cuts.push(i);
+            if ((t === "ke" || t === "k") && tokens[i + 1] === "liye")
+              cuts.push(i);
           });
           return cuts.sort((a, b) => a - b);
         }
 
         function itemQuantityNear(tokens, start, end) {
           let best = null;
-          for (let i = Math.max(0, start - 4); i < Math.min(tokens.length, end + 5); i++) {
+          for (
+            let i = Math.max(0, start - 4);
+            i < Math.min(tokens.length, end + 5);
+            i++
+          ) {
             const qty = tokenNumber(tokens[i]);
             if (!qty || isNaN(qty)) continue;
             const nextFew = tokens.slice(i + 1, i + 3);
-            if (nextFew.some((w) => ["percent", "discount", "disc", "off", "chhoot", "choot"].includes(w))) continue;
+            if (
+              nextFew.some((w) =>
+                [
+                  "percent",
+                  "discount",
+                  "disc",
+                  "off",
+                  "chhoot",
+                  "choot",
+                ].includes(w),
+              )
+            )
+              continue;
             if (isLikelyDimensionNumber(tokens, i)) continue;
             const beforeItem = i < start;
             const afterItem = i >= end;
             const close = beforeItem ? start - i : i - end + 1;
-            const hasQtyUnit = isQtyUnitWord(tokens[i + 1]) || isQtyUnitWord(tokens[i - 1]);
+            const hasQtyUnit =
+              isQtyUnitWord(tokens[i + 1]) || isQtyUnitWord(tokens[i - 1]);
             if (afterItem && !hasQtyUnit && close > 2) continue;
             const score = (beforeItem ? 5 : 3) + (hasQtyUnit ? 3 : 0) - close;
             if (!best || score > best.score) {
               best = {
                 qty,
-                type: ["kg", "kilo", "kilogram", "kilograms"].includes(tokens[i + 1]) ? "kg" : "pc",
+                type: ["kg", "kilo", "kilogram", "kilograms"].includes(
+                  tokens[i + 1],
+                )
+                  ? "kg"
+                  : "pc",
                 score,
               };
             }
@@ -12703,7 +13453,7 @@
           return best || { qty: 1, type: "pc", score: 0 };
         }
 
-        // Word-to-number parser â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // Word-to-number parser --------------------------------------
         function wordsToNum(tokens) {
           // Try direct parse first
           const joined = tokens.join(" ");
@@ -12727,11 +13477,17 @@
           return result > 0 ? result : NaN;
         }
 
-        // â”€â”€ Main parser â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // -- Main parser ------------------------------------------------
         function parseBillCommand(raw) {
           const text = speechNormalize(raw);
           const tokens = text.split(/\s+/).filter(Boolean);
-          const result = { customer: null, items: [], discount: 0, raw, uncertain: [] };
+          const result = {
+            customer: null,
+            items: [],
+            discount: 0,
+            raw,
+            uncertain: [],
+          };
 
           let discPct = extractDiscount(text);
           result.discount = discPct;
@@ -12741,15 +13497,30 @@
           const boundaries = commandBoundaryIndexes(tokens);
           for (let i = 0; i < tokens.length; i++) {
             if (isFillerWord(tokens[i])) continue;
+            let bestSpan = null;
             for (let len = 1; len <= Math.min(7, tokens.length - i); len++) {
               const end = i + len;
               if (boundaries.some((cut) => cut > i && cut < end)) break;
               const span = tokens.slice(i, end);
-              if (span.some((w, idx) => !isNaN(tokenNumber(w)) && !isLikelyDimensionNumber(span, idx))) continue;
+              if (
+                span.some(
+                  (w, idx) =>
+                    !isNaN(tokenNumber(w)) &&
+                    !isLikelyDimensionNumber(span, idx),
+                )
+              )
+                continue;
               const hit = scoreProductSpan(span);
               if (!hit || hit.ambiguous) continue;
               const prod = hit.item;
               if (!prod || seen.has(prod.id)) continue;
+              const spanScore = hit.score + len * 0.015;
+              if (!bestSpan || spanScore > bestSpan.spanScore) {
+                bestSpan = { hit, prod, end, spanScore };
+              }
+            }
+            if (bestSpan) {
+              const { hit, prod, end } = bestSpan;
               const qtyInfo = itemQuantityNear(tokens, i, end);
               seen.add(prod.id);
               result.items.push({
@@ -12761,7 +13532,6 @@
                 score: hit.score + qtyInfo.score * 0.01,
               });
               i = end - 1;
-              break;
             }
           }
 
@@ -12800,7 +13570,7 @@
           return units.includes(w);
         }
 
-        // â”€â”€ UI helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // -- UI helpers ------------------------------------------------
         function setHint(txt) {
           const el = document.getElementById("voice-hint");
           if (el) el.textContent = txt;
@@ -12877,7 +13647,7 @@
           el.style.pointerEvents = show ? "auto" : "none";
         }
 
-        // â”€â”€ Web Speech API setup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // -- Web Speech API setup --------------------------------------
         function initSpeech() {
           const SpeechRecognition =
             window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -12907,7 +13677,8 @@
                   const pa = parseBillCommand(a);
                   const pb = parseBillCommand(b);
                   return (
-                    (pb.items.length + (pb.customer ? 1 : 0)) -
+                    pb.items.length +
+                    (pb.customer ? 1 : 0) -
                     (pa.items.length + (pa.customer ? 1 : 0))
                   );
                 })[0];
@@ -12986,7 +13757,7 @@
           }
         }
 
-        // â”€â”€ Apply parsed data to bill â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // -- Apply parsed data to bill ---------------------------------
         function applyParsedToBill() {
           const parsed = VB.parsed;
           if (!parsed) return;
@@ -13032,7 +13803,7 @@
           }
         }
 
-        // â”€â”€ Public API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // -- Public API ------------------------------------------------
         window.openVoiceBill = function () {
           const overlay = document.getElementById("voice-overlay");
           if (!overlay) return;
