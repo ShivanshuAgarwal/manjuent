@@ -13809,14 +13809,21 @@
             window.SpeechRecognition || window.webkitSpeechRecognition;
           if (!SpeechRecognition) return null;
           const r = new SpeechRecognition();
-          r.continuous = true;
+          // NON-CONTINUOUS: Android Chrome repeats all results on every event
+          // with continuous=true causing "24 24 24 24..." duplicates.
+          // Single-shot is reliable on all platforms.
+          r.continuous = false;
           r.interimResults = true;
-          // Accept both Hindi and English
-          r.lang = "hi-IN"; // Browser will still accept English words
+          r.lang = "hi-IN";
           r.maxAlternatives = 3;
+
+          // Track best transcript seen so far (not cumulative push)
+          let bestTranscript = "";
 
           r.onstart = () => {
             VB.listening = true;
+            bestTranscript = "";
+            resetSpeechMemory();
             clearSpeechSilenceTimer();
             setOrbState("listening");
             setHint("Listening... speak now");
@@ -13824,42 +13831,51 @@
           };
 
           r.onresult = (e) => {
-            // Only process new results from e.resultIndex to avoid re-processing old ones
-            for (let i = e.resultIndex; i < e.results.length; i++) {
+            let interim = "";
+            let finalText = "";
+            // Always scan all results but REPLACE, never accumulate
+            for (let i = 0; i < e.results.length; i++) {
               const alternatives = Array.from(e.results[i]);
+              // Pick best alternative by parse score
               const t = alternatives
                 .map((alt) => alt.transcript)
                 .sort((a, b) => {
                   const pa = parseBillCommand(a);
                   const pb = parseBillCommand(b);
                   return (
-                    pb.items.length +
-                    (pb.customer ? 1 : 0) -
+                    pb.items.length + (pb.customer ? 1 : 0) -
                     (pa.items.length + (pa.customer ? 1 : 0))
                   );
                 })[0];
               if (e.results[i].isFinal) {
-                VB.finalSegments.push(t);
-                VB.interimTranscript = "";
+                finalText += (finalText ? " " : "") + t;
               } else {
-                VB.interimTranscript = t;
+                interim += (interim ? " " : "") + t;
               }
             }
-            VB.lastTranscript = rememberedTranscript();
-            setTranscript(VB.lastTranscript, !VB.finalSegments.length);
-            scheduleSpeechAutoStop(r);
+            // Use final if we have it, else interim — never concat across events
+            const current = (finalText || interim || "").trim();
+            if (current.length > bestTranscript.length || finalText) {
+              bestTranscript = current;
+            }
+            VB.lastTranscript = bestTranscript;
+            VB.interimTranscript = interim;
+            setTranscript(bestTranscript, !finalText);
+            if (finalText) {
+              scheduleSpeechAutoStop(r);
+            }
           };
 
           r.onend = () => {
             VB.listening = false;
             clearSpeechSilenceTimer();
             setOrbState("idle");
-            const transcript = rememberedTranscript();
+            const transcript = (bestTranscript || "").trim();
             if (transcript) {
               VB.lastTranscript = transcript;
               processTranscript(transcript);
             } else {
-              setHint("Kuch suna nahi - phir se try karo");
+              setHint("Kuch suna nahi - phir tap karo");
               showRetry(true);
             }
             if (!voiceOverlayOpen()) setTimeout(startWakeListener, 800);
@@ -13869,12 +13885,11 @@
             VB.listening = false;
             clearSpeechSilenceTimer();
             setOrbState("error");
+            if (e.error === "aborted") return; // intentional abort, ignore
             const msgs = {
               "no-speech": "Awaaz nahi aayi - phir tap karo",
-              "not-allowed":
-                "Mic permission chahiye - browser settings check karo",
+              "not-allowed": "Mic permission chahiye - browser settings check karo",
               network: "Network error - offline mode mein kaam nahi karta",
-              aborted: "Ruk gaya",
             };
             setHint(msgs[e.error] || "Error: " + e.error);
             setTranscript("", false);
