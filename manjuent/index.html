@@ -10297,70 +10297,7 @@
       // ================================================================
       // WHATSAPP SHARE
       // ================================================================
-      function shareCurrentBillWhatsApp() {
-        const b = S.bills.find((x) => x.id === S.currentBillId);
-        if (!b) return;
-        showToast("Preparing...");
-        const target = document.getElementById("bill-jpeg-target");
-        _loadHtml2Canvas(() => {
-          setTimeout(() => {
-            html2canvas(target, {
-              scale: 2.5,
-              useCORS: true,
-              backgroundColor: "#ffffff",
-              logging: false,
-            }).then((canvas) => {
-              canvas.toBlob(
-                (blob) => {
-                  const file = new File(
-                    [blob],
-                    "Estimate-" + b.invno + ".jpg",
-                    { type: "image/jpeg" },
-                  );
-                  if (
-                    navigator.share &&
-                    navigator.canShare &&
-                    navigator.canShare({ files: [file] })
-                  ) {
-                    navigator
-                      .share({
-                        files: [file],
-                        title: "Estimate #" + b.invno,
-                        text:
-                          "Estimate from Manju Enterprises &mdash; &#8377;" +
-                          b.grand.toFixed(2),
-                      })
-                      .catch(() => {});
-                  } else {
-                    // Fallback: save image + open WhatsApp
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = "Estimate-" + b.invno + ".jpg";
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    setTimeout(() => {
-                      const msg = encodeURIComponent(
-                        "Estimate #" +
-                          b.invno +
-                          " from Manju Enterprises\nAmount: &#8377;" +
-                          b.grand.toFixed(2) +
-                          "\n(Image saved &mdash; please attach it)",
-                      );
-                      window.open("https://wa.me/?text=" + msg, "_blank");
-                    }, 800);
-                  }
-                },
-                "image/jpeg",
-                0.95,
-              );
-            });
-          }, 100);
-        }); // end _loadHtml2Canvas
-      }
-
+     
       // ================================================================
       // REPORTS
       // ================================================================
@@ -11514,6 +11451,182 @@
       // ================================================================
       // JPEG BILL DOWNLOAD (WhatsApp-friendly card)
       // ================================================================
+      function shareCurrentBillWhatsApp() {
+        const b = S.bills.find((x) => x.id === S.currentBillId);
+        if (!b) return;
+        showToast("Preparing...");
+
+        const rows = b.items.map((it) => {
+          const pkgCell = it.pkgText ? it.pkgText
+            : (it.pkgType && it.pkgQty ? it.pkgQty + "x" + it.pkgType : "-");
+          const td = "padding:8px 10px;border-bottom:1px solid #e5e5e5;vertical-align:middle;color:#1d1d1f;font-size:12px;";
+          return `<tr>
+            <td style="${td}font-weight:700;white-space:nowrap;font-family:monospace;font-size:11px">${pkgCell}</td>
+            <td style="${td}text-align:left">${it.name}</td>
+            <td style="${td}text-align:right;font-family:monospace">&#8377;${it.rate}</td>
+            <td style="${td}text-align:right;font-family:monospace">${it.pcs != null ? it.pcs : "-"}</td>
+            <td style="${td}text-align:right;font-family:monospace">${it.weight != null ? it.weight.toFixed(2) + "kg" : "-"}</td>
+            <td style="${td}text-align:right;font-family:monospace">${it.disc ? it.disc + "%" : "-"}</td>
+            <td style="${td}text-align:right;font-family:monospace;font-weight:700">&#8377;${it.amount.toFixed(2)}</td>
+          </tr>`;
+        }).join("");
+
+        const extraRows = [
+          b.rikshaw > 0 ? `<tr><td colspan="6" style="padding:7px 10px;color:#888;font-size:11px;border-bottom:1px solid #eee">Rikshaw</td><td style="padding:7px 10px;text-align:right;font-family:monospace;border-bottom:1px solid #eee">&#8377;${b.rikshaw.toFixed(2)}</td></tr>` : "",
+          b.taxAmt > 0 ? `<tr><td colspan="6" style="padding:7px 10px;color:#888;font-size:11px;border-bottom:1px solid #eee">Tax (${b.taxPct || b.taxInput || 0}%)</td><td style="padding:7px 10px;text-align:right;font-family:monospace;border-bottom:1px solid #eee">&#8377;${b.taxAmt.toFixed(2)}</td></tr>` : "",
+        ].join("");
+
+        const html = `<div style="width:680px;background:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:#1d1d1f;">
+          <div style="background:#007aff;padding:14px 20px;text-align:center;">
+            <div style="color:#fff;font-size:18px;font-weight:700;letter-spacing:1px">ESTIMATE</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1.5px solid #e5e5e5;">
+            <div style="padding:11px 16px;border-right:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;">
+              <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px">Bill To</div>
+              <div style="font-size:15px;font-weight:700">${b.customer.name}</div>
+              ${b.customer.location ? `<div style="font-size:12px;color:#555;margin-top:1px">${b.customer.location}</div>` : ""}
+            </div>
+            <div style="padding:11px 16px;border-bottom:1px solid #e5e5e5;">
+              <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px">Invoice</div>
+              <div style="font-size:15px;font-weight:700;font-family:monospace">#${b.invno}</div>
+              <div style="font-size:12px;color:#555;margin-top:1px">${fmtDate(b.date)}</div>
+            </div>
+            <div style="padding:10px 16px;border-right:1px solid #e5e5e5;">
+              <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px">Transport</div>
+              <div style="font-size:13px;font-weight:600">${b.transport ? b.transport.name : "-"}</div>
+            </div>
+            <div style="padding:10px 16px;">
+              <div style="font-size:9px;font-weight:700;color:#86868b;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px">Destination</div>
+              <div style="font-size:13px;font-weight:600">${b.customer.location || "-"}</div>
+            </div>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="background:#f5f5f7;">
+                <th style="padding:7px 10px;text-align:left;font-size:9px;font-weight:700;color:#888;text-transform:uppercase;border-bottom:1.5px solid #ddd">Bundle</th>
+                <th style="padding:7px 10px;text-align:left;font-size:9px;font-weight:700;color:#888;text-transform:uppercase;border-bottom:1.5px solid #ddd">Item</th>
+                <th style="padding:7px 10px;text-align:right;font-size:9px;font-weight:700;color:#888;text-transform:uppercase;border-bottom:1.5px solid #ddd">Rate</th>
+                <th style="padding:7px 10px;text-align:right;font-size:9px;font-weight:700;color:#888;text-transform:uppercase;border-bottom:1.5px solid #ddd">Qty</th>
+                <th style="padding:7px 10px;text-align:right;font-size:9px;font-weight:700;color:#888;text-transform:uppercase;border-bottom:1.5px solid #ddd">Wt</th>
+                <th style="padding:7px 10px;text-align:right;font-size:9px;font-weight:700;color:#888;text-transform:uppercase;border-bottom:1.5px solid #ddd">Disc</th>
+                <th style="padding:7px 10px;text-align:right;font-size:9px;font-weight:700;color:#888;text-transform:uppercase;border-bottom:1.5px solid #ddd">Amt</th>
+              </tr>
+            </thead>
+            <tbody>${rows}${extraRows}</tbody>
+          </table>
+          <div style="border-top:2px solid #e5e5e5;"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f8f8fb;">
+            <div style="font-size:14px;font-weight:700">Total Amount</div>
+            <div style="font-size:20px;font-weight:800;color:#007aff;font-family:monospace">&#8377;${b.grand.toFixed(2)}</div>
+          </div>
+          <div style="padding:9px 16px;font-size:11px;color:#555;border-top:1px solid #ebebeb;">
+            <em style="color:#86868b">Amount in words: </em><strong>${b.words}</strong>
+          </div>
+          <div style="padding:7px 16px;background:#f5f5f7;text-align:center;font-size:10px;color:#86868b;">
+            This is a computer generated estimate
+          </div>
+        </div>`;
+
+        const target = document.getElementById("bill-jpeg-target");
+        target.innerHTML = html;
+
+        const prevStyle = target.getAttribute("style");
+        target.style.cssText = "position:fixed;top:0;left:0;width:680px;background:#fff;z-index:-1;opacity:0.01;pointer-events:none;";
+
+        _loadHtml2Canvas(() => {
+          setTimeout(() => {
+            html2canvas(target, {
+              scale: 2,
+              useCORS: true,
+              backgroundColor: "#ffffff",
+              logging: false,
+              allowTaint: true,
+              removeContainer: false,
+              ignoreElements: (el) => {
+                if (!el.style) return false;
+                const s = el.style;
+                return !!(s.backdropFilter || s.webkitBackdropFilter);
+              },
+            }).then((canvas) => {
+              target.setAttribute("style", prevStyle || "position:fixed;top:-9999px;left:-9999px;width:680px;background:#fff;");
+              canvas.toBlob((blob) => {
+                if (!blob) { showToast("Could not generate image"); return; }
+                const fileName = "Estimate-" + b.invno + ".jpg";
+                const file = new File([blob], fileName, { type: "image/jpeg" });
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                  navigator.share({
+                    files: [file],
+                    title: "Estimate #" + b.invno,
+                    text: "Manju Enterprises - Estimate #" + b.invno + " - \u20b9" + b.grand.toFixed(2),
+                  }).then(() => showToast("Shared!")).catch((err) => {
+                    if (err && err.name !== "AbortError") { fallbackShare(blob, b); }
+                  });
+                  return;
+                }
+                if (navigator.clipboard && window.ClipboardItem) {
+                  navigator.clipboard.write([
+                    new ClipboardItem({ "image/png": new Blob([blob], { type: "image/png" }) })
+                  ]).then(() => showToast("Image copied - paste in WhatsApp!"))
+                    .catch(() => fallbackShare(blob, b));
+                  return;
+                }
+                fallbackShare(blob, b);
+              }, "image/jpeg", 0.92);
+            }).catch((err) => {
+              target.setAttribute("style", prevStyle || "position:fixed;top:-9999px;left:-9999px;width:680px;background:#fff;");
+              console.error("html2canvas error:", err);
+              textShareWhatsApp(b);
+            });
+          }, 120);
+        });
+      }
+
+      function fallbackShare(blob, b) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Estimate-" + b.invno + "-" + (b.customer.name || "").replace(/[^a-zA-Z0-9]/g, "_") + ".jpg";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 2000);
+        setTimeout(() => {
+          const msg = encodeURIComponent(
+            "*Estimate #" + b.invno + "*\n" +
+            "Customer: " + b.customer.name + "\n" +
+            (b.customer.location ? "Location: " + b.customer.location + "\n" : "") +
+            "Items: " + b.items.length + "\n" +
+            "Amount: \u20b9" + b.grand.toFixed(2) + "\n" +
+            "Date: " + fmtDate(b.date) + "\n" +
+            "_(Image saved - please attach it)_"
+          );
+          window.open("https://wa.me/?text=" + msg, "_blank");
+          showToast("Image saved - attach it in WhatsApp");
+        }, 900);
+      }
+
+      function textShareWhatsApp(b) {
+        const itemLines = b.items.map((it) =>
+          "\u2022 " + it.name + " - " +
+          (it.pcs != null ? it.pcs + " pcs" : "") +
+          (it.weight != null ? it.weight.toFixed(2) + " kg" : "") +
+          " = \u20b9" + it.amount.toFixed(2)
+        ).join("\n");
+        const msg = encodeURIComponent(
+          "*Manju Enterprises*\n*Estimate #" + b.invno + "*\n\n" +
+          "To: *" + b.customer.name + "*\n" +
+          (b.customer.location ? "Location: " + b.customer.location + "\n" : "") +
+          "Date: " + fmtDate(b.date) + "\n\n" +
+          "*Items:*\n" + itemLines + "\n\n" +
+          (b.rikshaw > 0 ? "Rikshaw: \u20b9" + b.rikshaw.toFixed(2) + "\n" : "") +
+          (b.taxAmt > 0 ? "Tax: \u20b9" + b.taxAmt.toFixed(2) + "\n" : "") +
+          "*Total: \u20b9" + b.grand.toFixed(2) + "*\n\n" +
+          "_" + b.words + "_"
+        );
+        window.open("https://wa.me/?text=" + msg, "_blank");
+        showToast("Shared as text (image unavailable)");
+      }
+      
       function saveCurrentBillAsJpeg() {
         const b = S.bills.find((x) => x.id === S.currentBillId);
         if (!b) {
