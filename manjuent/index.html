@@ -13168,6 +13168,13 @@
           return normalize(
             String(raw || "")
               .replace(/[\u0966-\u096f]/g, (d) => "\u0966\u0967\u0968\u0969\u096a\u096b\u096c\u096d\u096e\u096f".indexOf(d))
+              .replace(/\u0939\u0947|\u0939\u093f|\u0939\u0948/g, " hey ")
+              .replace(/\u0930\u093e\u0927\u0947/g, " radhe ")
+              .replace(/\u0930\u093e\u0927\u093e/g, " radha ")
+              .replace(/\u0936\u094d\u092f\u093e\u092e|\u0936\u094d\u092f\u093e\u092e\u093e/g, " shyam ")
+              .replace(/\u0915\u0943\u0937\u094d\u0923/g, " krishna ")
+              .replace(/\u0917\u094b\u0935\u093f\u0928\u094d\u0926/g, " govind ")
+              .replace(/\u0917\u094b\u092a\u093e\u0932/g, " gopal ")
               .replace(/\u0917\u094d\u0930\u093e\u0939\u0915|\u0915\u0938\u094d\u091f\u092e\u0930/g, " customer ")
               .replace(/\u092a\u093e\u0930\u094d\u091f\u0940/g, " party ")
               .replace(/\u0930\u0935\u093f/g, " ravi ")
@@ -13680,7 +13687,16 @@
               // Don't cross clear command boundaries like "for", "customer", "discount"
               if (span.some(w => ["for", "customer", "cust", "party", "discount", "disc"].includes(w))) break;
               // Skip spans containing bare numbers (numbers are qty, not product names)
-              if (span.some((w, idx) => !isNaN(tokenNumber(w)) && !isLikelyDimensionNumber(span, idx))) continue;
+              // Exception: consecutive numbers within the span are dimension pairs (e.g. "24 24" in "24 24 FRP")
+              if (span.some((w, idx) => {
+                if (isNaN(tokenNumber(w))) return false;
+                if (isLikelyDimensionNumber(span, idx)) return false;
+                // Consecutive number within span = dimension pair like "24 24 frp"
+                const prevW = span[idx - 1];
+                const nextW = span[idx + 1];
+                if (!isNaN(tokenNumber(prevW)) || !isNaN(tokenNumber(nextW))) return false;
+                return true;
+              })) continue;
               const hit = scoreProductSpan(span);
               if (!hit || hit.ambiguous) continue;
               const prod = hit.item;
