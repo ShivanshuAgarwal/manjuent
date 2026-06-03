@@ -13676,6 +13676,11 @@
         }
 
         // -- Main parser ------------------------------------------------
+        // Strategy: layered extraction so fields don't interfere
+        //   Pass 1: Extract discount (unambiguous patterns)
+        //   Pass 2: Find all products (left-to-right span scan)
+        //   Pass 3: Extract quantity for each product from its local context
+        //   Pass 4: Find customer from tokens NOT consumed by products/qty/discount
         function parseBillCommand(raw) {
           const text = speechNormalize(raw);
           const tokens = text.split(/\s+/).filter(Boolean);
@@ -13687,56 +13692,135 @@
             uncertain: [],
           };
 
-          let discPct = extractDiscount(text);
+          // ---- Pass 1: Discount ----------------------------------------
+          const discPct = extractDiscount(text);
           result.discount = discPct;
-          result.customer = findCustomerAnywhere(text);
 
+          // Track which token indexes are "consumed" so customer search ignores them
+          const consumed = new Set(); // indexes used by products, qty, discount
+
+          // Mark discount-related tokens consumed
+          tokens.forEach((t, i) => {
+            if (["discount", "disc", "off", "percent", "chhoot", "choot"].includes(t)) consumed.add(i);
+          });
+
+          // ---- Pass 2: Find products (left-to-right, best non-overlapping) -----
           const seen = new Set();
-          const boundaries = commandBoundaryIndexes(tokens);
+          const foundItems = []; // { prodStart, prodEnd, hit, prod }
+
           for (let i = 0; i < tokens.length; i++) {
             if (isFillerWord(tokens[i])) continue;
+            // Skip if this token is a pure number (it's a qty, not a product)
+            if (!isNaN(tokenNumber(tokens[i])) && !isLikelyDimensionNumber(tokens, i)) continue;
+
             let bestSpan = null;
             for (let len = 1; len <= Math.min(7, tokens.length - i); len++) {
               const end = i + len;
-              if (boundaries.some((cut) => cut > i && cut < end)) break;
               const span = tokens.slice(i, end);
-              if (
-                span.some(
-                  (w, idx) =>
-                    !isNaN(tokenNumber(w)) &&
-                    !isLikelyDimensionNumber(span, idx),
-                )
-              )
-                continue;
+              // Don't cross clear command boundaries like "for", "customer", "discount"
+              if (span.some(w => ["for", "customer", "cust", "party", "discount", "disc"].includes(w))) break;
+              // Skip spans containing bare numbers (numbers are qty, not product names)
+              if (span.some((w, idx) => !isNaN(tokenNumber(w)) && !isLikelyDimensionNumber(span, idx))) continue;
               const hit = scoreProductSpan(span);
               if (!hit || hit.ambiguous) continue;
               const prod = hit.item;
               if (!prod || seen.has(prod.id)) continue;
               const spanScore = hit.score + len * 0.015;
               if (!bestSpan || spanScore > bestSpan.spanScore) {
-                bestSpan = { hit, prod, end, spanScore };
+                bestSpan = { hit, prod, prodStart: i, prodEnd: end, spanScore };
               }
             }
             if (bestSpan) {
-              const { hit, prod, end } = bestSpan;
-              const qtyInfo = itemQuantityNear(tokens, i, end);
+              const { hit, prod, prodStart, prodEnd } = bestSpan;
               seen.add(prod.id);
-              result.items.push({
-                product: prod,
-                qty: qtyInfo.qty,
-                type: qtyInfo.type || prod.type || "pc",
-                discPct,
-                raw: hit.key,
-                score: hit.score + qtyInfo.score * 0.01,
-              });
-              i = end - 1;
+              foundItems.push({ prodStart, prodEnd, hit, prod });
+              // Mark product tokens as consumed
+              for (let k = prodStart; k < prodEnd; k++) consumed.add(k);
+              i = prodEnd - 1;
             }
           }
 
+          // ---- Pass 3: Quantity for each product from its LOCAL context --------
+          // Each product gets its own qty from nearby tokens.
+          // We process left-to-right so earlier products claim nearby numbers first.
+          const claimedQtyIndexes = new Set();
+
+          foundItems.forEach(({ prodStart, prodEnd, prod }) => {
+            const windowStart = Math.max(0, prodStart - 5);
+            const windowEnd = Math.min(tokens.length, prodEnd + 5);
+            let best = null;
+            for (let i = windowStart; i < windowEnd; i++) {
+              if (claimedQtyIndexes.has(i)) continue; // already taken by another product
+              if (i >= prodStart && i < prodEnd) continue; // skip own product tokens
+              const qty = tokenNumber(tokens[i]);
+              if (isNaN(qty) || qty <= 0) continue;
+              // Skip discount numbers
+              const nextFew = tokens.slice(i + 1, i + 3);
+              if (nextFew.some(w => ["percent", "discount", "disc", "off", "chhoot", "choot", "%"].includes(w))) continue;
+              if (isLikelyDimensionNumber(tokens, i)) continue;
+
+              const beforeItem = i < prodStart;
+              const afterItem = i >= prodEnd;
+              const closeness = beforeItem ? (prodStart - i) : (i - prodEnd + 1);
+              const hasUnit = isQtyUnitWord(tokens[i + 1]) || isQtyUnitWord(tokens[i - 1]);
+              // After item: only accept if unit word is present or very close (within 2 tokens)
+              if (afterItem && !hasUnit && closeness > 2) continue;
+              const score = (beforeItem ? 5 : 3) + (hasUnit ? 3 : 0) - closeness;
+              if (!best || score > best.score) {
+                const unitNext = tokens[i + 1];
+                const unitPrev = tokens[i - 1];
+                const unitWord = isQtyUnitWord(unitNext) ? unitNext : (isQtyUnitWord(unitPrev) ? unitPrev : null);
+                const type = ["kg", "kilo", "kilogram", "kilograms", "kilos"].includes(unitWord) ? "kg" : (prod.type || "pc");
+                best = { qty, type, score, tokenIdx: i };
+              }
+            }
+            if (best) {
+              claimedQtyIndexes.add(best.tokenIdx);
+              consumed.add(best.tokenIdx);
+              prod._parsedQty = { qty: best.qty, type: best.type };
+            } else {
+              prod._parsedQty = { qty: 1, type: prod.type || "pc" };
+            }
+          });
+
+          // ---- Build result.items ------------------------------------------
+          foundItems.forEach(({ hit, prod }) => {
+            const qtyInfo = prod._parsedQty || { qty: 1, type: prod.type || "pc" };
+            delete prod._parsedQty;
+            result.items.push({
+              product: prod,
+              qty: qtyInfo.qty,
+              type: qtyInfo.type,
+              discPct,
+              raw: hit.key,
+              score: hit.score,
+            });
+          });
           result.items.sort((a, b) => (b.score || 0) - (a.score || 0));
+
+          // ---- Pass 4: Customer from REMAINING (unconsumed) tokens -----------
+          // Build a "remaining text" that excludes product/qty/discount tokens
+          // so customer name doesn't get polluted by product words
+          const remainingTokens = tokens.filter((_, i) => !consumed.has(i));
+          const remainingText = remainingTokens.join(" ");
+
+          // Try customer match on remaining text first (cleaner signal)
+          // Fall back to full text if nothing found (customer name might overlap product word)
+          let customer = null;
+          if (remainingText.trim().length >= 2) {
+            customer = findCustomerAnywhere(remainingText);
+          }
+          if (!customer && text !== remainingText) {
+            customer = findCustomerAnywhere(text);
+            // If found in full text but it overlaps a product token, lower confidence check
+            // (findCustomerAnywhere already handles ambiguity internally)
+          }
+          result.customer = customer;
 
           return result;
         }
+
+        // tiny helper used in pass 3 — not a real map, just a closure
         function isUnitWord(w) {
           const units = [
             "kg",
@@ -13954,8 +14038,9 @@
           r.onresult = (e) => {
             let interim = "";
             let finalText = "";
-            // Always scan all results but REPLACE, never accumulate
-            for (let i = 0; i < e.results.length; i++) {
+            // NON-CONTINUOUS mode: Chrome sends ONE result per event.
+            // Loop only from resultIndex to avoid re-processing old results (24 24 bug)
+            for (let i = e.resultIndex; i < e.results.length; i++) {
               const alternatives = Array.from(e.results[i]);
               // Pick best alternative by parse score
               const t = alternatives
@@ -13974,9 +14059,10 @@
                 interim += (interim ? " " : "") + t;
               }
             }
-            // Use final if we have it, else interim — never concat across events
+            // Use final if we have it, else interim
             const current = (finalText || interim || "").trim();
-            if (current.length > bestTranscript.length || finalText) {
+            // Only update if longer OR if it's a final result (final is authoritative)
+            if (finalText || current.length > bestTranscript.length) {
               bestTranscript = current;
             }
             VB.lastTranscript = bestTranscript;
@@ -14024,7 +14110,7 @@
         function wakeHotwordHeard(text) {
           const heard = " " + speechNormalize(text) + " ";
           if (
-            /\b(?:hey|he|ok|okay|jai|jaya|shree|shri|hare|bolo|sun|suno|start|chalu|chaloo|open)?\s*(?:radhe|raadhe|radhey|radhay|rade|raday|radha|radhika|shyam|krishna|kanha|kanhaiya|govind|gopal|mohan|hari|hare)(?:\s*(?:radhe|shyam|krishna|kanha|govind|gopal|mohan|hari|hare))?\b/.test(
+            /\b(?:hey|he|ok|okay|jai|jaya|shree|shri|hare|bolo|sun|suno|start|chalu|chaloo|open)?\s*(?:radhe|raadhe|radhey|radhay|rade|raday|radha|radhaa|radhika|shyam|krishna|kanha|kanhaiya|govind|gopal|mohan|hari|hare)(?:\s*(?:radhe|radha|shyam|krishna|kanha|govind|gopal|mohan|hari|hare))?\b/.test(
               heard,
             )
           )
@@ -14060,48 +14146,60 @@
 
         function startWakeListener() {
           const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-          if (!SpeechRecognition || VB.wakeListening || VB.listening) return;
+          if (!SpeechRecognition || VB.wakeListening || VB.listening || VB.wakePaused) return;
           const r = new SpeechRecognition();
-          r.continuous = true;
-          r.interimResults = true;
+          // FIX: continuous=false — Android Chrome tung tung sound continuous mode mein zyada bajata hai
+          // Single-shot mode: sunta hai, result deta hai, silently restart karta hai
+          r.continuous = false;
+          r.interimResults = false;
           r.lang = "hi-IN";
-          r.maxAlternatives = 2;
+          r.maxAlternatives = 3;
           VB.wakeRecognition = r;
           r.onstart = () => { VB.wakeListening = true; };
           r.onresult = (e) => {
-            for (let i = e.resultIndex; i < e.results.length; i++) {
-              const heard = Array.from(e.results[i]).map((alt) => alt.transcript).join(" ");
-              if (wakeHotwordHeard(heard)) {
-                const command = stripWakeCommand(heard);
-                VB.wakePaused = true;
-                try { r.abort(); } catch (err) {}
-                openVoiceBill();
-                if (looksLikeBillCommand(command)) {
-                  VB.pendingWakeCommand = command;
-                  setTranscript(command, false);
-                  setHint("Radhe heard - command pakad liya");
-                  setTimeout(() => {
-                    processTranscript(VB.pendingWakeCommand);
-                    VB.pendingWakeCommand = "";
-                  }, 220);
-                } else {
-                  setHint("Radhe heard - listening...");
-                  setTimeout(() => toggleVoiceListening(), 280);
-                }
-                break;
+            // Collect ALL alternatives for best wake detection
+            const allTranscripts = [];
+            for (let i = 0; i < e.results.length; i++) {
+              for (let j = 0; j < e.results[i].length; j++) {
+                allTranscripts.push(e.results[i][j].transcript);
+              }
+            }
+            const combinedHeard = allTranscripts.join(" ");
+            const wakeDetected = allTranscripts.some(t => wakeHotwordHeard(t)) || wakeHotwordHeard(combinedHeard);
+            if (wakeDetected) {
+              const command = stripWakeCommand(allTranscripts[0] || "");
+              VB.wakePaused = true;
+              VB.wakeListening = false;
+              try { r.abort(); } catch (err) {}
+              openVoiceBill();
+              if (looksLikeBillCommand(command)) {
+                VB.pendingWakeCommand = command;
+                setTranscript(command, false);
+                setHint("Radhe heard - command pakad liya");
+                setTimeout(() => {
+                  processTranscript(VB.pendingWakeCommand);
+                  VB.pendingWakeCommand = "";
+                }, 220);
+              } else {
+                setHint("Radhe heard - listening...");
+                setTimeout(() => toggleVoiceListening(), 280);
               }
             }
           };
-          r.onerror = () => {
+          r.onerror = (e) => {
             VB.wakeListening = false;
-            if (!VB.wakePaused) setTimeout(startWakeListener, 900);
+            // no-speech is normal — mic timed out, quietly restart
+            if (!VB.wakePaused) setTimeout(startWakeListener, e.error === "no-speech" ? 300 : 1200);
           };
           r.onend = () => {
             VB.wakeListening = false;
-            if (!VB.wakePaused) setTimeout(startWakeListener, 900);
-            VB.wakePaused = false;
+            // wakePaused yahan reset NAHI — closeVoiceBill mein reset hoga
+            // warna race condition: onend fires → wakePaused false → fir se start ho jaata hai prematurely
+            if (!VB.wakePaused) setTimeout(startWakeListener, 400);
           };
-          try { r.start(); } catch (e) {}
+          try { r.start(); } catch (e) {
+            VB.wakeListening = false;
+          }
         }
 
         function armWakeListenerAfterGesture() {
