@@ -9403,8 +9403,16 @@
         renderSheetList(document.getElementById("sheet-search").value);
       }
 
+      function naturalSortKey(str) {
+        // Split into text/number chunks so "FRP 12 x 12" sorts before "FRP 18 x 18"
+        return (str || "").replace(/(\d+)/g, (n) => n.padStart(10, "0")).toLowerCase();
+      }
       function smartSearch(items, q) {
-        if (!q || !q.trim()) return items.map((i) => ({ item: i, score: 0 }));
+        if (!q || !q.trim()) {
+          return [...items]
+            .sort((a, b) => naturalSortKey(a.name).localeCompare(naturalSortKey(b.name)))
+            .map((i) => ({ item: i, score: 0 }));
+        }
         const ql = q.trim().toLowerCase();
         return items
           .map((i) => {
@@ -10004,6 +10012,8 @@
             );
           return esc(text);
         }
+        // Latest bill (highest invno) on top
+        filtered.sort((a, b) => (b.invno || 0) - (a.invno || 0));
         const filteredTotal = filtered.reduce((s, b) => s + (b.grand || 0), 0);
         const summaryLabel =
           deliveryFilter === "delivered"
@@ -13703,8 +13713,44 @@
                 if (!isNaN(tokenNumber(prevW)) || !isNaN(tokenNumber(nextW))) return false;
                 return true;
               })) continue;
-              const hit = scoreProductSpan(span);
-              if (!hit || hit.ambiguous) continue;
+              let hit = scoreProductSpan(span);
+              if (!hit) continue;
+              // Tiebreak: if ambiguous between a lock and a no-lock variant, resolve it
+              if (hit.ambiguous) {
+                const hitName = normalize(hit.item.name);
+                const userSaidLock = tokens.includes("lock");
+                const userSaidWithout = tokens.some((t, ti) =>
+                  ["without", "bina", "nahi", "nahin", "no"].includes(t) &&
+                  tokens[ti + 1] === "lock"
+                );
+                if (hitName.includes("lock")) {
+                  // hit is the LOCK variant; user didn't say "lock" → flip to no-lock counterpart
+                  if (!userSaidLock || userSaidWithout) {
+                    const noLockName = hitName.replace(/\s*lock\s*/g, "").trim();
+                    const noLockProd = S.products.find(
+                      (p) => normalize(p.name).replace(/\s*lock\s*/g, "").trim() === noLockName &&
+                        !normalize(p.name).includes("lock")
+                    );
+                    if (noLockProd) { hit = { item: noLockProd, score: hit.score, key: hit.key, ambiguous: false }; }
+                    else continue;
+                  } else {
+                    hit = { ...hit, ambiguous: false };
+                  }
+                } else {
+                  // hit is the NO-LOCK variant; user said "lock" → flip to lock counterpart
+                  if (userSaidLock && !userSaidWithout) {
+                    const lockProd = S.products.find(
+                      (p) => normalize(p.name).replace(/\s*lock\s*/g, "").trim() === hitName &&
+                        normalize(p.name).includes("lock")
+                    );
+                    if (lockProd) { hit = { item: lockProd, score: hit.score, key: hit.key, ambiguous: false }; }
+                    else { hit = { ...hit, ambiguous: false }; }
+                  } else {
+                    hit = { ...hit, ambiguous: false };
+                  }
+                }
+              }
+              if (hit.ambiguous) continue;
               const prod = hit.item;
               if (!prod || seen.has(prod.id)) continue;
               const spanScore = hit.score + len * 0.015;
