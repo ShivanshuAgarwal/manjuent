@@ -11531,7 +11531,9 @@
         target.innerHTML = html;
 
         const prevStyle = target.getAttribute("style");
-        target.style.cssText = "position:fixed;top:0;left:0;width:680px;background:#fff;z-index:-1;opacity:0.01;pointer-events:none;";
+        // FIX: opacity:0.01 aur z-index:-1 se html2canvas black image banata hai
+        // Screen ke bahar rakho lekin fully visible rakho html2canvas ke liye
+        target.style.cssText = "position:fixed;top:0;left:-9999px;width:680px;background:#fff;pointer-events:none;visibility:visible;opacity:1;";
 
         _loadHtml2Canvas(() => {
           setTimeout(() => {
@@ -11542,6 +11544,7 @@
               logging: false,
               allowTaint: true,
               removeContainer: false,
+              windowWidth: 680,
               ignoreElements: (el) => {
                 if (!el.style) return false;
                 const s = el.style;
@@ -11741,6 +11744,9 @@
 
         const target = document.getElementById("bill-jpeg-target");
         target.innerHTML = html;
+        // FIX: opacity:0.01 se black image aati thi - ab screen ke bahar rakho lekin visible rakho
+        const prevStyle2 = target.getAttribute("style");
+        target.style.cssText = "position:fixed;top:0;left:-9999px;width:680px;background:#fff;pointer-events:none;visibility:visible;opacity:1;";
 
         _loadHtml2Canvas(() => {
           setTimeout(() => {
@@ -11749,8 +11755,10 @@
               useCORS: true,
               backgroundColor: "#ffffff",
               logging: false,
+              windowWidth: 680,
             })
               .then((canvas) => {
+                target.setAttribute("style", prevStyle2 || "position:fixed;top:-9999px;left:-9999px;width:680px;background:#fff;");
                 canvas.toBlob(
                   (blob) => {
                     const url = URL.createObjectURL(blob);
