@@ -13678,7 +13678,13 @@
           for (let i = 0; i < tokens.length; i++) {
             if (isFillerWord(tokens[i])) continue;
             // Skip if this token is a pure number (it's a qty, not a product)
-            if (!isNaN(tokenNumber(tokens[i])) && !isLikelyDimensionNumber(tokens, i)) continue;
+            // Exception: consecutive numbers are dimension pairs (e.g. "24 24" in "24 24 FRP")
+            if (!isNaN(tokenNumber(tokens[i]))) {
+              const prevAdj = tokens[i - 1];
+              const nextAdj = tokens[i + 1];
+              const adjacentToNumber = !isNaN(tokenNumber(prevAdj)) || !isNaN(tokenNumber(nextAdj));
+              if (!adjacentToNumber && !isLikelyDimensionNumber(tokens, i)) continue;
+            }
 
             let bestSpan = null;
             for (let len = 1; len <= Math.min(7, tokens.length - i); len++) {
