@@ -8569,7 +8569,7 @@
                 const active = document.querySelector(".screen.active");
                 if (!active) return;
                 const id = active.id;
-                if (id === "screen-gateway") updateGatewayCounts();
+                if (id === "screen-gateway") { updateGatewayCounts(); updateDashboardStats(); }
                 if (id === "screen-bills")
                   renderBillsList(
                     document.getElementById("bills-search")?.value || "",
@@ -8646,7 +8646,7 @@
       // Load from Firebase on startup &mdash; prevents data loss on redeploy
       function loadFromCloud() {
         if (!db) return;
-        showSync("syncing", "Loading data...");
+        showSync("syncing", "Loading...");
         const cols = ["customers", "products", "transports", "bills"];
         Promise.all(
           cols.map((col) =>
@@ -8656,21 +8656,33 @@
               .then((snap) => {
                 const docs = [];
                 snap.forEach((d) => docs.push({ id: d.id, ...d.data() }));
-                if (docs.length > 0) {
-                  S[col] = docs;
-                  localStorage.setItem("me2_" + col, JSON.stringify(docs));
-                }
+                // ALWAYS overwrite local with cloud — Firebase is single source of truth
+                // New device (empty localStorage) gets all real data this way
+                // Existing device gets latest changes made by anyone
+                S[col] = docs;
+                localStorage.setItem("me2_" + col, JSON.stringify(docs));
               }),
           ),
         )
           .then(() => {
-            showSync("ok", "Data loaded &#10003;");
+            showSync("ok", "Synced ✓");
+            // Refresh everything so new device sees real data immediately
             updateGatewayCounts();
             updateDashboardStats();
+            const active = document.querySelector(".screen.active");
+            if (active) {
+              const id = active.id;
+              if (id === "screen-bills")
+                renderBillsList(document.getElementById("bills-search")?.value || "");
+              if (id === "screen-customers") renderMasterList("cust");
+              if (id === "screen-products") renderMasterList("prod");
+              if (id === "screen-transports") renderMasterList("trans");
+              if (id === "screen-backup") updateBackupScreen();
+            }
           })
           .catch((err) => {
             console.error("Cloud load error:", err);
-            showSync("err", "Using local data");
+            showSync("err", "Offline - local data");
           });
       }
 
@@ -11870,60 +11882,8 @@
           di.innerHTML =
             '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
       }
-      if (!S.customers.length) {
-        S.customers = [
-          {
-            id: uid(),
-            name: "Jaya Traders",
-            location: "Bodhan",
-            phone: "9876543210",
-            preferredTransport: "",
-            searchName: "Jaya Traders - Bodhan",
-          },
-          {
-            id: uid(),
-            name: "Ravi Stores",
-            location: "Nizamabad",
-            phone: "8765432109",
-            preferredTransport: "",
-            searchName: "Ravi Stores - Nizamabad",
-          },
-          {
-            id: uid(),
-            name: "Lakshmi Enterprises",
-            location: "Kamareddy",
-            phone: "",
-            preferredTransport: "",
-            searchName: "Lakshmi Enterprises - Kamareddy",
-          },
-        ];
-        persist("customers");
-      }
-      if (!S.products.length) {
-        S.products = [
-          { id: uid(), name: "Cover Gold PVC 24 x 24", type: "pc", rate: 950 },
-          {
-            id: uid(),
-            name: "Cover Silver PVC 18 x 18",
-            type: "pc",
-            rate: 650,
-          },
-          { id: uid(), name: "PVC Granules Premium", type: "kg", rate: 120 },
-          { id: uid(), name: "Tarpaulin Sheet Heavy", type: "pc", rate: 450 },
-        ];
-        persist("products");
-      }
-      if (!S.transports.length) {
-        S.transports = [
-          { id: uid(), name: "Hindustan Roadlines", contact: "9900112233" },
-          {
-            id: uid(),
-            name: "Sri Venkateshwara Transport",
-            contact: "8811223344",
-          },
-        ];
-        persist("transports");
-      }
+      // No seed data — Firebase is the single source of truth for all users.
+      // New device/user gets all real data from loadFromCloud() automatically.
       updateTopDate();
       updateGatewayCounts();
       updateDashboardStats();
