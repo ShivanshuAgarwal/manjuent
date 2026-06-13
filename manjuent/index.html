@@ -5013,6 +5013,218 @@
           height: 90px !important;
         }
       }
+
+      /* =============================================
+         QUICK-ADD MODAL  (Apple HIG inspired)
+      ============================================= */
+      .qa-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 3000;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        background: rgba(0,0,0,0);
+        transition: background 0.28s var(--ease-ios);
+        pointer-events: none;
+      }
+      .qa-overlay.open {
+        background: rgba(0,0,0,0.38);
+        pointer-events: all;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+      .qa-modal {
+        width: 100%;
+        max-width: 520px;
+        background: var(--surface);
+        border-radius: 28px 28px 0 0;
+        padding: 0 0 env(safe-area-inset-bottom);
+        transform: translateY(110%);
+        transition: transform 0.42s cubic-bezier(0.32, 1.1, 0.52, 1);
+        will-change: transform;
+        box-shadow: 0 -4px 40px rgba(0,0,0,0.18), 0 -1px 0 var(--glass-border);
+        overflow: hidden;
+      }
+      .qa-overlay.open .qa-modal {
+        transform: translateY(0);
+      }
+      .qa-drag-bar {
+        width: 36px; height: 5px;
+        background: var(--surface3);
+        border-radius: 3px;
+        margin: 10px auto 0;
+      }
+      .qa-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px 12px;
+      }
+      .qa-header-icon {
+        width: 40px; height: 40px;
+        border-radius: 12px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        display: flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        transition: transform 0.18s var(--ease-spring);
+      }
+      .qa-overlay.open .qa-header-icon {
+        transform: scale(1);
+        animation: qaIconPop 0.5s var(--ease-spring2) 0.15s both;
+      }
+      @keyframes qaIconPop {
+        0%   { transform: scale(0.6) rotate(-12deg); opacity: 0; }
+        60%  { transform: scale(1.12) rotate(4deg); opacity: 1; }
+        100% { transform: scale(1) rotate(0deg); opacity: 1; }
+      }
+      .qa-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: -0.3px;
+        line-height: 1.2;
+      }
+      .qa-subtitle {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 500;
+        margin-top: 1px;
+      }
+      .qa-close-btn {
+        margin-left: auto;
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        background: var(--surface2);
+        border: none;
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--muted);
+        transition: background 0.15s, transform 0.12s;
+        flex-shrink: 0;
+      }
+      .qa-close-btn:active { transform: scale(0.88); background: var(--surface3); }
+      .qa-fields {
+        padding: 0 16px;
+      }
+      .qa-field-group {
+        background: var(--surface2);
+        border-radius: 18px;
+        overflow: hidden;
+        margin-bottom: 12px;
+      }
+      .qa-field-row {
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        min-height: 50px;
+        border-bottom: 0.5px solid var(--separator);
+        gap: 12px;
+      }
+      .qa-field-row:last-child { border-bottom: none; }
+      .qa-label {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text2);
+        white-space: nowrap;
+        min-width: 120px;
+        flex-shrink: 0;
+      }
+      .qa-required { color: var(--accent); }
+      .qa-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-family: var(--font);
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--text);
+        outline: none;
+        text-align: right;
+        padding: 0;
+        min-width: 0;
+      }
+      .qa-input::placeholder { color: var(--muted); font-weight: 400; }
+      .qa-seg-wrap {
+        display: flex;
+        gap: 6px;
+        justify-content: flex-end;
+        flex: 1;
+        padding: 6px 0;
+      }
+      .qa-seg {
+        border: none;
+        padding: 6px 14px;
+        border-radius: 10px;
+        font-family: var(--font);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        background: var(--surface3);
+        color: var(--text2);
+        transition: background 0.15s, color 0.15s, transform 0.1s;
+      }
+      .qa-seg.active {
+        background: var(--accent);
+        color: #fff;
+      }
+      .qa-seg:active { transform: scale(0.94); }
+      .qa-footer {
+        display: flex;
+        gap: 10px;
+        padding-bottom: 16px;
+      }
+      .qa-btn {
+        flex: 1;
+        height: 52px;
+        border-radius: 16px;
+        border: none;
+        font-family: var(--font);
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center; gap: 7px;
+        transition: opacity 0.12s, transform 0.12s;
+      }
+      .qa-btn:active { transform: scale(0.96); opacity: 0.82; }
+      .qa-btn-cancel {
+        background: var(--surface2);
+        color: var(--text2);
+        flex: 0.55;
+      }
+      .qa-btn-primary {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      /* Long-press ripple hint on the customer/product row */
+      .lp-hint {
+        animation: lpPulse 0.55s var(--ease-spring2);
+        background: var(--accent-soft) !important;
+      }
+      @keyframes lpPulse {
+        0%   { background: transparent; }
+        40%  { background: var(--accent-soft); }
+        100% { background: transparent; }
+      }
+
+      /* Ctrl+N hint badge in sheet header */
+      .sheet-new-btn {
+        background: var(--accent-soft);
+        color: var(--accent);
+        border: none;
+        border-radius: 10px;
+        padding: 5px 11px;
+        font-family: var(--font);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex; align-items: center; gap: 5px;
+        transition: background 0.15s, transform 0.12s;
+      }
+      .sheet-new-btn:active { transform: scale(0.94); }
+      .sheet-new-btn svg { flex-shrink:0; }
     </style>
   </head>
   <body>
@@ -8251,6 +8463,84 @@
             </button>
             <button class="pe-btn pe-btn-cancel" onclick="closeSheet()">
               Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick-Add Modal -->
+    <div id="quick-add-overlay" class="qa-overlay" onclick="closeQuickAdd(event)">
+      <div class="qa-modal" id="qa-modal" role="dialog" aria-modal="true">
+        <div class="qa-drag-bar"></div>
+
+        <!-- Header -->
+        <div class="qa-header">
+          <div class="qa-header-icon" id="qa-header-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
+          <div>
+            <div class="qa-title" id="qa-title">New Customer</div>
+            <div class="qa-subtitle" id="qa-subtitle">Add & auto-select</div>
+          </div>
+          <button class="qa-close-btn" onclick="closeQuickAdd()" aria-label="Close">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <!-- Customer fields -->
+        <div id="qa-customer-fields" class="qa-fields">
+          <div class="qa-field-group">
+            <div class="qa-field-row">
+              <label class="qa-label">Name <span class="qa-required">*</span></label>
+              <input class="qa-input" id="qa-cn-name" type="text" placeholder="Party name" autocomplete="off" />
+            </div>
+            <div class="qa-field-row">
+              <label class="qa-label">Destination</label>
+              <input class="qa-input" id="qa-cn-loc" type="text" placeholder="City / area" autocomplete="off" oninput="qaAutoSearchName()" />
+            </div>
+            <div class="qa-field-row">
+              <label class="qa-label">Phone</label>
+              <input class="qa-input" id="qa-cn-phone" type="tel" placeholder="Optional" autocomplete="off" />
+            </div>
+            <div class="qa-field-row">
+              <label class="qa-label">Pref. Transport</label>
+              <input class="qa-input" id="qa-cn-transport" type="text" placeholder="Optional" autocomplete="off" />
+            </div>
+          </div>
+          <div class="qa-footer">
+            <button class="qa-btn qa-btn-cancel" onclick="closeQuickAdd()">Cancel</button>
+            <button class="qa-btn qa-btn-primary" id="qa-customer-save" onclick="quickAddCustomer()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+              Add Customer
+            </button>
+          </div>
+        </div>
+
+        <!-- Product fields -->
+        <div id="qa-product-fields" class="qa-fields" style="display:none">
+          <div class="qa-field-group">
+            <div class="qa-field-row">
+              <label class="qa-label">Item Name <span class="qa-required">*</span></label>
+              <input class="qa-input" id="qa-pn-name" type="text" placeholder="Product name" autocomplete="off" />
+            </div>
+            <div class="qa-field-row">
+              <label class="qa-label">Unit</label>
+              <div class="qa-seg-wrap">
+                <button class="qa-seg active" id="qa-seg-pc" onclick="qaSetUnit('pc')">Pieces (pc)</button>
+                <button class="qa-seg" id="qa-seg-kg" onclick="qaSetUnit('kg')">Weight (kg)</button>
+              </div>
+            </div>
+            <div class="qa-field-row">
+              <label class="qa-label">Rate (₹) <span class="qa-required">*</span></label>
+              <input class="qa-input" id="qa-pn-rate" type="number" placeholder="0.00" min="0" step="0.01" autocomplete="off" />
+            </div>
+          </div>
+          <div class="qa-footer">
+            <button class="qa-btn qa-btn-cancel" onclick="closeQuickAdd()">Cancel</button>
+            <button class="qa-btn qa-btn-primary" id="qa-product-save" onclick="quickAddProduct()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+              Add Item
             </button>
           </div>
         </div>
@@ -14490,6 +14780,273 @@
         };
 
         armWakeListenerAfterGesture();
+
+        /* ============================================================
+           QUICK-ADD MODAL — open via long-press (mobile) or Ctrl+N (pc)
+           when the customer / product sheet is open
+        ============================================================ */
+        let _qaType = null; // 'customer' | 'product'
+        let _qaUnit = 'pc'; // product unit
+
+        function openQuickAdd(type) {
+          _qaType = type;
+          const overlay = document.getElementById('quick-add-overlay');
+          const modal   = document.getElementById('qa-modal');
+          const custF   = document.getElementById('qa-customer-fields');
+          const prodF   = document.getElementById('qa-product-fields');
+          const titleEl = document.getElementById('qa-title');
+          const subEl   = document.getElementById('qa-subtitle');
+          const iconEl  = document.getElementById('qa-header-icon');
+
+          if (type === 'customer') {
+            titleEl.textContent = 'New Customer';
+            subEl.textContent   = 'Add & auto-select';
+            iconEl.style.background = 'var(--accent-soft)';
+            iconEl.style.color      = 'var(--accent)';
+            iconEl.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+            custF.style.display = 'block';
+            prodF.style.display = 'none';
+            // clear fields
+            ['qa-cn-name','qa-cn-loc','qa-cn-phone','qa-cn-transport'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) el.value = '';
+            });
+          } else {
+            titleEl.textContent = 'New Item';
+            subEl.textContent   = 'Add & auto-select';
+            iconEl.style.background = 'var(--success-soft)';
+            iconEl.style.color      = 'var(--success)';
+            iconEl.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>';
+            custF.style.display = 'none';
+            prodF.style.display = 'block';
+            ['qa-pn-name','qa-pn-rate'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) el.value = '';
+            });
+            qaSetUnit('pc');
+          }
+
+          overlay.classList.add('open');
+
+          // Focus first input after transition
+          setTimeout(() => {
+            const firstInput = type === 'customer'
+              ? document.getElementById('qa-cn-name')
+              : document.getElementById('qa-pn-name');
+            if (firstInput) firstInput.focus();
+          }, 360);
+        }
+
+        function closeQuickAdd(e) {
+          if (e && e.target !== document.getElementById('quick-add-overlay')) return;
+          document.getElementById('quick-add-overlay').classList.remove('open');
+          _qaType = null;
+        }
+
+        function qaSetUnit(unit) {
+          _qaUnit = unit;
+          document.getElementById('qa-seg-pc').classList.toggle('active', unit === 'pc');
+          document.getElementById('qa-seg-kg').classList.toggle('active', unit === 'kg');
+        }
+
+        function quickAddCustomer() {
+          const name  = (document.getElementById('qa-cn-name').value || '').trim();
+          const loc   = (document.getElementById('qa-cn-loc').value  || '').trim();
+          const phone = (document.getElementById('qa-cn-phone').value || '').trim();
+          const pref  = (document.getElementById('qa-cn-transport').value || '').trim();
+
+          if (!name) {
+            document.getElementById('qa-cn-name').style.borderBottom = '1.5px solid var(--danger)';
+            document.getElementById('qa-cn-name').focus();
+            // shake
+            document.getElementById('qa-modal').animate(
+              [{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(-4px)'},{transform:'translateX(0)'}],
+              {duration:280, easing:'ease-out'}
+            );
+            showToast('Enter customer name');
+            return;
+          }
+
+          // Auto-add transport if new
+          if (pref && !S.transports.some(t => t.name.toLowerCase() === pref.toLowerCase())) {
+            S.transports.push({ id: uid(), name: pref, contact: '' });
+            persist('transports');
+          }
+
+          const searchName = name && loc ? name + ' - ' + loc : name;
+          const newCust = { id: uid(), name, location: loc, phone, preferredTransport: pref, searchName };
+          S.customers.push(newCust);
+          persist('customers');
+
+          // Close quick-add overlay
+          document.getElementById('quick-add-overlay').classList.remove('open');
+          _qaType = null;
+
+          // Auto-select the newly added customer in the bill form
+          selectCustomer(newCust.id);
+
+          // Also close the sheet
+          closeSheet();
+
+          showToast('✓ ' + name + ' added & selected');
+        }
+
+        function quickAddProduct() {
+          const name = (document.getElementById('qa-pn-name').value || '').trim();
+          const rate = parseFloat(String(document.getElementById('qa-pn-rate').value || '').replace(',', '.'));
+
+          if (!name) {
+            document.getElementById('qa-pn-name').focus();
+            document.getElementById('qa-modal').animate(
+              [{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(-4px)'},{transform:'translateX(0)'}],
+              {duration:280, easing:'ease-out'}
+            );
+            showToast('Enter item name');
+            return;
+          }
+          if (isNaN(rate) || rate <= 0) {
+            document.getElementById('qa-pn-rate').focus();
+            document.getElementById('qa-modal').animate(
+              [{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(-4px)'},{transform:'translateX(0)'}],
+              {duration:280, easing:'ease-out'}
+            );
+            showToast('Enter a valid rate');
+            return;
+          }
+
+          const newProd = { id: uid(), name, type: _qaUnit, rate };
+          S.products.push(newProd);
+          persist('products');
+
+          // Close quick-add
+          document.getElementById('quick-add-overlay').classList.remove('open');
+          _qaType = null;
+
+          // Auto-select the product in the sheet
+          selectProduct(newProd.id);
+
+          // Close the sheet
+          closeSheet();
+
+          showToast('✓ ' + name + ' added & selected');
+        }
+
+        /* ----------------------------------------------------------
+           Long-press on the customer row in bill form → open quick-add
+        ---------------------------------------------------------- */
+        (function attachLongPressAndHint() {
+          const LP_DURATION = 500; // ms
+
+          function addLongPress(element, type) {
+            if (!element) return;
+            let timer = null;
+            let fired = false;
+
+            function start(e) {
+              fired = false;
+              timer = setTimeout(() => {
+                fired = true;
+                // Visual feedback
+                element.classList.add('lp-hint');
+                setTimeout(() => element.classList.remove('lp-hint'), 600);
+                // Haptic (if supported)
+                if (navigator.vibrate) navigator.vibrate(18);
+                // Open quick-add
+                openQuickAdd(type);
+              }, LP_DURATION);
+            }
+
+            function cancel() {
+              clearTimeout(timer);
+              timer = null;
+            }
+
+            element.addEventListener('touchstart', start, { passive: true });
+            element.addEventListener('touchend',   cancel, { passive: true });
+            element.addEventListener('touchmove',  cancel, { passive: true });
+            element.addEventListener('touchcancel',cancel, { passive: true });
+            // Prevent tap from firing openSheet when long-press fired
+            element.addEventListener('click', function(e) {
+              if (fired) { e.stopImmediatePropagation(); fired = false; }
+            }, true);
+          }
+
+          // Attach after DOM is ready (elements already exist)
+          const custRow = document.querySelector('[onclick="openSheet(\'customer\')"]');
+          addLongPress(custRow, 'customer');
+
+          // For product: the "Add Item" button and bottom action
+          document.querySelectorAll('[onclick="openSheet(\'product\')"]').forEach(el => {
+            addLongPress(el, 'product');
+          });
+        })();
+
+        /* ----------------------------------------------------------
+           Ctrl+N / Cmd+N  when a sheet is open → open quick-add
+        ---------------------------------------------------------- */
+        document.addEventListener('keydown', function(e) {
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+            const sheetOpen = document.getElementById('sheet-overlay').classList.contains('show');
+            if (sheetOpen && (S.currentSheetType === 'customer' || S.currentSheetType === 'product')) {
+              e.preventDefault();
+              openQuickAdd(S.currentSheetType);
+            }
+          }
+          if (e.key === 'Escape') {
+            const qaOpen = document.getElementById('quick-add-overlay').classList.contains('open');
+            if (qaOpen) {
+              document.getElementById('quick-add-overlay').classList.remove('open');
+              _qaType = null;
+              e.stopImmediatePropagation();
+            }
+          }
+          // Enter to submit quick-add form
+          if (e.key === 'Enter') {
+            const qaOpen = document.getElementById('quick-add-overlay').classList.contains('open');
+            if (qaOpen) {
+              e.preventDefault();
+              if (_qaType === 'customer') quickAddCustomer();
+              else if (_qaType === 'product') quickAddProduct();
+            }
+          }
+        });
+
+        /* ----------------------------------------------------------
+           Inject "＋ New" button into the sheet header (customer & product)
+        ---------------------------------------------------------- */
+        (function injectSheetNewBtn() {
+          const sheetHeader = document.querySelector('#sheet-overlay .sheet-header');
+          if (!sheetHeader) return;
+
+          const btn = document.createElement('button');
+          btn.className = 'sheet-new-btn';
+          btn.id = 'sheet-new-btn';
+          btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M12 5v14M5 12h14"/></svg> New';
+          btn.title = 'Add new (Ctrl+N)';
+          btn.style.display = 'none'; // hidden until sheet opens
+          btn.onclick = function() {
+            openQuickAdd(S.currentSheetType);
+          };
+
+          sheetHeader.insertBefore(btn, sheetHeader.querySelector('.sheet-close'));
+        })();
+
+        /* Show/hide the "+ New" button based on sheet type */
+        const _origOpenSheet = openSheet;
+        openSheet = function(type) {
+          _origOpenSheet(type);
+          const btn = document.getElementById('sheet-new-btn');
+          if (btn) {
+            btn.style.display = (type === 'customer' || type === 'product') ? 'flex' : 'none';
+          }
+        };
+        const _origCloseSheet = closeSheet;
+        closeSheet = function() {
+          _origCloseSheet();
+          const btn = document.getElementById('sheet-new-btn');
+          if (btn) btn.style.display = 'none';
+        };
+
       })();
     </script>
   </body>
