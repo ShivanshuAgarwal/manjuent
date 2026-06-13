@@ -5015,8 +5015,10 @@
       }
 
       /* =============================================
-         QUICK-ADD MODAL  (Apple HIG inspired)
+         QUICK-ADD MODAL  — Premium Apple-style
       ============================================= */
+
+      /* Backdrop */
       .qa-overlay {
         position: fixed;
         inset: 0;
@@ -5024,103 +5026,113 @@
         display: flex;
         align-items: flex-end;
         justify-content: center;
-        background: rgba(0,0,0,0);
-        transition: background 0.28s var(--ease-ios);
+        background: transparent;
         pointer-events: none;
+        transition: background 0.3s ease;
       }
       .qa-overlay.open {
-        background: rgba(0,0,0,0.38);
+        background: rgba(0,0,0,0.45);
         pointer-events: all;
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(6px) saturate(150%);
+        -webkit-backdrop-filter: blur(6px) saturate(150%);
       }
+
+      /* Sheet */
       .qa-modal {
         width: 100%;
-        max-width: 520px;
+        max-width: 540px;
         background: var(--surface);
-        border-radius: 28px 28px 0 0;
-        padding: 0 0 env(safe-area-inset-bottom);
-        transform: translateY(110%);
-        transition: transform 0.42s cubic-bezier(0.32, 1.1, 0.52, 1);
+        border-radius: 26px 26px 0 0;
+        padding-bottom: max(env(safe-area-inset-bottom), 12px);
+        transform: translateY(100%);
+        transition: transform 0.38s cubic-bezier(0.28, 1.2, 0.48, 1);
         will-change: transform;
-        box-shadow: 0 -4px 40px rgba(0,0,0,0.18), 0 -1px 0 var(--glass-border);
-        overflow: hidden;
+        box-shadow: 0 -2px 0 var(--glass-border), 0 -8px 48px rgba(0,0,0,0.22);
+        max-height: 92dvh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
       .qa-overlay.open .qa-modal {
         transform: translateY(0);
       }
+
+      /* Drag pill */
       .qa-drag-bar {
-        width: 36px; height: 5px;
+        width: 38px; height: 4px;
         background: var(--surface3);
-        border-radius: 3px;
-        margin: 10px auto 0;
+        border-radius: 2px;
+        margin: 12px auto 0;
+        opacity: 0.7;
       }
+
+      /* Header */
       .qa-header {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 16px 20px 12px;
+        gap: 14px;
+        padding: 14px 20px 10px;
       }
       .qa-header-icon {
-        width: 40px; height: 40px;
-        border-radius: 12px;
-        background: var(--accent-soft);
-        color: var(--accent);
+        width: 42px; height: 42px;
+        border-radius: 13px;
         display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
-        transition: transform 0.18s var(--ease-spring);
+        opacity: 0;
+        transform: scale(0.5) rotate(-15deg);
+        transition: none;
       }
       .qa-overlay.open .qa-header-icon {
-        transform: scale(1);
-        animation: qaIconPop 0.5s var(--ease-spring2) 0.15s both;
+        animation: qaIconPop 0.46s cubic-bezier(0.28, 1.35, 0.5, 1) 0.12s forwards;
       }
       @keyframes qaIconPop {
-        0%   { transform: scale(0.6) rotate(-12deg); opacity: 0; }
-        60%  { transform: scale(1.12) rotate(4deg); opacity: 1; }
-        100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        0%   { opacity: 0; transform: scale(0.5) rotate(-15deg); }
+        55%  { opacity: 1; transform: scale(1.08) rotate(3deg); }
+        100% { opacity: 1; transform: scale(1) rotate(0deg); }
       }
+      .qa-titles { flex: 1; min-width: 0; }
       .qa-title {
         font-size: 17px;
         font-weight: 700;
         color: var(--text);
-        letter-spacing: -0.3px;
+        letter-spacing: -0.4px;
         line-height: 1.2;
       }
       .qa-subtitle {
         font-size: 12px;
         color: var(--muted);
         font-weight: 500;
-        margin-top: 1px;
+        margin-top: 2px;
+        letter-spacing: 0.1px;
       }
       .qa-close-btn {
         margin-left: auto;
-        width: 32px; height: 32px;
+        width: 30px; height: 30px;
         border-radius: 50%;
-        background: var(--surface2);
+        background: var(--surface3);
         border: none;
         cursor: pointer;
         display: flex; align-items: center; justify-content: center;
-        color: var(--muted);
-        transition: background 0.15s, transform 0.12s;
+        color: var(--text2);
         flex-shrink: 0;
+        transition: background 0.14s, transform 0.1s;
       }
-      .qa-close-btn:active { transform: scale(0.88); background: var(--surface3); }
-      .qa-fields {
-        padding: 0 16px;
-      }
+      .qa-close-btn:active { transform: scale(0.85); }
+
+      /* Fields */
+      .qa-fields { padding: 8px 16px 4px; }
       .qa-field-group {
         background: var(--surface2);
         border-radius: 18px;
         overflow: hidden;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
       }
       .qa-field-row {
         display: flex;
         align-items: center;
         padding: 0 16px;
-        min-height: 50px;
+        min-height: 52px;
         border-bottom: 0.5px solid var(--separator);
-        gap: 12px;
+        gap: 10px;
       }
       .qa-field-row:last-child { border-bottom: none; }
       .qa-label {
@@ -5128,10 +5140,10 @@
         font-weight: 500;
         color: var(--text2);
         white-space: nowrap;
-        min-width: 120px;
+        min-width: 112px;
         flex-shrink: 0;
       }
-      .qa-required { color: var(--accent); }
+      .qa-required { color: var(--accent); margin-left: 2px; }
       .qa-input {
         flex: 1;
         border: none;
@@ -5144,87 +5156,107 @@
         text-align: right;
         padding: 0;
         min-width: 0;
+        caret-color: var(--accent);
       }
       .qa-input::placeholder { color: var(--muted); font-weight: 400; }
+      .qa-input.error { color: var(--danger); }
+
+      /* Unit toggle */
       .qa-seg-wrap {
         display: flex;
-        gap: 6px;
+        gap: 5px;
         justify-content: flex-end;
         flex: 1;
-        padding: 6px 0;
+        padding: 5px 0;
       }
       .qa-seg {
         border: none;
-        padding: 6px 14px;
+        padding: 6px 13px;
         border-radius: 10px;
         font-family: var(--font);
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 600;
         cursor: pointer;
         background: var(--surface3);
         color: var(--text2);
-        transition: background 0.15s, color 0.15s, transform 0.1s;
+        transition: background 0.14s, color 0.14s, transform 0.1s;
       }
-      .qa-seg.active {
-        background: var(--accent);
-        color: #fff;
-      }
-      .qa-seg:active { transform: scale(0.94); }
+      .qa-seg.active { background: var(--accent); color: #fff; }
+      .qa-seg:active { transform: scale(0.92); }
+
+      /* Footer */
       .qa-footer {
         display: flex;
         gap: 10px;
-        padding-bottom: 16px;
+        padding: 8px 16px 0;
       }
       .qa-btn {
         flex: 1;
-        height: 52px;
-        border-radius: 16px;
+        height: 54px;
+        border-radius: 17px;
         border: none;
         font-family: var(--font);
         font-size: 16px;
         font-weight: 600;
         cursor: pointer;
         display: flex; align-items: center; justify-content: center; gap: 7px;
+        letter-spacing: -0.2px;
         transition: opacity 0.12s, transform 0.12s;
+        -webkit-tap-highlight-color: transparent;
       }
-      .qa-btn:active { transform: scale(0.96); opacity: 0.82; }
+      .qa-btn:active { transform: scale(0.96); opacity: 0.78; }
       .qa-btn-cancel {
         background: var(--surface2);
         color: var(--text2);
-        flex: 0.55;
+        flex: 0 0 auto;
+        width: 96px;
       }
       .qa-btn-primary {
         background: var(--accent);
         color: #fff;
+        box-shadow: 0 2px 12px rgba(0,122,255,0.28);
       }
 
-      /* Long-press ripple hint on the customer/product row */
-      .lp-hint {
-        animation: lpPulse 0.55s var(--ease-spring2);
-        background: var(--accent-soft) !important;
+      /* Shake keyframe for validation */
+      @keyframes qaShake {
+        0%   { transform: translateX(0); }
+        18%  { transform: translateX(-7px); }
+        36%  { transform: translateX(7px); }
+        54%  { transform: translateX(-5px); }
+        72%  { transform: translateX(4px); }
+        88%  { transform: translateX(-2px); }
+        100% { transform: translateX(0); }
       }
-      @keyframes lpPulse {
-        0%   { background: transparent; }
-        40%  { background: var(--accent-soft); }
-        100% { background: transparent; }
-      }
+      .qa-shake { animation: qaShake 0.32s ease-out; }
 
-      /* Ctrl+N hint badge in sheet header */
+      /* Long-press visual feedback */
+      @keyframes lpFlash {
+        0%   { opacity: 1; }
+        35%  { opacity: 0.55; background: var(--accent-soft); }
+        100% { opacity: 1; }
+      }
+      .lp-fired { animation: lpFlash 0.35s ease-out; }
+
+      /* "+ New" button in sheet header */
       .sheet-new-btn {
         background: var(--accent-soft);
         color: var(--accent);
         border: none;
         border-radius: 10px;
-        padding: 5px 11px;
+        padding: 6px 12px;
         font-family: var(--font);
         font-size: 13px;
         font-weight: 600;
         cursor: pointer;
-        display: flex; align-items: center; gap: 5px;
-        transition: background 0.15s, transform 0.12s;
+        display: none;
+        align-items: center;
+        gap: 5px;
+        letter-spacing: -0.1px;
+        transition: background 0.14s, transform 0.1s;
+        -webkit-tap-highlight-color: transparent;
       }
-      .sheet-new-btn:active { transform: scale(0.94); }
-      .sheet-new-btn svg { flex-shrink:0; }
+      .sheet-new-btn.visible { display: flex; }
+      .sheet-new-btn:active { transform: scale(0.92); }
     </style>
   </head>
   <body>
@@ -8470,7 +8502,7 @@
     </div>
 
     <!-- Quick-Add Modal -->
-    <div id="quick-add-overlay" class="qa-overlay" onclick="closeQuickAdd(event)">
+    <div id="quick-add-overlay" class="qa-overlay">
       <div class="qa-modal" id="qa-modal" role="dialog" aria-modal="true">
         <div class="qa-drag-bar"></div>
 
@@ -8479,12 +8511,12 @@
           <div class="qa-header-icon" id="qa-header-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
           </div>
-          <div>
+          <div class="qa-titles">
             <div class="qa-title" id="qa-title">New Customer</div>
             <div class="qa-subtitle" id="qa-subtitle">Add & auto-select</div>
           </div>
-          <button class="qa-close-btn" onclick="closeQuickAdd()" aria-label="Close">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <button class="qa-close-btn" onclick="event.stopPropagation(); closeQuickAdd()" aria-label="Close">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
 
@@ -8509,7 +8541,7 @@
             </div>
           </div>
           <div class="qa-footer">
-            <button class="qa-btn qa-btn-cancel" onclick="closeQuickAdd()">Cancel</button>
+            <button class="qa-btn qa-btn-cancel" onclick="event.stopPropagation(); closeQuickAdd()">Cancel</button>
             <button class="qa-btn qa-btn-primary" id="qa-customer-save" onclick="quickAddCustomer()">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
               Add Customer
@@ -8537,7 +8569,7 @@
             </div>
           </div>
           <div class="qa-footer">
-            <button class="qa-btn qa-btn-cancel" onclick="closeQuickAdd()">Cancel</button>
+            <button class="qa-btn qa-btn-cancel" onclick="event.stopPropagation(); closeQuickAdd()">Cancel</button>
             <button class="qa-btn qa-btn-primary" id="qa-product-save" onclick="quickAddProduct()">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
               Add Item
@@ -14782,269 +14814,295 @@
         armWakeListenerAfterGesture();
 
         /* ============================================================
-           QUICK-ADD MODAL — open via long-press (mobile) or Ctrl+N (pc)
-           when the customer / product sheet is open
+           QUICK-ADD MODAL
+           • Mobile : long-press (400ms) on customer row / Add Item btn
+           • PC     : Ctrl+Q or Cmd+Q when sheet is open
+           • Always : "+ New" button in sheet header
         ============================================================ */
-        let _qaType = null; // 'customer' | 'product'
-        let _qaUnit = 'pc'; // product unit
 
+        let _qaType = null; // 'customer' | 'product'
+        let _qaUnit = 'pc'; // product unit toggle
+
+        /* ---------- open ---------- */
         function openQuickAdd(type) {
           _qaType = type;
-          const overlay = document.getElementById('quick-add-overlay');
-          const modal   = document.getElementById('qa-modal');
-          const custF   = document.getElementById('qa-customer-fields');
-          const prodF   = document.getElementById('qa-product-fields');
+
+          const iconEl  = document.getElementById('qa-header-icon');
           const titleEl = document.getElementById('qa-title');
           const subEl   = document.getElementById('qa-subtitle');
-          const iconEl  = document.getElementById('qa-header-icon');
+          const custF   = document.getElementById('qa-customer-fields');
+          const prodF   = document.getElementById('qa-product-fields');
 
           if (type === 'customer') {
-            titleEl.textContent = 'New Customer';
-            subEl.textContent   = 'Add & auto-select';
             iconEl.style.background = 'var(--accent-soft)';
             iconEl.style.color      = 'var(--accent)';
             iconEl.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+            titleEl.textContent = 'New Customer';
+            subEl.textContent   = 'Saved & auto-selected in bill';
             custF.style.display = 'block';
             prodF.style.display = 'none';
-            // clear fields
-            ['qa-cn-name','qa-cn-loc','qa-cn-phone','qa-cn-transport'].forEach(id => {
-              const el = document.getElementById(id);
-              if (el) el.value = '';
+            ['qa-cn-name','qa-cn-loc','qa-cn-phone','qa-cn-transport'].forEach(function(id) {
+              var inp = document.getElementById(id);
+              if (inp) { inp.value = ''; inp.classList.remove('error'); }
             });
           } else {
-            titleEl.textContent = 'New Item';
-            subEl.textContent   = 'Add & auto-select';
             iconEl.style.background = 'var(--success-soft)';
             iconEl.style.color      = 'var(--success)';
-            iconEl.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>';
+            iconEl.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>';
+            titleEl.textContent = 'New Item';
+            subEl.textContent   = 'Saved & auto-selected in bill';
             custF.style.display = 'none';
             prodF.style.display = 'block';
-            ['qa-pn-name','qa-pn-rate'].forEach(id => {
-              const el = document.getElementById(id);
-              if (el) el.value = '';
+            ['qa-pn-name','qa-pn-rate'].forEach(function(id) {
+              var inp = document.getElementById(id);
+              if (inp) { inp.value = ''; inp.classList.remove('error'); }
             });
             qaSetUnit('pc');
           }
 
-          overlay.classList.add('open');
+          // Reset icon animation each open
+          iconEl.style.animation = 'none';
+          iconEl.style.opacity   = '0';
+          requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+              iconEl.style.animation = '';
+            });
+          });
 
-          // Focus first input after transition
-          setTimeout(() => {
-            const firstInput = type === 'customer'
-              ? document.getElementById('qa-cn-name')
-              : document.getElementById('qa-pn-name');
-            if (firstInput) firstInput.focus();
-          }, 360);
+          document.getElementById('quick-add-overlay').classList.add('open');
+
+          // Focus first field after sheet slides up
+          setTimeout(function() {
+            var first = document.getElementById(type === 'customer' ? 'qa-cn-name' : 'qa-pn-name');
+            if (first) first.focus();
+          }, 400);
         }
 
-        function closeQuickAdd(e) {
-          if (e && e.target !== document.getElementById('quick-add-overlay')) return;
+        /* ---------- close ---------- */
+        function closeQuickAdd() {
           document.getElementById('quick-add-overlay').classList.remove('open');
+          // Blur any focused input so keyboard hides on mobile
+          if (document.activeElement) document.activeElement.blur();
           _qaType = null;
         }
 
+        // Tap on backdrop (overlay but outside modal) closes it
+        document.getElementById('quick-add-overlay').addEventListener('click', function(e) {
+          if (e.target === this) closeQuickAdd();
+        });
+
+        /* ---------- unit toggle ---------- */
         function qaSetUnit(unit) {
           _qaUnit = unit;
           document.getElementById('qa-seg-pc').classList.toggle('active', unit === 'pc');
           document.getElementById('qa-seg-kg').classList.toggle('active', unit === 'kg');
         }
 
+        /* ---------- shake helper ---------- */
+        function qaShake(inputId) {
+          var inp = document.getElementById(inputId);
+          if (inp) { inp.classList.add('error'); inp.focus(); }
+          var modal = document.getElementById('qa-modal');
+          modal.classList.remove('qa-shake');
+          // force reflow
+          void modal.offsetWidth;
+          modal.classList.add('qa-shake');
+          modal.addEventListener('animationend', function h() {
+            modal.classList.remove('qa-shake');
+            modal.removeEventListener('animationend', h);
+          });
+        }
+
+        /* ---------- save customer ---------- */
         function quickAddCustomer() {
-          const name  = (document.getElementById('qa-cn-name').value || '').trim();
-          const loc   = (document.getElementById('qa-cn-loc').value  || '').trim();
-          const phone = (document.getElementById('qa-cn-phone').value || '').trim();
-          const pref  = (document.getElementById('qa-cn-transport').value || '').trim();
+          var name  = (document.getElementById('qa-cn-name').value || '').trim();
+          var loc   = (document.getElementById('qa-cn-loc').value  || '').trim();
+          var phone = (document.getElementById('qa-cn-phone').value || '').trim();
+          var pref  = (document.getElementById('qa-cn-transport').value || '').trim();
 
           if (!name) {
-            document.getElementById('qa-cn-name').style.borderBottom = '1.5px solid var(--danger)';
-            document.getElementById('qa-cn-name').focus();
-            // shake
-            document.getElementById('qa-modal').animate(
-              [{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(-4px)'},{transform:'translateX(0)'}],
-              {duration:280, easing:'ease-out'}
-            );
+            qaShake('qa-cn-name');
             showToast('Enter customer name');
             return;
           }
 
-          // Auto-add transport if new
-          if (pref && !S.transports.some(t => t.name.toLowerCase() === pref.toLowerCase())) {
+          // Auto-create transport if new
+          if (pref && !S.transports.some(function(t) { return t.name.toLowerCase() === pref.toLowerCase(); })) {
             S.transports.push({ id: uid(), name: pref, contact: '' });
             persist('transports');
           }
 
-          const searchName = name && loc ? name + ' - ' + loc : name;
-          const newCust = { id: uid(), name, location: loc, phone, preferredTransport: pref, searchName };
+          var searchName = (name && loc) ? name + ' - ' + loc : name;
+          var newCust = { id: uid(), name: name, location: loc, phone: phone, preferredTransport: pref, searchName: searchName };
           S.customers.push(newCust);
           persist('customers');
 
-          // Close quick-add overlay
-          document.getElementById('quick-add-overlay').classList.remove('open');
-          _qaType = null;
-
-          // Auto-select the newly added customer in the bill form
-          selectCustomer(newCust.id);
-
-          // Also close the sheet
+          closeQuickAdd();
           closeSheet();
-
-          showToast('✓ ' + name + ' added & selected');
+          selectCustomer(newCust.id);
+          showToast('✓ ' + name + ' added');
         }
 
+        /* ---------- save product ---------- */
         function quickAddProduct() {
-          const name = (document.getElementById('qa-pn-name').value || '').trim();
-          const rate = parseFloat(String(document.getElementById('qa-pn-rate').value || '').replace(',', '.'));
+          var name = (document.getElementById('qa-pn-name').value || '').trim();
+          var rateRaw = (document.getElementById('qa-pn-rate').value || '').replace(',', '.');
+          var rate = parseFloat(rateRaw);
 
           if (!name) {
-            document.getElementById('qa-pn-name').focus();
-            document.getElementById('qa-modal').animate(
-              [{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(-4px)'},{transform:'translateX(0)'}],
-              {duration:280, easing:'ease-out'}
-            );
+            qaShake('qa-pn-name');
             showToast('Enter item name');
             return;
           }
           if (isNaN(rate) || rate <= 0) {
-            document.getElementById('qa-pn-rate').focus();
-            document.getElementById('qa-modal').animate(
-              [{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(-4px)'},{transform:'translateX(0)'}],
-              {duration:280, easing:'ease-out'}
-            );
+            qaShake('qa-pn-rate');
             showToast('Enter a valid rate');
             return;
           }
 
-          const newProd = { id: uid(), name, type: _qaUnit, rate };
+          var newProd = { id: uid(), name: name, type: _qaUnit, rate: rate };
           S.products.push(newProd);
           persist('products');
 
-          // Close quick-add
-          document.getElementById('quick-add-overlay').classList.remove('open');
-          _qaType = null;
-
-          // Auto-select the product in the sheet
-          selectProduct(newProd.id);
-
-          // Close the sheet
+          closeQuickAdd();
           closeSheet();
-
-          showToast('✓ ' + name + ' added & selected');
+          selectProduct(newProd.id);
+          showToast('✓ ' + name + ' added');
         }
 
-        /* ----------------------------------------------------------
-           Long-press on the customer row in bill form → open quick-add
-        ---------------------------------------------------------- */
-        (function attachLongPressAndHint() {
-          const LP_DURATION = 500; // ms
+        /* ============================================================
+           LONG-PRESS  (mobile) — 400 ms hold on trigger elements
+        ============================================================ */
+        (function attachLongPress() {
+          var LP_MS = 400;
 
-          function addLongPress(element, type) {
-            if (!element) return;
-            let timer = null;
-            let fired = false;
+          function makeLongPress(el, type) {
+            if (!el) return;
+            var timer   = null;
+            var moved   = false;
+            var didFire = false;
 
-            function start(e) {
-              fired = false;
-              timer = setTimeout(() => {
-                fired = true;
-                // Visual feedback
-                element.classList.add('lp-hint');
-                setTimeout(() => element.classList.remove('lp-hint'), 600);
-                // Haptic (if supported)
-                if (navigator.vibrate) navigator.vibrate(18);
-                // Open quick-add
+            function onStart(e) {
+              moved   = false;
+              didFire = false;
+              timer = setTimeout(function() {
+                if (moved) return;
+                didFire = true;
+                // pulse feedback
+                el.classList.add('lp-fired');
+                el.addEventListener('animationend', function h() {
+                  el.classList.remove('lp-fired');
+                  el.removeEventListener('animationend', h);
+                });
+                if (navigator.vibrate) navigator.vibrate([12, 8, 12]);
                 openQuickAdd(type);
-              }, LP_DURATION);
+              }, LP_MS);
             }
 
-            function cancel() {
+            function onMove() {
+              moved = true;
               clearTimeout(timer);
               timer = null;
             }
 
-            element.addEventListener('touchstart', start, { passive: true });
-            element.addEventListener('touchend',   cancel, { passive: true });
-            element.addEventListener('touchmove',  cancel, { passive: true });
-            element.addEventListener('touchcancel',cancel, { passive: true });
-            // Prevent tap from firing openSheet when long-press fired
-            element.addEventListener('click', function(e) {
-              if (fired) { e.stopImmediatePropagation(); fired = false; }
-            }, true);
+            function onEnd(e) {
+              clearTimeout(timer);
+              timer = null;
+              // If long-press fired, swallow the subsequent click
+              if (didFire) {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                didFire = false;
+              }
+            }
+
+            el.addEventListener('touchstart',  onStart, { passive: true });
+            el.addEventListener('touchmove',   onMove,  { passive: true });
+            el.addEventListener('touchend',    onEnd,   { passive: false });
+            el.addEventListener('touchcancel', onMove,  { passive: true });
+
+            // On desktop: right-click context = skip, but add a title hint
+            el.title = (el.title || '') + (el.title ? ' · ' : '') + 'Hold to add new ' + type;
           }
 
-          // Attach after DOM is ready (elements already exist)
-          const custRow = document.querySelector('[onclick="openSheet(\'customer\')"]');
-          addLongPress(custRow, 'customer');
+          // Customer row in bill form
+          var custRow = document.querySelector('[onclick="openSheet(\'customer\')"]');
+          makeLongPress(custRow, 'customer');
 
-          // For product: the "Add Item" button and bottom action
-          document.querySelectorAll('[onclick="openSheet(\'product\')"]').forEach(el => {
-            addLongPress(el, 'product');
+          // Product button(s) in bill form
+          document.querySelectorAll('[onclick="openSheet(\'product\')"]').forEach(function(btn) {
+            makeLongPress(btn, 'product');
           });
         })();
 
-        /* ----------------------------------------------------------
-           Ctrl+N / Cmd+N  when a sheet is open → open quick-add
-        ---------------------------------------------------------- */
+        /* ============================================================
+           KEYBOARD shortcuts
+           Ctrl+Q / Cmd+Q  — open quick-add when sheet is open
+           Escape          — close quick-add
+           Enter           — submit quick-add form
+        ============================================================ */
         document.addEventListener('keydown', function(e) {
-          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
-            const sheetOpen = document.getElementById('sheet-overlay').classList.contains('show');
-            if (sheetOpen && (S.currentSheetType === 'customer' || S.currentSheetType === 'product')) {
+          var qaOpen = document.getElementById('quick-add-overlay').classList.contains('open');
+
+          // Ctrl+Q → open quick-add
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'q') {
+            var sheetOpen = document.getElementById('sheet-overlay').classList.contains('show');
+            if (!qaOpen && sheetOpen && (S.currentSheetType === 'customer' || S.currentSheetType === 'product')) {
               e.preventDefault();
               openQuickAdd(S.currentSheetType);
             }
+            return;
           }
-          if (e.key === 'Escape') {
-            const qaOpen = document.getElementById('quick-add-overlay').classList.contains('open');
-            if (qaOpen) {
-              document.getElementById('quick-add-overlay').classList.remove('open');
-              _qaType = null;
-              e.stopImmediatePropagation();
-            }
-          }
-          // Enter to submit quick-add form
-          if (e.key === 'Enter') {
-            const qaOpen = document.getElementById('quick-add-overlay').classList.contains('open');
-            if (qaOpen) {
-              e.preventDefault();
-              if (_qaType === 'customer') quickAddCustomer();
-              else if (_qaType === 'product') quickAddProduct();
-            }
-          }
-        });
 
-        /* ----------------------------------------------------------
-           Inject "＋ New" button into the sheet header (customer & product)
-        ---------------------------------------------------------- */
+          // Escape → close quick-add (stop propagation so sheet doesn't also close)
+          if (e.key === 'Escape' && qaOpen) {
+            e.stopImmediatePropagation();
+            closeQuickAdd();
+            return;
+          }
+
+          // Enter → submit
+          if (e.key === 'Enter' && qaOpen) {
+            // Only if not in a textarea
+            if (document.activeElement && document.activeElement.tagName === 'TEXTAREA') return;
+            e.preventDefault();
+            if (_qaType === 'customer') quickAddCustomer();
+            else if (_qaType === 'product') quickAddProduct();
+          }
+        }, true); // capture phase so we beat other listeners
+
+        /* ============================================================
+           "+ New" BUTTON injected into sheet header
+        ============================================================ */
         (function injectSheetNewBtn() {
-          const sheetHeader = document.querySelector('#sheet-overlay .sheet-header');
+          var sheetHeader = document.querySelector('#sheet-overlay .sheet-header');
           if (!sheetHeader) return;
 
-          const btn = document.createElement('button');
+          var btn = document.createElement('button');
+          btn.id        = 'sheet-new-btn';
           btn.className = 'sheet-new-btn';
-          btn.id = 'sheet-new-btn';
-          btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8"><path d="M12 5v14M5 12h14"/></svg> New';
-          btn.title = 'Add new (Ctrl+N)';
-          btn.style.display = 'none'; // hidden until sheet opens
-          btn.onclick = function() {
-            openQuickAdd(S.currentSheetType);
-          };
+          btn.setAttribute('aria-label', 'Add new (Ctrl+Q)');
+          btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg> New';
+          btn.onclick = function() { openQuickAdd(S.currentSheetType); };
 
-          sheetHeader.insertBefore(btn, sheetHeader.querySelector('.sheet-close'));
+          var closeBtn = sheetHeader.querySelector('.sheet-close');
+          if (closeBtn) sheetHeader.insertBefore(btn, closeBtn);
+          else sheetHeader.appendChild(btn);
         })();
 
-        /* Show/hide the "+ New" button based on sheet type */
-        const _origOpenSheet = openSheet;
+        // Wrap openSheet / closeSheet to show-hide the New button
+        var _origOpenSheet = openSheet;
         openSheet = function(type) {
           _origOpenSheet(type);
-          const btn = document.getElementById('sheet-new-btn');
-          if (btn) {
-            btn.style.display = (type === 'customer' || type === 'product') ? 'flex' : 'none';
-          }
+          var btn = document.getElementById('sheet-new-btn');
+          if (btn) btn.classList.toggle('visible', type === 'customer' || type === 'product');
         };
-        const _origCloseSheet = closeSheet;
+
+        var _origCloseSheet = closeSheet;
         closeSheet = function() {
           _origCloseSheet();
-          const btn = document.getElementById('sheet-new-btn');
-          if (btn) btn.style.display = 'none';
+          var btn = document.getElementById('sheet-new-btn');
+          if (btn) btn.classList.remove('visible');
         };
 
       })();
