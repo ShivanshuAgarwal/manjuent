@@ -8525,11 +8525,15 @@
           <div class="qa-field-group">
             <div class="qa-field-row">
               <label class="qa-label">Name <span class="qa-required">*</span></label>
-              <input class="qa-input" id="qa-cn-name" type="text" placeholder="Party name" autocomplete="off" />
+              <input class="qa-input" id="qa-cn-name" type="text" placeholder="Party name" autocomplete="off" oninput="qaAutoSearchName()" />
             </div>
             <div class="qa-field-row">
               <label class="qa-label">Destination</label>
               <input class="qa-input" id="qa-cn-loc" type="text" placeholder="City / area" autocomplete="off" oninput="qaAutoSearchName()" />
+            </div>
+            <div class="qa-field-row">
+              <label class="qa-label">Search Name</label>
+              <input class="qa-input" id="qa-cn-searchname" type="text" placeholder="Auto from name + destination" autocomplete="off" style="color:var(--accent)" oninput="this._me = this.value.trim() !== ''" />
             </div>
             <div class="qa-field-row">
               <label class="qa-label">Phone</label>
@@ -8548,6 +8552,7 @@
             </button>
           </div>
         </div>
+
 
         <!-- Product fields -->
         <div id="qa-product-fields" class="qa-fields" style="display:none">
@@ -14841,9 +14846,9 @@
             subEl.textContent   = 'Saved & auto-selected in bill';
             custF.style.display = 'block';
             prodF.style.display = 'none';
-            ['qa-cn-name','qa-cn-loc','qa-cn-phone','qa-cn-transport'].forEach(function(id) {
+            ['qa-cn-name','qa-cn-loc','qa-cn-phone','qa-cn-transport','qa-cn-searchname'].forEach(function(id) {
               var inp = document.getElementById(id);
-              if (inp) { inp.value = ''; inp.classList.remove('error'); }
+              if (inp) { inp.value = ''; inp.classList.remove('error'); inp._me = false; }
             });
           } else {
             iconEl.style.background = 'var(--success-soft)';
@@ -14877,6 +14882,7 @@
             if (first) first.focus();
           }, 400);
         }
+        window.openQuickAdd = openQuickAdd;
 
         /* ---------- close ---------- */
         function closeQuickAdd() {
@@ -14885,6 +14891,7 @@
           if (document.activeElement) document.activeElement.blur();
           _qaType = null;
         }
+        window.closeQuickAdd = closeQuickAdd;
 
         // Tap on backdrop (overlay but outside modal) closes it
         document.getElementById('quick-add-overlay').addEventListener('click', function(e) {
@@ -14897,6 +14904,18 @@
           document.getElementById('qa-seg-pc').classList.toggle('active', unit === 'pc');
           document.getElementById('qa-seg-kg').classList.toggle('active', unit === 'kg');
         }
+        window.qaSetUnit = qaSetUnit;
+
+        /* ---------- keep searchName in sync with name + destination ---------- */
+        function qaAutoSearchName() {
+          var name = (document.getElementById('qa-cn-name').value || '').trim();
+          var loc  = (document.getElementById('qa-cn-loc').value  || '').trim();
+          var sn   = document.getElementById('qa-cn-searchname');
+          var auto = (name && loc) ? name + ' - ' + loc : name;
+          if (sn && !sn._me) sn.value = auto;
+          return auto;
+        }
+        window.qaAutoSearchName = qaAutoSearchName;
 
         /* ---------- shake helper ---------- */
         function qaShake(inputId) {
@@ -14919,6 +14938,7 @@
           var loc   = (document.getElementById('qa-cn-loc').value  || '').trim();
           var phone = (document.getElementById('qa-cn-phone').value || '').trim();
           var pref  = (document.getElementById('qa-cn-transport').value || '').trim();
+          var sn    = (document.getElementById('qa-cn-searchname').value || '').trim();
 
           if (!name) {
             qaShake('qa-cn-name');
@@ -14932,7 +14952,7 @@
             persist('transports');
           }
 
-          var searchName = (name && loc) ? name + ' - ' + loc : name;
+          var searchName = sn || ((name && loc) ? name + ' - ' + loc : name);
           var newCust = { id: uid(), name: name, location: loc, phone: phone, preferredTransport: pref, searchName: searchName };
           S.customers.push(newCust);
           persist('customers');
@@ -14942,6 +14962,7 @@
           selectCustomer(newCust.id);
           showToast('✓ ' + name + ' added');
         }
+        window.quickAddCustomer = quickAddCustomer;
 
         /* ---------- save product ---------- */
         function quickAddProduct() {
@@ -14969,6 +14990,7 @@
           selectProduct(newProd.id);
           showToast('✓ ' + name + ' added');
         }
+        window.quickAddProduct = quickAddProduct;
 
         /* ============================================================
            LONG-PRESS  (mobile) — 400 ms hold on trigger elements
